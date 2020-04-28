@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "373091848992",
+    "firebase_url": "https://greenpeace-4ed8c.firebaseio.com",
+    "project_id": "greenpeace-4ed8c",
+    "storage_bucket": "greenpeace-4ed8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373091848992:android:da8d98766339bc6b0e7d45",
+        "android_client_info": {
+          "package_name": "com.example.greenpeace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373091848992-i3qebkfb307djr547fo8pni5qrj285ip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcR2s6JMFCRrxHjpkA7AmQb6FSS1V5w-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373091848992-i3qebkfb307djr547fo8pni5qrj285ip.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
