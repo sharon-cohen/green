@@ -28,6 +28,7 @@ class Home_menagerState extends State<Home_menager> {
   String messageText;
   bool ok=false;
   bool showSpinner = false;
+
   image_sent_pro(BuildContext context,String image_show) {
     // set up the buttons
     Widget cancelButton = FlatButton(
@@ -287,6 +288,7 @@ class MessageBubble extends StatelessWidget {
   MessageBubble({this.sender, this.text, this.isMe, this.time,this.image_u});
 
 
+ int report=0;
   Widget nassege(){
 
    if(image_u=="")
@@ -366,13 +368,14 @@ class MessageBubble extends StatelessWidget {
                       text:text,
                       sender:sender,
                        image_u:image_u,
-    ),
+                        flage_report:report,
+                   ),
                child:  Container(
                    height:25,
                    width: 25,
                    decoration: new BoxDecoration(
                        image: new DecorationImage(
-                         image: new AssetImage('image/report.png'),
+                         image: new AssetImage('image/report$report.png'),
                          fit: BoxFit.fill,
                        )
                    )
@@ -402,7 +405,7 @@ class DialogUtils {
       {@required String title,
         String okBtnText = "Ok",
         String cancelBtnText = "Cancel",
- String text,@required String sender,String image_u}) {
+ String text,@required String sender,String image_u,int flage_report}) {
 
     Future movetoreport()async{
       String mass_id=await GetExistMass(sender,text,image_u);
@@ -429,6 +432,9 @@ class DialogUtils {
                 child: Text(okBtnText),
              onPressed: () {
                   movetoreport();
+
+
+
              },
               ),
               FlatButton(

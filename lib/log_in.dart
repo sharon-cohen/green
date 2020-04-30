@@ -1,9 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:greenpeace/home.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'footer.dart';
+import 'globalfunc.dart';
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
   @override
@@ -85,7 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       String name=document.data['name'];
                       String role=document.data['role'];
 
-                      Navigator.pushNamed(context, Home.id,);
+                      Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments_m(
+                          t,'sharon','menager'
+                      ));
 
                     }
 
