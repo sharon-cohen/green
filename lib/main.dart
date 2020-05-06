@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
        Home.id: (context) => Home((ModalRoute.of(context).settings.arguments)),
-        BottomNavigationBarController.id :(context)=> BottomNavigationBarController((ModalRoute.of(context).settings.arguments)),
+        BottomNavigationBarController.id :(context)=> BottomNavigationBarController((ModalRoute.of(context).settings.arguments),0,0),
 
       },
     );
