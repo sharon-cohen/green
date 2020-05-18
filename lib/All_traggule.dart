@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'globalfunc.dart';
-
+import 'streem_firestore/StruggleStream.dart';
+import 'home_menager.dart';
 class All_truggle extends StatefulWidget {
   All_truggle({Key key, this.arguments}) : super(key: key);
   static const String id = " All_truggle";

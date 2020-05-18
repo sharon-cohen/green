@@ -7,10 +7,11 @@ import 'create_struggle1.dart';
 import 'All_traggule.dart';
 class BottomNavigationBarController extends StatefulWidget {
   static String id = "BottomNavigationBarController ";
-  BottomNavigationBarController(this.arguments,this.page_num,this.come_from);
+  BottomNavigationBarController(this.arguments,this.page_num,this.come_from,);
   final  int page_num;
   final  int come_from;
   final  ScreenArguments_m arguments;
+
   @override
   _BottomNavigationBarControllerState createState() =>
       _BottomNavigationBarControllerState();
@@ -20,16 +21,17 @@ class _BottomNavigationBarControllerState
 
     extends State<BottomNavigationBarController> {
 
-
+  static bool is_reg;
   final List<Widget> pages = [
    Home_menager(
       key: PageStorageKey('home'),
       arguments: send
+
     ),
    report(
         key: PageStorageKey('report'),
         arguments: send
-    ),
+   ),
 
     All_truggle(
         key: PageStorageKey(' All_truggle'),
@@ -75,12 +77,15 @@ int _index_bifore;
   void initState() {
     super.initState();
     send = widget.arguments;
+    print("Df");
+
     _selectedIndex = widget.page_num;
     _index_bifore=widget.come_from;
-  }
+
+   }
 
   Widget build(BuildContext context) {
-    print(_selectedIndex);
+
     return Scaffold(
       bottomNavigationBar: _bottomNavigationBar( _index_bifore),
       body: PageStorage(

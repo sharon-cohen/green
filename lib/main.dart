@@ -7,10 +7,15 @@ import 'register.dart';
 import 'home_menager.dart';
 import 'footer.dart';
 import 'home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'globalfunc.dart';
 void main() => runApp(MyApp());
+
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       initialRoute: WelcomeScreen.id,
       routes: {
@@ -18,11 +23,12 @@ class MyApp extends StatelessWidget {
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
-       Home.id: (context) => Home((ModalRoute.of(context).settings.arguments)),
+       Home.id: (context) => Home((ModalRoute.of(context).settings.arguments),),
         BottomNavigationBarController.id :(context)=> BottomNavigationBarController((ModalRoute.of(context).settings.arguments),0,0),
 
       },
     );
   }
+
 }
 

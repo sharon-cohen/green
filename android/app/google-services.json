@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "373091848992",
-    "firebase_url": "https://greenpeace-4ed8c.firebaseio.com",
-    "project_id": "greenpeace-4ed8c",
-    "storage_bucket": "greenpeace-4ed8c.appspot.com"
+    "project_number": "833716760496",
+    "firebase_url": "https://greenpeace2.firebaseio.com",
+    "project_id": "greenpeace2",
+    "storage_bucket": "greenpeace2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:373091848992:android:da8d98766339bc6b0e7d45",
+        "mobilesdk_app_id": "1:833716760496:android:b3d10dcee6492a07903075",
         "android_client_info": {
-          "package_name": "com.example.greenpeace"
+          "package_name": "com.examplee.greenpeace"
         }
       },
       "oauth_client": [
         {
-          "client_id": "373091848992-i3qebkfb307djr547fo8pni5qrj285ip.apps.googleusercontent.com",
+          "client_id": "833716760496-jbs98i7seaeks9p8iffq93tnge47fv63.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDcR2s6JMFCRrxHjpkA7AmQb6FSS1V5w-w"
+          "current_key": "AIzaSyBaDsNopX3GScvQNcsQJJ_tdPuA2i0HVEY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "373091848992-i3qebkfb307djr547fo8pni5qrj285ip.apps.googleusercontent.com",
+              "client_id": "833716760496-jbs98i7seaeks9p8iffq93tnge47fv63.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

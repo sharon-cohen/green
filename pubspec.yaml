@@ -29,6 +29,9 @@ dependencies:
   font_awesome_flutter: ^8.8.1
   intl: ^0.16.1
   url_launcher: ^5.4.5
+  folding_cell: ^0.1.2
+  align_positioned: ^1.2.5
+  eva_icons_flutter: ^2.0.0
   flutter_open_whatsapp: ^0.1.2
 
 dev_dependencies:

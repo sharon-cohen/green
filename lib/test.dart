@@ -24,6 +24,7 @@ class reportState extends State<report> {
   Widget build(BuildContext context) {
     height_width();
     return Scaffold(
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       appBar: new AppBar(
         title: new Text('My App Title'),
         elevation: 0.0,
@@ -33,24 +34,27 @@ class reportState extends State<report> {
           alignment: Alignment.bottomCenter,
           children: <Widget>[
             SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height / (18),
-                    color: Colors.green,
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height ,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Container(child: reportStream(height_page: height_page,width_page: width_page,)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              child: reportStream(),
+
+
+//              child: Column(
+//                children: <Widget>[
+//                  Container(
+//                    height: MediaQuery.of(context).size.height / (18),
+//                    color: Colors.green,
+//                  ),
+//                  Container(
+//                    height: MediaQuery.of(context).size.height ,
+//                    child: Column(
+//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                      crossAxisAlignment: CrossAxisAlignment.stretch,
+//                      children: <Widget>[
+//                        Container(child: reportStream(height_page: height_page,width_page: width_page,)),
+//                      ],
+//                    ),
+//                  ),
+//                ],
+//              ),
             ),
           ],
         ),
@@ -92,12 +96,11 @@ final width_page;
           reportsContainers.add( reportsContainer);
         //  reports.sort((a, b) => b.time.compareTo(a.time));
         }
-        return Expanded(
-          child: ListView(
-            reverse: true,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-            children: reportsContainers,
-          ),
+        return ListView(
+          shrinkWrap: true,
+
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+          children: reportsContainers,
         );
       },
     );
@@ -112,7 +115,7 @@ class ReportsContainer extends StatelessWidget {
   ReportsContainer({this.sender, this.text, this.image_u,this.height_page,this.width_page});
   Widget thereport(){
     if(image_u!=''){
-             return Container(
+      return Container(
         height:100,
           width: 100,
           decoration: new BoxDecoration(image: new DecorationImage(
@@ -123,42 +126,35 @@ class ReportsContainer extends StatelessWidget {
      );
     }
     else{
-
-      return Container(
-        height: height_page/3,
-        width: width_page,
-        color: Colors.grey.shade300,
-        child:Column(
-          children: <Widget>[
-            Text(sender,
-              style: TextStyle(fontSize: 30),
-            ),
-            Text(text,
-              style: TextStyle(fontSize: 20),
-            ),
-          ],
-        ),
-      );
+      return Text(text,style: TextStyle(color: Colors.white));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Column(
-        children: <Widget>[
-          Text(
-            "$sender ",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-          thereport()
+    return ListTile(
 
-        ],
-      ),
-    );
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        leading: Container(
+          padding: EdgeInsets.only(right: 12.0),
+          decoration: new BoxDecoration(
+              border: new Border(
+                  right: new BorderSide(width: 1.0, color: Colors.white24))),
+          child: Icon(Icons.receipt, color: Colors.white),
+        ),
+        title: Text(
+         sender,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+        subtitle: Row(
+          children: <Widget>[
+            Text('message:  ',style: TextStyle(color: Colors.white30)),
+            thereport(),
+          ],
+        ),
+        trailing:
+        Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0));
   }
 }
