@@ -11,76 +11,25 @@ import 'register.dart';
 import 'Component/Alret_Dealog.dart';
 import 'streem_firestore/MessagesStream.dart';
 import 'package:folding_cell/folding_cell.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
-
 class Home_menager extends StatefulWidget {
   Home_menager({Key key, this.arguments}) : super(key: key);
   static const String id = " home_menager";
   final ScreenArguments_m arguments;
-
   @override
   Home_menagerState createState() => Home_menagerState();
 }
-
 class Home_menagerState extends State<Home_menager> {
-  final messageTextContoller = TextEditingController();
   final _auth = FirebaseAuth.instance;
-  String fileUrl = "";
-  String messageText;
   bool ok = false;
   bool showSpinner = false;
-  bool try_send=false;
-  List<Widget> mass=[];
 bool no_reg=false;
-  image_sent_pro(BuildContext context, String image_show) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed: () {},
-    );
-    Widget continueButton = FlatButton(
-        child: Text("send"),
-        onPressed: () {
-          fileUrl = image_show;
-          messageTextContoller.clear();
-          _firestore.collection("messages").add({
-            "text": "",
-            "sender": loggedInUser.email,
-            "time": DateTime.now(),
-            "url": fileUrl,
-          });
-
-          Navigator.of(context).pop();
-        });
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
-      content: Image.network(image_show),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
     getCurrentUser();
   }
-
   void getCurrentUser() async {
 
       final user = await _auth.currentUser();
@@ -90,128 +39,10 @@ bool no_reg=false;
       }
       if(user==null){
         no_reg=true;
-
       }
-
-
-  }
-
-  void messagesStream() async {
-    await for (var snapshot in _firestore.collection("messages").snapshots()) {
-      for (var message in snapshot.documents) {
-        print(message.data);
-      }
-    }
-  }
-  List<Widget> send_botton(){
-  print('wiget.reg');
-    print(no_reg);
-    mass.clear();
-    if(try_send==false){
-   mass.add(  Align(
-     alignment: Alignment.centerLeft,
-     child: FlatButton(
-       onPressed: (){
-         setState(() {
-           try_send=true;
-          if(no_reg==true){ DialogUtils.showCustomDialog(
-            context,
-            title: "לא ניתן לעלות הודעה ללא הרשמה רוצה להירשם?",
-            okBtnText: "הירשם",
-            cancelBtnText: "חזור",
-            sender: "",
-          );}
-
-         });
-       },
-       child: Container(
-         child: Text('שלח הודעה',textAlign: TextAlign.center,),
-       ),
-     ),
-   ),);
-      return mass;
-  }
-  else{
-
-    if(no_reg==true){
-      mass.add(FlatButton(
-          onPressed: (){
-            Navigator.pushNamed(context, RegistrationScreen.id);
-
-          },
-          child: Text('הירשם')),) ;
-    return mass;
-    }
-
-    else{
-      mass.add(Expanded(
-        child: TextField(
-          controller: messageTextContoller,
-          onChanged: (value) {
-            messageText = value;
-          },
-          decoration: kMessageTextFieldDecoration,
-        ),
-      ),);
-      mass.add( FlatButton(
-        onPressed: () {
-          messageTextContoller.clear();
-          _firestore.collection("messages").add({
-            "text": messageText,
-            "sender": loggedInUser.email,
-            "time": DateTime.now(),
-            "url": fileUrl,
-          });
-        },
-        child: Text(
-          'Send',
-          style: kSendButtonTextStyle,
-        ),
-      ),);
-      mass.add( new Container(
-        margin: new EdgeInsets.symmetric(horizontal: 4.0),
-        child: new IconButton(
-            icon: new Icon(
-              Icons.photo_camera,
-              color: Theme.of(context).accentColor,
-            ),
-            onPressed: () async {
-
-              var image = await ImagePicker.pickImage(
-                  source: ImageSource.gallery);
-              int timestamp = new DateTime.now()
-                  .millisecondsSinceEpoch;
-              StorageReference storageReference =
-              FirebaseStorage.instance.ref().child(
-                  'chats/img_' +
-                      timestamp.toString() +
-                      '.jpg');
-              StorageUploadTask uploadTask =
-              storageReference.putFile(image);
-
-              await uploadTask.onComplete;
-
-              try {
-                fileUrl = await storageReference
-                    .getDownloadURL();
-                image_sent_pro(context, fileUrl);
-
-                showSpinner = false;
-              } catch (e) {
-                print('errordfd');
-              }
-            }),
-      ),);
-      return mass;
-    }
-
-  }
-
-
   }
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -278,7 +109,6 @@ bool no_reg=false;
                   ),
                 ),
             ),
-
             Card(
               margin: new EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 5.0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -299,12 +129,7 @@ bool no_reg=false;
                       Container(child: MessagesStream()),
                       Container(
                         decoration: kMessageContainerDecoration,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children:
-                           send_botton(),
-
-                        ),
+                        child: button_send(no_reg: no_reg,),
                       ),
                     ],
                   ),
@@ -409,15 +234,6 @@ class TtuggleContainer extends StatefulWidget {
 }
 
 class _TtuggleContainerState extends State<TtuggleContainer> {
-  final _auth = FirebaseAuth.instance;
-  String  button_heart='image/heart.png';
-  void inputlike() async {
-    final FirebaseUser user = await _auth.currentUser();
-    final uid = user.uid;
-    Firestore.instance.collection("users").document(uid).updateData({"likes": FieldValue.arrayUnion([widget.name])});
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -447,15 +263,7 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(widget.name),
-                    FlatButton(
-                      onPressed: () async {
-                       setState(() {
-                         button_heart='image/heart_red.png';
-                       });
-                        inputlike();
-                      },
-                      child: Image.asset(button_heart),
-                    ),
+                   heart_button(name: widget.name,),
                   ],
                 ),
               )),
@@ -585,8 +393,6 @@ class All_TtuggleContainer extends StatelessWidget {
 }
 
 class MessagesStream extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -626,6 +432,202 @@ class MessagesStream extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+
+class button_send extends StatefulWidget {
+  button_send({this.no_reg});
+  final bool no_reg;
+  @override
+  _button_sendState createState() => _button_sendState();
+}
+class _button_sendState extends State<button_send> {
+  List<Widget> mass=[];
+  final messageTextContoller = TextEditingController();
+  String fileUrl = "";
+  String messageText;
+  bool try_send=false;
+  image_sent_pro(BuildContext context, String image_show) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {},
+    );
+    Widget continueButton = FlatButton(
+        child: Text("send"),
+        onPressed: () {
+          fileUrl = image_show;
+          messageTextContoller.clear();
+          _firestore.collection("messages").add({
+            "text": "",
+            "sender": loggedInUser.email,
+            "time": DateTime.now(),
+            "url": fileUrl,
+          });
+
+          Navigator.of(context).pop();
+        });
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Image.network(image_show),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  List<Widget> send_botton(){
+    print('wiget.reg');
+    mass.clear();
+    if(try_send==false){
+      mass.add(  Align(
+        alignment: Alignment.centerLeft,
+        child: FlatButton(
+          onPressed: (){
+           setState(() {
+             try_send=true;
+             if(widget.no_reg==true){ DialogUtils.showCustomDialog(
+               context,
+               title: "לא ניתן לעלות הודעה ללא הרשמה רוצה להירשם?",
+               okBtnText: "הירשם",
+               cancelBtnText: "חזור",
+               sender: "",
+             );}
+           });
+
+          },
+          child: Container(
+            child: Text('שלח הודעה',textAlign: TextAlign.center,),
+          ),
+        ),
+      ),);
+      return mass;
+    }
+    else{
+
+      if(widget.no_reg==true){
+        mass.add(FlatButton(
+            onPressed: (){
+              Navigator.pushNamed(context, RegistrationScreen.id);
+
+            },
+            child: Text('הירשם')),) ;
+        return mass;
+      }
+
+      else{
+        mass.add(Expanded(
+          child: TextField(
+            controller: messageTextContoller,
+            onChanged: (value) {
+              messageText = value;
+            },
+            decoration: kMessageTextFieldDecoration,
+          ),
+        ),);
+        mass.add( FlatButton(
+          onPressed: () {
+            messageTextContoller.clear();
+            _firestore.collection("messages").add({
+              "text": messageText,
+              "sender": loggedInUser.email,
+              "time": DateTime.now(),
+              "url": fileUrl,
+            });
+          },
+          child: Text(
+            'Send',
+            style: kSendButtonTextStyle,
+          ),
+        ),);
+        mass.add( new Container(
+          margin: new EdgeInsets.symmetric(horizontal: 4.0),
+          child: new IconButton(
+              icon: new Icon(
+                Icons.photo_camera,
+                color: Theme.of(context).accentColor,
+              ),
+              onPressed: () async {
+
+                var image = await ImagePicker.pickImage(
+                    source: ImageSource.gallery);
+                int timestamp = new DateTime.now()
+                    .millisecondsSinceEpoch;
+                StorageReference storageReference =
+                FirebaseStorage.instance.ref().child(
+                    'chats/img_' +
+                        timestamp.toString() +
+                        '.jpg');
+                StorageUploadTask uploadTask =
+                storageReference.putFile(image);
+
+                await uploadTask.onComplete;
+
+                try {
+                  fileUrl = await storageReference
+                      .getDownloadURL();
+                  image_sent_pro(context, fileUrl);
+
+                } catch (e) {
+                  print('errordfd');
+                }
+              }),
+        ),);
+        return mass;
+      }
+
+    }
+
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return  Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children:
+      send_botton(),
+
+    );
+  }
+}
+class heart_button extends StatefulWidget {
+  heart_button({this.name});
+  final String name;
+  @override
+  _heart_buttonState createState() => _heart_buttonState();
+}
+
+class _heart_buttonState extends State<heart_button> {
+ bool heart_OnOf=false;
+ final _auth = FirebaseAuth.instance;
+ void inputlike() async {
+   final FirebaseUser user = await _auth.currentUser();
+   final uid = user.uid;
+   Firestore.instance.collection("users").document(uid).updateData({"likes": FieldValue.arrayUnion([widget.name])});
+ }
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      onPressed: () async {
+        setState(() {
+         heart_OnOf=!heart_OnOf;
+        });
+        inputlike();
+      },
+      child: heart_OnOf? Image.asset('image/heart_red.png'):Image.asset('image/heart.png'),
     );
   }
 }

@@ -6,9 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/Component/Alret_Dealog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 final _firestore = Firestore.instance;
-
-
-
 class MessageBubble extends StatelessWidget {
   final String sender;
   final String text;
@@ -73,13 +70,25 @@ class MessageBubble extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text(
-                "$sender ${time.toDate()}",
+              isMe?
+              Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    "$sender ${time.toDate()}",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ):Text("$sender ${time.toDate()}",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 12,
                 ),
-              ),
+               ),
               Container(
                 child: GestureDetector(
                   onTap: () => DialogUtils.showCustomDialog(
@@ -92,14 +101,14 @@ class MessageBubble extends StatelessWidget {
                     image_u: image_u,
                     flage_report: report,
                   ),
-                  child: Container(
+                  child:!isMe? Container(
                       height: 25,
                       width: 25,
                       decoration: new BoxDecoration(
                           image: new DecorationImage(
                             image: new AssetImage('image/report.png'),
                             fit: BoxFit.fill,
-                          ))),
+                          ))):Container(),
                 ),
               ),
             ],
