@@ -234,6 +234,15 @@ class TtuggleContainer extends StatefulWidget {
 }
 
 class _TtuggleContainerState extends State<TtuggleContainer> {
+  final _auth = FirebaseAuth.instance;
+   Future<bool> readlike(String name)async{
+    final FirebaseUser user = await _auth.currentUser();
+    final uid = user.uid;
+    final document = await Firestore.instance.collection('users').document(uid
+    ).get();
+    List<String> likes=List.from(document['likes']);
+   return  Future<bool>.value();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -263,7 +272,8 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(widget.name),
-                   heart_button(name: widget.name,),
+                   heart_button(name: widget.name,  like_or_not:
+                     readlike(widget.name),),
                   ],
                 ),
               )),
@@ -604,8 +614,9 @@ class _button_sendState extends State<button_send> {
   }
 }
 class heart_button extends StatefulWidget {
-  heart_button({this.name});
+  heart_button({this.name,this.like_or_not});
   final String name;
+   Future <bool> like_or_not;
   @override
   _heart_buttonState createState() => _heart_buttonState();
 }
@@ -613,17 +624,28 @@ class heart_button extends StatefulWidget {
 class _heart_buttonState extends State<heart_button> {
  bool heart_OnOf=false;
  final _auth = FirebaseAuth.instance;
+
+
+
  void inputlike() async {
    final FirebaseUser user = await _auth.currentUser();
    final uid = user.uid;
    Firestore.instance.collection("users").document(uid).updateData({"likes": FieldValue.arrayUnion([widget.name])});
  }
   @override
+
+
+  void initState() {
+    super.initState();
+    //heart_OnOf= widget.like_or_not;
+
+  }
   Widget build(BuildContext context) {
-    return FlatButton(
+
+   return FlatButton(
       onPressed: () async {
         setState(() {
-         heart_OnOf=!heart_OnOf;
+          heart_OnOf=!heart_OnOf;
         });
         inputlike();
       },

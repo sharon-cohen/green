@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:greenpeace/home_menager.dart';
 import 'globalfunc.dart';
 import 'test.dart';
-import 'create_truggle.dart';
 import 'create_struggle1.dart';
 import 'All_traggule.dart';
+import 'evants/calender.dart';
+
 class BottomNavigationBarController extends StatefulWidget {
   static String id = "BottomNavigationBarController ";
   BottomNavigationBarController(this.arguments,this.page_num,this.come_from,);
@@ -38,9 +39,9 @@ class _BottomNavigationBarControllerState
         arguments: send
     ),
 
-    create_struggle(
-        key: PageStorageKey('create_struggle'),
-        arguments: send
+    Calender(
+        key: PageStorageKey('Calender'),
+
     ),
     create_struggle1(
         key: PageStorageKey(' StepperBody'),

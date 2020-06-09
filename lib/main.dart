@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greenpeace/test.dart';
+import 'evants/add_event.dart';
 import 'welcom.dart';
 import 'log_in.dart';
 import 'register.dart';
 import 'home_menager.dart';
 import 'footer.dart';
 import 'home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'globalfunc.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       initialRoute: WelcomeScreen.id,
       routes: {
 
+        "add_event": (_) => AddEventPage(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
