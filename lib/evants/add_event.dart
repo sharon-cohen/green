@@ -110,6 +110,7 @@ class _AddEventPageState extends State<AddEventPage> {
                               title: _title.text,
                               description: _description.text,
                               eventDate: _eventDate,
+                              approve: false,
                           ));
                         }
                         Navigator.pop(context);

@@ -18,11 +18,14 @@ class CalenderState extends State<Calender>{
   Map<DateTime,List<dynamic>>_groupEvents(List<EventModel> events) {
     Map<DateTime, List<dynamic>> data={};
     events.forEach((event) {
-      DateTime date = DateTime(
-          event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
-      if(data[date]==null) data[date]=[];
-      data[date].add(event);
-    });
+      if(event.approve==true) {
+        DateTime date = DateTime(
+            event.eventDate.year, event.eventDate.month, event.eventDate.day,
+            12);
+        if (data[date] == null) data[date] = [];
+        data[date].add(event);
+      }
+     });
   return data;
   }
   @override
@@ -58,7 +61,7 @@ class CalenderState extends State<Calender>{
                   initialCalendarFormat: CalendarFormat.week,
                   calendarStyle: CalendarStyle(
                       canEventMarkersOverflow: true,
-                      todayColor: Colors.orange,
+                      todayColor: Colors.green,
                       selectedColor: Theme.of(context).primaryColor,
                       todayStyle: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -67,7 +70,7 @@ class CalenderState extends State<Calender>{
                   headerStyle: HeaderStyle(
                     centerHeaderTitle: true,
                     formatButtonDecoration: BoxDecoration(
-                      color: Colors.orange,
+                      color: Colors.green,
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     formatButtonTextStyle: TextStyle(color: Colors.white),
@@ -94,7 +97,7 @@ class CalenderState extends State<Calender>{
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: Colors.orange,
+                            color: Colors.green,
                             borderRadius: BorderRadius.circular(10.0)),
                         child: Text(
                           date.day.toString(),
