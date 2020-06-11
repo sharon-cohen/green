@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:greenpeace/home_menager.dart';
-import 'globalfunc.dart';
-import 'personal_massage/manage_massage.dart';
-import 'create_struggle1.dart';
-import 'All_traggule.dart';
-import 'evants/calender.dart';
+import 'package:greenpeace/home/home_menager.dart';
+import 'package:greenpeace/globalfunc.dart';
+import 'package:greenpeace/personal_massage/manage_massage.dart';
+import 'package:greenpeace/create_struggle1.dart';
+import 'package:greenpeace/truggel_page/all_truggle.dart';
+import 'package:greenpeace/evants/calender.dart';
 
 class BottomNavigationBarController extends StatefulWidget {
   static String id = "BottomNavigationBarController ";
@@ -24,15 +24,15 @@ class _BottomNavigationBarControllerState
 
   static bool is_reg;
   final List<Widget> pages = [
-   Home_menager(
-      key: PageStorageKey('home'),
-      arguments: send
+    Home_menager(
+        key: PageStorageKey('home'),
+        arguments: send
 
     ),
-   report(
+    report(
         key: PageStorageKey('report'),
         arguments: send
-   ),
+    ),
 
     All_truggle(
         key: PageStorageKey(' All_truggle'),
@@ -40,7 +40,7 @@ class _BottomNavigationBarControllerState
     ),
 
     Calender(
-        key: PageStorageKey('Calender'),
+      key: PageStorageKey('Calender'),
 
     ),
     create_struggle1(
@@ -53,7 +53,7 @@ class _BottomNavigationBarControllerState
   final PageStorageBucket bucket = PageStorageBucket();
 
   int _selectedIndex;
-int _index_bifore;
+  int _index_bifore;
   static ScreenArguments_m send;
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
     onTap: (int index) => setState(() => _selectedIndex = index ),
@@ -83,7 +83,7 @@ int _index_bifore;
     _selectedIndex = widget.page_num;
     _index_bifore=widget.come_from;
 
-   }
+  }
 
   Widget build(BuildContext context) {
 

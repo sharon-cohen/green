@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'footer.dart';
+import 'package:greenpeace/Footer/footer.dart';
 import 'globalfunc.dart';
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';

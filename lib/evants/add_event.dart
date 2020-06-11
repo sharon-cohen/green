@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'event_model.dart';
 import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
@@ -15,6 +18,7 @@ class _AddEventPageState extends State<AddEventPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
+  String dropdownValue='';
   DateTime _eventDate;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -70,6 +74,10 @@ class _AddEventPageState extends State<AddEventPage> {
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: TruggleStream('add_event'),
+                ),
               const SizedBox(height: 10.0),
               ListTile(
                 title: Text("Date (YYYY-MM-DD)"),
@@ -119,6 +127,7 @@ class _AddEventPageState extends State<AddEventPage> {
                         });
                       }
                     },
+
                     child: Text(
                       "Save",
                       style: style.copyWith(

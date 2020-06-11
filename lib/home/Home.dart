@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'titel_class.dart';
+import 'package:greenpeace/Component/text_class.dart';
 
 class Home extends StatelessWidget {
   static const String id = 'home_screen';

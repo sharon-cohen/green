@@ -1,11 +1,10 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/Component/Alret_Dealog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 final _firestore = Firestore.instance;
+FirebaseUser loggedInUser;
 class MessageBubble extends StatelessWidget {
   final String sender;
   final String text;
@@ -30,7 +29,7 @@ class MessageBubble extends StatelessWidget {
           bottomRight: Radius.circular(30),
         ),
         elevation: 5.0,
-        color: isMe ? Colors.lightBlueAccent : Colors.purpleAccent,
+        color: isMe ? Colors.green : Colors.green.shade200,
         child: Padding(
           padding: EdgeInsets.symmetric(
             vertical: 10,

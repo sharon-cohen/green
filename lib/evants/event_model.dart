@@ -5,15 +5,17 @@ class EventModel extends DatabaseItem{
   final String title;
   final String description;
   final DateTime eventDate;
+  final String struggle;
   bool approve;
-  EventModel({this.id,this.title, this.description, this.eventDate,this.approve}):super(id);
+  EventModel({this.id,this.title, this.description, this.eventDate,this.approve,this.struggle}):super(id);
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
       title: data['title'],
       description: data['description'],
       eventDate: data['event_date'],
-      approve: data['approve']
+      approve: data['approve'],
+      struggle: data['struggle'],
     );
   }
 
@@ -24,6 +26,7 @@ class EventModel extends DatabaseItem{
       description: data['description'],
       eventDate: data['event_date'].toDate(),
       approve: data['approve'],
+      struggle: data['struggle'],
     );
   }
 
@@ -34,6 +37,7 @@ class EventModel extends DatabaseItem{
       "event_date":eventDate,
       "id":id,
       "approve":approve,
+        "struggle":struggle,
     };
   }
 }

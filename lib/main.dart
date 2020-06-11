@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:greenpeace/personal_massage/manage_massage.dart';
+
 import 'evants/add_event.dart';
 import 'welcom.dart';
 import 'log_in.dart';
 import 'register.dart';
-import 'home_menager.dart';
-import 'footer.dart';
-import 'home.dart';
+import 'package:greenpeace/home/home_menager.dart';
+import 'package:greenpeace/Footer/footer.dart';
+import 'package:greenpeace/home/Home.dart';
 
 void main() => runApp(MyApp());
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'log_in.dart';
 import 'register.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'footer.dart';
+import 'package:greenpeace/Footer/footer.dart';
 import 'globalfunc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
