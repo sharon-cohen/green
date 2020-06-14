@@ -27,11 +27,9 @@ class reportState extends State<report> {
     height_width();
     return Scaffold(
       backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-      appBar: new AppBar(
-        title: new Text('My App Title'),
-        elevation: 0.0,
-      ),
+
       body: Container(
+        margin: const EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
             SingleChildScrollView(
@@ -82,6 +80,10 @@ class reportState extends State<report> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.pushNamed(context, 'add_event'),
       ),
     );
   }

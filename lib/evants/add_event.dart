@@ -18,7 +18,9 @@ class _AddEventPageState extends State<AddEventPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
-  String dropdownValue='';
+  Data data=Data(
+    dropdownValue:'',
+  );
   DateTime _eventDate;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -76,13 +78,15 @@ class _AddEventPageState extends State<AddEventPage> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TruggleStream('add_event'),
+                child: TruggleStream(page_call:'add_event',data: this.data),
                 ),
+
               const SizedBox(height: 10.0),
               ListTile(
                 title: Text("Date (YYYY-MM-DD)"),
                 subtitle: Text("${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
                 onTap: ()async{
+                 print(this.data.dropdownValue);
                   DateTime picked = await showDatePicker(context: context, initialDate: _eventDate, firstDate: DateTime(_eventDate.year-5), lastDate: DateTime(_eventDate.year+5));
                   if(picked != null) {
                     setState(() {
@@ -103,6 +107,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   color: Theme.of(context).primaryColor,
                   child: MaterialButton(
                     onPressed: () async {
+
                       if (_formKey.currentState.validate()) {
                         setState(() {
                           processing = true;
@@ -111,7 +116,8 @@ class _AddEventPageState extends State<AddEventPage> {
                           await eventDBS.updateData(widget.note.id,{
                             "title": _title.text,
                             "description": _description.text,
-                            "event_date": widget.note.eventDate
+                            "event_date": widget.note.eventDate,
+                            "struggle":this.data.dropdownValue,
                           });
                         }else{
                           await eventDBS.createItem(EventModel(
@@ -119,6 +125,7 @@ class _AddEventPageState extends State<AddEventPage> {
                               description: _description.text,
                               eventDate: _eventDate,
                               approve: false,
+                              struggle: this.data.dropdownValue,
                           ));
                         }
                         Navigator.pop(context);
@@ -150,4 +157,8 @@ class _AddEventPageState extends State<AddEventPage> {
     _description.dispose();
     super.dispose();
   }
+}
+class Data{
+  String dropdownValue;
+  Data({this.dropdownValue});
 }

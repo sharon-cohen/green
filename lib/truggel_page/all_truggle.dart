@@ -13,6 +13,6 @@ class All_truggle extends StatefulWidget {
 class _All_truggleState extends State<All_truggle> {
   @override
   Widget build(BuildContext context) {
-    return  Container(child: TruggleStream('all_struggle'));
+    return  Container(child: TruggleStream(page_call:'all_struggle'));
   }
 }

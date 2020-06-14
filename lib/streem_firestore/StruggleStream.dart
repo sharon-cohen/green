@@ -4,12 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:greenpeace/evants/add_event.dart';
 import 'package:greenpeace/home/haert_button.dart';
 final _firestore = Firestore.instance;
 
 class TruggleStream extends StatelessWidget {
   final String page_call;
-  TruggleStream(this.page_call);
+  Data data;
+  TruggleStream({this.page_call,this.data});
   List<TtuggleContainer> TtuggleContainers = [];
   List<All_TtuggleContainer> ALL_TtuggleContainers = [];
   List<String>NameStruggle=[];
@@ -76,7 +78,9 @@ class TruggleStream extends StatelessWidget {
             image_u: imag_url,
             time: messageTime,
           );
-          NameStruggle.add(trugglNmae);
+          if(NameStruggle.contains(trugglNmae)==false) {
+            NameStruggle.add(trugglNmae);
+          }
           TtuggleContainers.add(TtuggleContainer_new);
           ALL_TtuggleContainers.add(All_TtuggleContainer_new);
           TtuggleContainers.sort((a, b) => b.time.compareTo(a.time));
@@ -85,7 +89,7 @@ class TruggleStream extends StatelessWidget {
           return Align(
             alignment: AlignmentDirectional.centerStart,
             child: Container(
-              child: DropDown(NameStruggle: NameStruggle,),
+              child: DropDown(NameStruggle: NameStruggle,data: this.data,),
             ),
 
           );
@@ -273,9 +277,9 @@ class All_TtuggleContainer extends StatelessWidget {
   }
 }
 class DropDown extends StatefulWidget {
- DropDown({this.NameStruggle});
+ DropDown({this.NameStruggle,this.data});
   // ignore: non_constant_identifier_names
-
+  Data data;
  List<String> NameStruggle;
   @override
   DropDownWidget createState() => DropDownWidget();
@@ -283,9 +287,10 @@ class DropDown extends StatefulWidget {
 
 class DropDownWidget extends State<DropDown> {
 
-  String dropdownValue = 'gdg';
+  String dropdownValue = 'sharon';
   @override
   Widget build(BuildContext context) {
+    print(widget.NameStruggle);
     return Center(
         child :
         Column(children: <Widget>[
@@ -302,6 +307,7 @@ class DropDownWidget extends State<DropDown> {
             ),
             onChanged: (String data) {
               setState(() {
+                widget.data.dropdownValue = data;
                 dropdownValue = data;
               });
             },

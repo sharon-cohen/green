@@ -101,7 +101,7 @@ class Home_menagerState extends State<Home_menager> {
                             ],
                           ),
                         ),
-                        Container(child: TruggleStream('home')),
+                        Container(child: TruggleStream(page_call:'home')),
                       ],
                     ),
                   ),

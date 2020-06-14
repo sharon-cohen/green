@@ -12,17 +12,12 @@ class BottomNavigationBarController extends StatefulWidget {
   final  int page_num;
   final  int come_from;
   final  ScreenArguments_m arguments;
-
   @override
   _BottomNavigationBarControllerState createState() =>
       _BottomNavigationBarControllerState();
 }
-
 class _BottomNavigationBarControllerState
-
     extends State<BottomNavigationBarController> {
-
-  static bool is_reg;
   final List<Widget> pages = [
     Home_menager(
         key: PageStorageKey('home'),
@@ -56,8 +51,58 @@ class _BottomNavigationBarControllerState
   int _index_bifore;
   static ScreenArguments_m send;
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
-    onTap: (int index) => setState(() => _selectedIndex = index ),
     currentIndex: selectedIndex,
+    onTap: (int index) async {
+      if(index == 4){
+        await showMenu<String>(
+          context: context,
+          position: RelativeRect.fromLTRB(1000.0, 500, 0.0, 0.0),
+          items: <PopupMenuItem<String>>[
+            new PopupMenuItem<String>(
+              child: FlatButton(
+                child: Row(
+                  children: [
+                    const Text('עבודה/התנדבות'),
+                    const Icon(Icons.print),
+                  ],
+                ),
+                onPressed: (){
+                  setState(() {
+                    _selectedIndex=2;
+                  });
+                },
+              ),
+
+            ),
+            new PopupMenuItem<String>(
+              child: FlatButton(
+                child: Row(
+
+                  children: [
+                    SizedBox(width:70,),
+                    const Text('אודות'),
+                    const Icon(Icons.print),
+                  ],
+                ),
+              onPressed: (){
+                  setState(() {
+                    _selectedIndex=0;
+                  });
+              },
+              ),
+            ),
+          ],
+
+          elevation: 1,
+          color: Colors.green,
+        );
+      }
+      setState(() {
+        if(index!=4)
+          _selectedIndex = index;
+        }
+      );
+    },
     items: const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           icon: Icon(Icons.home,color: Colors.black,), title: Text('עמוד הבית')),
@@ -67,12 +112,11 @@ class _BottomNavigationBarControllerState
           icon:ImageIcon(  AssetImage("image/icon_struggle.png"),color: Colors.black,), title: Text('מאבקים')),
       BottomNavigationBarItem(
           icon:ImageIcon(  AssetImage("image/date.png"),color: Colors.black,), title: Text('אירועים')),
-
-//      BottomNavigationBarItem(
-//          icon: Icon(Icons.add_alarm,color: Colors.black,), title: Text('יצירת מאבק חדש')),
+      BottomNavigationBarItem(
+          icon: Icon(Icons.add,color: Colors.black,), title: Text('אירועים')),
     ],
-  );
 
+  );
   @override
 
   void initState() {
