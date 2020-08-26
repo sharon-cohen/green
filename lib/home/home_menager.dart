@@ -62,40 +62,40 @@ class Home_menagerState extends State<Home_menager> {
                 ),
 
                 Card(
-                  margin: new EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 5.0),
+                  margin: new EdgeInsets.only( top: 8.0, bottom: 5.0),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                  elevation: 2.0,
+                  elevation: 0,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: <Widget>[
                         Container(
                           height: MediaQuery.of(context).size.height /18,
-                          color: Colors.green.shade300,
+
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             textDirection: TextDirection.rtl,
                             children: <Widget>[
                               FlatButton(
-                                child: Text("מאבקים",style: TextStyle(fontSize: 20,color: Colors.white)),
+                                child: Text("מאבקים",style: TextStyle(fontSize: 20,color: Colors.green.shade900)),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               BottomNavigationBarController(
-                                                widget.arguments, 2, 0,)));
+                                                2, 0,)));
                                 },
                               ),
                               FlatButton(
-                                child: Text("מאבק חדש",style: TextStyle(fontSize: 20,color: Colors.white)),
+                                child: Text("מאבק חדש",style: TextStyle(fontSize: 20,color: Colors.green.shade900)),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               BottomNavigationBarController(
-                                                widget.arguments, 4, 0,)));
+                                                4, 0,)));
                                 },
                               ),
                             ],
@@ -107,21 +107,22 @@ class Home_menagerState extends State<Home_menager> {
                   ),
                 ),
                 Card(
-                  margin: new EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 5.0),
+                  margin: new EdgeInsets.only( top: 8.0, bottom: 5.0),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                  elevation: 2.0,
+                  elevation: 0,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       height: MediaQuery.of(context).size.height / 2.3,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        textDirection: TextDirection.rtl,
                         children: <Widget>[
                           Container(
                             height: MediaQuery.of(context).size.height /18,
-                            color: Colors.green.shade300,
-                            child: Text("feed",style: TextStyle(fontSize: 30,color: Colors.white),),
+
+                            child: Text("עידכונים",style: TextStyle(fontSize: 20,color: Colors.green.shade900),),
                           ),
                           Container(child: MessagesStream()),
                           Container(

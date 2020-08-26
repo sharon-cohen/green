@@ -5,6 +5,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'globalfunc.dart';
+import 'global.dart' as globals;
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
   @override
@@ -85,6 +86,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ).get();
                       String name=document.data['name'];
                       String role=document.data['role'];
+                      if(role=='menager'){
+                        globals.isMeneger = true;
+
+                      }
 
                       Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments_m(
                           t,'sharon','menager'

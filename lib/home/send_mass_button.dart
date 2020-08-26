@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import '../globalfunc.dart';
 import '../register.dart';
-FirebaseUser loggedInUser;
+
 final _firestore = Firestore.instance;
 class button_send extends StatefulWidget {
   button_send({this.no_reg});
@@ -15,11 +15,32 @@ class button_send extends StatefulWidget {
   _button_sendState createState() => _button_sendState();
 }
 class _button_sendState extends State<button_send> {
+  FirebaseUser currentUser;
   List<Widget> mass=[];
   final messageTextContoller = TextEditingController();
   String fileUrl = "";
   String messageText;
   bool try_send=false;
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentUser();
+  }
+  void _loadCurrentUser() {
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      setState(() { // call setState to rebuild the view
+        this.currentUser = user;
+      });
+    });
+  }
+  String _email() {
+    if (currentUser != null) {
+      return currentUser.email;
+    } else {
+      return "no current user";
+    }
+  }
+
   image_sent_pro(BuildContext context, String image_show) {
     // set up the buttons
     Widget cancelButton = FlatButton(
@@ -33,7 +54,7 @@ class _button_sendState extends State<button_send> {
           messageTextContoller.clear();
           _firestore.collection("messages").add({
             "text": "",
-            "sender": loggedInUser.email,
+            "sender":  _email(),
             "time": DateTime.now(),
             "url": fileUrl,
           });
@@ -113,7 +134,7 @@ class _button_sendState extends State<button_send> {
             messageTextContoller.clear();
             _firestore.collection("messages").add({
               "text": messageText,
-              "sender": loggedInUser.email,
+              "sender":  _email(),
               "time": DateTime.now(),
               "url": fileUrl,
             });

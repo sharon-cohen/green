@@ -7,6 +7,7 @@ import 'package:greenpeace/Footer/footer.dart';
 import 'globalfunc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'global.dart' as globals;
 FirebaseUser loggedInUser;
 
 class WelcomeScreen extends StatefulWidget {
@@ -81,14 +82,9 @@ button_in.clear();
 
     super.initState();
     getCurrentUser();
-    controller =
-        AnimationController(duration: Duration(seconds: 1), vsync: this);
-    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
-        .animate(controller);
-    controller.forward();
-    controller.addListener(() {
-      setState(() {});
-    });
+
+
+
 
   }
 
@@ -106,6 +102,13 @@ button_in.clear();
     if (user != null) {
       loggedInUser = user;
       print(loggedInUser.email);
+      var document = await Firestore.instance.collection('users').document(loggedInUser.uid
+      ).get();
+      String role=document.data['role'];
+      if(role=='menager'){
+        globals.isMeneger = true;
+
+      }
     }
     if(user==null){
       no_reg=true;
@@ -119,7 +122,7 @@ button_in.clear();
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: animation.value,
+
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(

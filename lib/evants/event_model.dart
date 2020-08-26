@@ -5,17 +5,28 @@ class EventModel extends DatabaseItem{
   final String title;
   final String description;
   final DateTime eventDate;
-  final String struggle;
+  final String equipment;
+  final String sender;
+  final String senderId;
+  final String location;
+  final String type_event;
   bool approve;
-  EventModel({this.id,this.title, this.description, this.eventDate,this.approve,this.struggle}):super(id);
+  EventModel({this.id,this.title, this.description, this.eventDate,this.approve,
+    this.equipment,this.senderId,this.sender,this.location,this.type_event,
+  }):super(id);
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
+
       title: data['title'],
       description: data['description'],
-      eventDate: data['event_date'],
+      eventDate: data['event_date'].toDate(),
       approve: data['approve'],
-      struggle: data['struggle'],
+      equipment: data['equipment'],
+      sender: data['sender'],
+      senderId: data['senderId'],
+      location: data['location'],
+      type_event: data['type_event'],
     );
   }
 
@@ -26,7 +37,11 @@ class EventModel extends DatabaseItem{
       description: data['description'],
       eventDate: data['event_date'].toDate(),
       approve: data['approve'],
-      struggle: data['struggle'],
+      equipment: data['equipment'],
+      sender: data['sender'],
+      senderId: data['senderId'],
+      location: data['location'],
+      type_event: data['type_event'],
     );
   }
 
@@ -37,7 +52,11 @@ class EventModel extends DatabaseItem{
       "event_date":eventDate,
       "id":id,
       "approve":approve,
-        "struggle":struggle,
+        "equipment":equipment,
+        "sender":sender,
+      "senderId":senderId,
+      "type_event":type_event,
+      "location":location,
     };
   }
 }

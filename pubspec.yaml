@@ -44,10 +44,13 @@ dependencies:
   flutter_form_builder: ^3.10.1
   popup_menu: ^1.0.5
   get_it: ^4.0.2
+  commons: ^0.7.8+3
+  grouped_buttons: ^1.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
 flutter:
   uses-material-design: true
 

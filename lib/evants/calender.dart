@@ -41,7 +41,7 @@ class CalenderState extends State<Calender>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: const EdgeInsets.all(20),
+
         child: StreamBuilder<List<EventModel>>(
           stream: eventDBS.streamList(),
           builder: (context, snapshot) {
@@ -55,6 +55,17 @@ class CalenderState extends State<Calender>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  new Container(
+                    margin: new EdgeInsets.only(left:0, right: 0, top: 0, bottom: 5.0),
+                    height: MediaQuery.of(context).size.height / (2.5),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: new BoxDecoration(
+                      image: DecorationImage(
+                        image: new AssetImage('image/green.jpeg'),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
                   TableCalendar(
                     events: _events,
                     initialCalendarFormat: CalendarFormat.week,
@@ -124,7 +135,7 @@ class CalenderState extends State<Calender>{
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, 'add_event'),
+        onPressed: () => Navigator.pushNamed(context, 'new_event'),
       ),
     );
   }

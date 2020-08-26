@@ -49,13 +49,14 @@ class TruggleStream extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("struggle").snapshots(),
     builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
-            ),
-          );
-        }
+      if (!snapshot.hasData) {
+        return Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.lightBlueAccent,
+          ),
+        );
+      }
+
         final truggls = snapshot.data.documents;
         for (var truggl in truggls) {
           final trugglNmae = truggl.data["name"];
@@ -78,26 +79,28 @@ class TruggleStream extends StatelessWidget {
             image_u: imag_url,
             time: messageTime,
           );
-          if(NameStruggle.contains(trugglNmae)==false) {
+          if (NameStruggle.contains(trugglNmae) == false) {
             NameStruggle.add(trugglNmae);
           }
           TtuggleContainers.add(TtuggleContainer_new);
           ALL_TtuggleContainers.add(All_TtuggleContainer_new);
           TtuggleContainers.sort((a, b) => b.time.compareTo(a.time));
         }
-        if(page_call=='add_event'){
+        if (page_call == 'new_event') {
           return Align(
             alignment: AlignmentDirectional.centerStart,
             child: Container(
-              child: DropDown(NameStruggle: NameStruggle,data: this.data,),
+              child: DropDown(NameStruggle: NameStruggle, data: this.data,),
             ),
 
           );
-
         }
         return result_stream();
-      },
+      }
+
+
     );
+
   }
 }
 
@@ -128,11 +131,11 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
       height: MediaQuery.of(context).size.height / (3.5),
-      width: MediaQuery.of(context).size.width / (2.5),
+      width: MediaQuery.of(context).size.width / (3),
       child: Column(
         children: <Widget>[
           new Expanded(
-              flex: 4,
+              flex: 6,
               child: Container(
                 decoration: new BoxDecoration(
                   image: DecorationImage(
@@ -146,13 +149,15 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
           new Expanded(
               flex: 1,
               child: Container(
-                color: Colors.green.shade200,
-                width: MediaQuery.of(context).size.width / (2.5),
+
+                width: MediaQuery.of(context).size.width / (1),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  textDirection: TextDirection.rtl,
+
                   children: <Widget>[
                     Text(widget.name),
-                    heart_button(name: widget.name, like_or_not: love,),
+
                   ],
                 ),
               )),
@@ -327,4 +332,8 @@ class DropDownWidget extends State<DropDown> {
       );
 
   }
+}
+class Data{
+  String dropdownValue;
+  Data({this.dropdownValue});
 }

@@ -8,10 +8,10 @@ import 'package:greenpeace/evants/calender.dart';
 
 class BottomNavigationBarController extends StatefulWidget {
   static String id = "BottomNavigationBarController ";
-  BottomNavigationBarController(this.arguments,this.page_num,this.come_from,);
+  BottomNavigationBarController(this.page_num,this.come_from,);
   final  int page_num;
   final  int come_from;
-  final  ScreenArguments_m arguments;
+
   @override
   _BottomNavigationBarControllerState createState() =>
       _BottomNavigationBarControllerState();
@@ -22,7 +22,6 @@ class _BottomNavigationBarControllerState
     Home_menager(
         key: PageStorageKey('home'),
         arguments: send
-
     ),
     report(
         key: PageStorageKey('report'),
@@ -84,11 +83,11 @@ class _BottomNavigationBarControllerState
                     const Icon(Icons.print),
                   ],
                 ),
-              onPressed: (){
+                onPressed: (){
                   setState(() {
                     _selectedIndex=0;
                   });
-              },
+                },
               ),
             ),
           ],
@@ -100,7 +99,7 @@ class _BottomNavigationBarControllerState
       setState(() {
         if(index!=4)
           _selectedIndex = index;
-        }
+      }
       );
     },
     items: const <BottomNavigationBarItem>[
@@ -121,7 +120,7 @@ class _BottomNavigationBarControllerState
 
   void initState() {
     super.initState();
-    send = widget.arguments;
+
     print("Df");
 
     _selectedIndex = widget.page_num;

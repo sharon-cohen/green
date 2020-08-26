@@ -4,161 +4,179 @@ import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'event_model.dart';
 import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:greenpeace/global.dart' as globals;
+final _firestore = Firestore.instance;
 class AddEventPage extends StatefulWidget {
   final EventModel note;
-
-  const AddEventPage({Key key, this.note}) : super(key: key);
+  final String sender;
+  final String senderId;
+  const AddEventPage({Key key, this.note,this.sender,this.senderId}) : super(key: key);
 
   @override
   _AddEventPageState createState() => _AddEventPageState();
 }
 
 class _AddEventPageState extends State<AddEventPage> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  TextEditingController _title;
-  TextEditingController _description;
-  Data data=Data(
-    dropdownValue:'',
-  );
-  DateTime _eventDate;
-  final _formKey = GlobalKey<FormState>();
-  final _key = GlobalKey<ScaffoldState>();
-  bool processing;
+  final TextEditingController _controller = new TextEditingController();
+  FirebaseUser currentUser;
 
+  String str = "";
+  String submitStr = "";
   @override
   void initState() {
     super.initState();
-    _title = TextEditingController(text: widget.note != null ? widget.note.title : "");
-    _description = TextEditingController(text:  widget.note != null ? widget.note.description : "");
-    _eventDate = DateTime.now();
-    processing = false;
+    _loadCurrentUser();
   }
+  void _loadCurrentUser() {
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      setState(() { // call setState to rebuild the view
+        this.currentUser = user;
+      });
+    });
+  }
+  String _email() {
+    if (currentUser != null) {
+      return currentUser.email;
+    } else {
+      return "no current user";
+    }
+  }
+  //not used
+  // int votes = 0;
+  // void countT() {
+  //   setState(() {
+  //     votes++;
+  //   });
+  // }
+
+  Widget text_field(){
+    return TextField(
+      textAlign: TextAlign.right,
+      decoration: new InputDecoration(
+        border: InputBorder.none,
+        hintText: "תוכן ההודעה",
+      ),
+      onChanged: (String value) {
+        submitStr=value;
+
+      },
+      controller: _controller,
+      onSubmitted: (String submittedStr) {
+
+        _controller.text = "";
+      },
+    );
+
+
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.note != null ? "Edit Note" : "Add note"),
-      ),
-      key: _key,
-      body: Form(
-        key: _formKey,
-        child: Container(
-          alignment: Alignment.center,
-          child: ListView(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _title,
-                  validator: (value) =>
-                  (value.isEmpty) ? "Please Enter title" : null,
-                  style: style,
-                  decoration: InputDecoration(
-                      labelText: "Title",
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _description,
-                  minLines: 3,
-                  maxLines: 5,
-                  validator: (value) =>
-                  (value.isEmpty) ? "Please Enter description" : null,
-                  style: style,
-                  decoration: InputDecoration(
-                      labelText: "description",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TruggleStream(page_call:'add_event',data: this.data),
-                ),
 
-              const SizedBox(height: 10.0),
-              ListTile(
-                title: Text("Date (YYYY-MM-DD)"),
-                subtitle: Text("${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
-                onTap: ()async{
-                 print(this.data.dropdownValue);
-                  DateTime picked = await showDatePicker(context: context, initialDate: _eventDate, firstDate: DateTime(_eventDate.year-5), lastDate: DateTime(_eventDate.year+5));
-                  if(picked != null) {
-                    setState(() {
-                      _eventDate = picked;
-                    });
-                  }
-                },
-              ),
+    return new Scaffold(
 
-              SizedBox(height: 10.0),
-              processing
-                  ? Center(child: CircularProgressIndicator())
-                  : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Material(
-                  elevation: 5.0,
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Theme.of(context).primaryColor,
-                  child: MaterialButton(
-                    onPressed: () async {
+      body: new Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(30),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          textDirection: TextDirection.rtl,
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
 
-                      if (_formKey.currentState.validate()) {
-                        setState(() {
-                          processing = true;
-                        });
-                        if(widget.note != null) {
-                          await eventDBS.updateData(widget.note.id,{
-                            "title": _title.text,
-                            "description": _description.text,
-                            "event_date": widget.note.eventDate,
-                            "struggle":this.data.dropdownValue,
-                          });
-                        }else{
-                          await eventDBS.createItem(EventModel(
-                              title: _title.text,
-                              description: _description.text,
-                              eventDate: _eventDate,
-                              approve: false,
-                              struggle: this.data.dropdownValue,
-                          ));
-                        }
-                        Navigator.pop(context);
-                        setState(() {
-                          processing = false;
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                        Icons.clear
+                    ),
+                    iconSize: 30,
+                    color: Colors.grey,
+                    splashColor: Colors.purple,
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+
+                  Spacer(), // use Spacer
+                  IconButton(
+                    icon: Icon(
+                      Icons.send,
+                    ),
+                    iconSize: 30,
+                    color: Colors.grey,
+                    splashColor: Colors.purple,
+                    onPressed: () {
+
+                      if(globals.isMeneger==false) {
+                        _firestore.collection("report").add({
+                          "text": '$submitStr',
+                          "sender": _email(),
+                          "time": DateTime.now(),
+                          "url": "",
+                          "senderID": currentUser.uid,
+
                         });
                       }
-                    },
+                      else{
+                        DocumentReference documentReference = Firestore.instance.collection("personalMess").document();
+                        documentReference.setData({
 
-                    child: Text(
-                      "Save",
-                      style: style.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
+                          "text": '$submitStr',
+                          "sender": _email(),
+                          "time": DateTime.now(),
+                          "url": "",
+                          "senderID": currentUser.uid,
+
+                        });
+
+                        Firestore.instance.collection("users").document(widget.senderId).updateData({"personalMessId": FieldValue.arrayUnion([documentReference.documentID])});
+
+                      }
+
+                      Navigator.pop(context, true);
+                    },
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                'אל המנהלים',
+              ),
+
+            ),
+            Divider(
+                thickness: 1,
+                color: Colors.black
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                  'מאת: '+_email(),
+
+              ),
+
+            ),
+            Divider(
+                thickness: 1,
+                color: Colors.black
+            ),
+            text_field(),
+
+
+
+          ],
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _title.dispose();
-    _description.dispose();
-    super.dispose();
   }
-}
-class Data{
-  String dropdownValue;
-  Data({this.dropdownValue});
-}
+
+

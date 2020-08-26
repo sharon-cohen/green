@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home/Home.dart';
 import 'globalfunc.dart';
 import 'package:greenpeace/Footer/footer.dart';
+import 'global.dart' as globals;
 //final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 final databaseReference = Firestore.instance;
@@ -85,6 +86,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       bool menag=await doesNameAlreadyExist(email);
                       print(menag);
                        if(menag==true){
+                         globals.isMeneger = true;
+                         print(globals.isMeneger);
                          await databaseservice(uid: user.uid).updateUserData('sharon','menager');
                          Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments_m(
                              t,'sharon','menager'
