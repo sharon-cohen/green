@@ -8,22 +8,45 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:greenpeace/Footer/footer.dart';
-class newEventPage extends StatefulWidget {
+import 'dart:convert';
+class updateEventPage extends StatefulWidget {
   final EventModel note;
+  final String sender;
+  final String text;
+  final String senderId;
+  final String topic;
+  final DateTime eventDate;
+  final String equipment;
+  final String type_event;
+  final String location;
+  final String dataid;
+  updateEventPage(
+      {this.sender,
+        this.text,
+        this.senderId,
+        this.topic,
+        this.equipment,
+        this.eventDate,
+        this.type_event,
+        this.location,
+        this.dataid,
+        this.note,
+      });
 
-  const newEventPage({Key key, this.note}) : super(key: key);
+
 
   @override
-  _newEventPage createState() => _newEventPage();
+  _updateEventPage createState() => _updateEventPage();
 }
 
-class _newEventPage extends State<newEventPage> {
+class _updateEventPage extends State<updateEventPage> {
+
   FirebaseUser currentUser;
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   TextEditingController _location;
-  String type_event;
+
   Data data=Data(
     dropdownValue:'',
   );
@@ -36,10 +59,7 @@ class _newEventPage extends State<newEventPage> {
     'שקיות אשפה': false,
     'כפפות': false,
   };
-  Map<String, bool> values_type = {
-    'foo': true,
-    'bar': false,
-  };
+
   var tmpArray = [];
 
   String getCheckboxItems(){
@@ -51,23 +71,55 @@ class _newEventPage extends State<newEventPage> {
 
       }
     });
-      return tmpArray.toString();
+    return tmpArray.toString();
 
   }
-  DateTime _eventDate;
+  DateTime _eventDate=DateTime.now();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
+  List<String> equipmentList=[];
   bool processing;
+  String temp="";
+  void stringToList(){
+print(widget.equipment);
+    for(int i=1; i<widget.equipment.length; i++) {
+      if(widget.equipment[i]==','||widget.equipment[i]==']'){
+         equipmentList.add(temp);
+         temp="";
+      }
+      else {
+        temp = temp + widget.equipment[i];
 
+      }
+    }
+for(int i=0; i<equipmentList.length; i++){
+  values[equipmentList[i]]=true;
+}
+
+  }
+  void _asyncMethod() async {
+   await set();
+
+  }
+  Future<void> set() async{
+
+
+  }
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
+
     _title = TextEditingController(text: widget.note != null ? widget.note.title : "");
     _description = TextEditingController(text:  widget.note != null ? widget.note.description : "");
     _location = TextEditingController(text:  widget.note != null ? widget.note.location : "");
-    _eventDate = DateTime.now();
     processing = false;
+
+    _title = TextEditingController(text:widget.topic);
+    _description = TextEditingController(text:widget.text );
+    _location = TextEditingController(text: widget.location);
+
+
   }
 
   void _loadCurrentUser() {
@@ -98,13 +150,24 @@ class _newEventPage extends State<newEventPage> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: new Align(
+                  child: new Text(
+                    "עריכת אירוע",
+                    style: new TextStyle(fontSize: 30),
+                  ), //so big text
+                  alignment: FractionalOffset.topRight,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _title,
                   validator: (value) =>
                   (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
-                      labelText: "נושא המחאה",
+                      labelText: "נושא האירוע",
+
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
@@ -121,6 +184,7 @@ class _newEventPage extends State<newEventPage> {
                   style: style,
                   decoration: InputDecoration(
                       labelText: "תיאור הבעיה",
+
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                 ),
               ),
@@ -145,60 +209,62 @@ class _newEventPage extends State<newEventPage> {
                 ), //so big text
                 alignment: FractionalOffset.topRight,
               ),
-        Flex(
-          direction: Axis.horizontal,
+              Flex(
+                direction: Axis.horizontal,
 
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 400,
-                    width: 300,
-                    child: Column (children: <Widget>[
-                      Expanded(
-                        child:  RadioButtonGroup(
-                          labels: [
-                            "הפגנה",
-                            "נקיון",
-                            "הרצאה",
-                          ],
-
-                          onChange: (String label, int index) {print("label: $label index: $index");
-                         type_event=label;
-                          } ,
-                          onSelected: (String label) => print(label),
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 400,
+                      width: 300,
+                      child: Column (children: <Widget>[
+                        Expanded(
+                          child:  RadioButtonGroup(
+                            labels: [
+                              "הפגנה",
+                              "ניקיון",
+                              "הרצאה",
+                            ],
+                            disabled: [
+                             "${widget.type_event}",
+                            ],
+                            onChange: (String label, int index) {print("label: $label index: $index");
+                            //type_event=label;
+                            } ,
+                            onSelected: (String label) => print(label),
+                          ),
                         ),
-                      ),
-                      new Align(
-                        child: new Text(
-                          "רשימת ציוד",
-                          style: new TextStyle(fontSize: 30),
-                        ), //so big text
-                        alignment: FractionalOffset.topRight,
-                      ),
-
-                      Expanded(
-                        child :
-                        ListView(
-                          children: values.keys.map((String key) {
-                            return new CheckboxListTile(
-                              title: new Text(key),
-                              value: values[key],
-                              activeColor: Colors.pink,
-                              checkColor: Colors.white,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  values[key] = value;
-                                });
-                              },
-                            );
-                          }).toList(),
+                        new Align(
+                          child: new Text(
+                            "רשימת ציוד",
+                            style: new TextStyle(fontSize: 30),
+                          ), //so big text
+                          alignment: FractionalOffset.topRight,
                         ),
-                      ),]),
+
+                        Expanded(
+                          child :
+                          ListView(
+                            children: values.keys.map((String key) {
+                              return new CheckboxListTile(
+                                title: new Text(key),
+                                value: values[key],
+                                activeColor: Colors.pink,
+                                checkColor: Colors.white,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    values[key] = value;
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),]),
+                    ),
                   ),
-                ),
 
-              ],
-            ),
+                ],
+              ),
 
 
 //           Padding(
@@ -237,31 +303,16 @@ class _newEventPage extends State<newEventPage> {
                         setState(() {
                           processing = true;
                         });
-                        if(widget.note != null) {
-                          await eventDBS.updateData(widget.note.id,{
+
+                          await eventDBS.updateData(widget.dataid,{
                             "title": _title.text,
                             "description": _description.text,
-                            "event_date": widget.note.eventDate,
-                            "equipment":tmpArray.toString(),
-                            "sender":_email(),
-                            "senderId":currentUser.uid,
+                            "event_date": _eventDate,
+                            "equipment":getCheckboxItems(),
                             "location":_location.text,
-                            "type_event":type_event,
+                            "type_event":widget.type_event,
                           });
-                        }else{
 
-                          await eventDBS.createItem(EventModel(
-                            title: _title.text,
-                            description: _description.text,
-                            eventDate: _eventDate,
-                            approve: false,
-                            equipment: getCheckboxItems(),
-                            sender: _email(),
-                            senderId: currentUser.uid,
-                            type_event: type_event,
-                            location: _location.text,
-                          ));
-                        }
 
                         setState(() {
                           processing = false;

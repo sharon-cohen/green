@@ -1,5 +1,5 @@
 import 'package:firebase_helpers/firebase_helpers.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 class EventModel extends DatabaseItem{
   final String id;
   final String title;
@@ -46,6 +46,8 @@ class EventModel extends DatabaseItem{
   }
 
   Map<String,dynamic> toMap() {
+
+
     return {
       "title":title,
       "description": description,
@@ -60,3 +62,6 @@ class EventModel extends DatabaseItem{
     };
   }
 }
+
+
+
