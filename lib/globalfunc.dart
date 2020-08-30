@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:folding_cell/folding_cell.dart';
+import 'package:url_launcher/url_launcher.dart';
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,
@@ -124,3 +125,17 @@ class RoundedButton extends StatelessWidget {
 }
 
 
+AssetImage getimage(String type){
+  if(type=='נקיון'){
+    return  new AssetImage('image/clean.jpg');
+  }
+  if(type=='הפגנה'){
+    return  new AssetImage('image/struggle.jpg');
+  }
+  if(type=='הרצאה'){
+    return  new AssetImage('image/lecture.jpg');
+  }
+  else{
+    return AssetImage('image/green.jpeg');
+  }
+}

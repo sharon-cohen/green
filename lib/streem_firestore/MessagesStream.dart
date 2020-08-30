@@ -77,7 +77,7 @@ class MessageBubble extends StatelessWidget {
                     "$sender ${time.toDate()}",
                     style: TextStyle(
                       color: Colors.grey,
-                      fontSize: 12,
+                      fontSize: 7,
                     ),
                     textAlign: TextAlign.end,
                   ),
@@ -85,7 +85,7 @@ class MessageBubble extends StatelessWidget {
               ):Text("$sender ${time.toDate()}",
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 12,
+                  fontSize: 7,
                 ),
                ),
               Container(

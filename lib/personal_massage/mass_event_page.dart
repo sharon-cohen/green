@@ -5,7 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:greenpeace/globalfunc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/evants/update_event.dart';
+import 'package:greenpeace/globalfunc.dart';
 final databaseReference = Firestore.instance;
+
 
 class mass_event extends StatefulWidget {
   final String sender;
@@ -16,10 +18,12 @@ class mass_event extends StatefulWidget {
   final String equipment;
   final String type_event;
   final String location;
+  final String whatapp;
   mass_event(
       {this.sender,
       this.text,
-      this.senderId,
+      this.whatapp,
+        this.senderId,
       this.topic,
       this.equipment,
       this.eventDate,
@@ -31,9 +35,11 @@ class mass_event extends StatefulWidget {
 
 class _mass_eventState extends State<mass_event> {
   FirebaseUser currentUser;
+  String idevent;
   void launchMap(String address) async {
     String query = Uri.encodeComponent(address);
-    String googleUrl = "https://www.google.com/maps/search/?api=1&query=$query";
+
+    String googleUrl = "https://waze.com/ul?q=$query";
 
     if (await canLaunch(googleUrl)) {
       await launch(googleUrl);
@@ -62,18 +68,6 @@ class _mass_eventState extends State<mass_event> {
     }
   }
 
-  dynamic data;
-  Future<dynamic> getData(String id) async {
-    final DocumentReference document = Firestore.instance
-        .collection("events")
-        .document("BMaN0ggVZeeYFFjb3OWx");
-
-    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
-      setState(() {
-        data = snapshot.data;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,154 +76,178 @@ class _mass_eventState extends State<mass_event> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         margin: const EdgeInsets.all(30),
-        child: Column(
-          children: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.keyboard_arrow_left,
-              ),
-              iconSize: 30,
-              color: Colors.grey,
-              splashColor: Colors.purple,
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-            ),
-            new Align(
-              child: new Text(
-                "מאת " + widget.sender,
-                style: new TextStyle(fontSize: 20),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            Divider(thickness: 1, color: Colors.black),
-            new Align(
-              child: new Text(
-                "נושא " + widget.topic,
-                style: new TextStyle(fontSize: 20),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            Divider(thickness: 1, color: Colors.black),
-            new Align(
-              child: new Text(
-                widget.topic,
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                widget.text,
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                "רשימת ציוד",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                widget.equipment.toString(),
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                "תאריך",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                widget.eventDate.toString(),
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                "סוג האירוע",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                widget.type_event,
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                "מיקום",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: FlatButton(
-                color: Colors.white,
-                textColor: Colors.green,
-                disabledColor: Colors.grey,
-                disabledTextColor: Colors.black,
-                padding: EdgeInsets.all(8.0),
-                splashColor: Colors.blueAccent,
-                onPressed: () {
-                  launchMap(widget.location);
-                },
-                child: Text(
-                  widget.location,
-                  style: TextStyle(fontSize: 20.0),
+        child: ListView(
+
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.keyboard_arrow_left,
                 ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            Expanded(
-              child: Align(
+                iconSize: 30,
+                color: Colors.grey,
+                splashColor: Colors.purple,
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
+              new Align(
+                child: new Text(
+                  "מאת " + widget.sender,
+                  style: new TextStyle(fontSize: 20),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              Divider(thickness: 1, color: Colors.black),
+              new Align(
+                child: new Text(
+                  "נושא " + widget.topic,
+                  style: new TextStyle(fontSize: 20),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              Divider(thickness: 1, color: Colors.black),
+              new Align(
+                child: new Text(
+                  widget.topic,
+                  style: new TextStyle(fontSize: 30),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  widget.text,
+                  style: new TextStyle(fontSize: 15),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  "רשימת ציוד",
+                  style: new TextStyle(fontSize: 30),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  widget.equipment.toString(),
+                  style: new TextStyle(fontSize: 15),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  "תאריך",
+                  style: new TextStyle(fontSize: 30),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  widget.eventDate.toString(),
+                  style: new TextStyle(fontSize: 15),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  "סוג האירוע",
+                  style: new TextStyle(fontSize: 30),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  widget.type_event,
+                  style: new TextStyle(fontSize: 15),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: FlatButton(
+                  onPressed: (){
+                    _launchURL(widget.whatapp);
+                  },
+                  child: new Text(
+                    "הצרפות לקבוצת whatapp",
+                    style: new TextStyle(fontSize: 30),
+                  ),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  widget.whatapp,
+                  style: new TextStyle(fontSize: 15),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              new Align(
+                child: new Text(
+                  "מיקום",
+                  style: new TextStyle(fontSize: 30),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+
+              new Align(
+                child: FlatButton(
+                  color: Colors.white,
+                  textColor: Colors.green,
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.black,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.blueAccent,
+                  onPressed: () {
+                    launchMap(widget.location);
+                  },
+                  child: Text(
+                    widget.location,
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              Align(
                 alignment: Alignment.bottomCenter,
                 child: Row(
                   children: [
-                    RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddEventPage(
-                                      sender: widget.sender,
-                                      senderId: widget.senderId,
-                                    )));
-                      },
-                      child: const Text('השב', style: TextStyle(fontSize: 20)),
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                    ),
-                    RaisedButton(
-                      onPressed: () async {
-                        String idevent = await Getevent(widget.topic);
-                        databaseReference
-                            .collection('events')
-                            .document(idevent)
-                            .updateData({'approve': true});
-                        successshowAlertDialog(context, _email(),
-                            currentUser.uid, widget.topic, widget.senderId);
-                      },
-                      child: const Text('אישור האירוע',
-                          style: TextStyle(fontSize: 20)),
-                      color: Colors.blue,
-                      textColor: Colors.white,
+                    Expanded(
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddEventPage(
+                                        sender: widget.sender,
+                                        senderId: widget.senderId,
+                                      )));
+                        },
+                        child: const Text('השב', style: TextStyle(fontSize: 20)),
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                      ),
                     ),
                     Expanded(
                       child: RaisedButton(
                         onPressed: () async {
-                          getData("BMaN0ggVZeeYFFjb3OWx");
+                          idevent = await Getevent(widget.topic);
+                          databaseReference
+                              .collection('events')
+                              .document(idevent)
+                              .updateData({'approve': true});
+                          successshowAlertDialog(context, _email(),
+                              currentUser.uid, widget.topic, widget.senderId);
+                        },
+                        child: const Text('אישור האירוע',
+                            style: TextStyle(fontSize: 20)),
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                      ),
+                    ),
+                    Expanded(
+                      child: RaisedButton(
+                        onPressed: () async {
+                          idevent = await Getevent(widget.topic);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -242,7 +260,7 @@ class _mass_eventState extends State<mass_event> {
                                     senderId: widget.senderId,
                                     location: widget.location,
                                     type_event: widget.type_event,
-                                     dataid: "BMaN0ggVZeeYFFjb3OWx",
+                                     dataid: idevent,
                                       )));
                         },
                         child: const Text('עריכת אירוע',
@@ -254,10 +272,10 @@ class _mass_eventState extends State<mass_event> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+
     );
   }
 }
@@ -290,8 +308,8 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("אישור אירוע"),
-    content: Text("האירוע הוסף ללוח השנה ונשלח עיכון ליוצר האירוע"),
+    title: Text("אירוע עודכן בהצלחה"),
+    content: Text("נשלח עידכון ליוצר האירוע"),
     actions: [
       okButton,
     ],
@@ -304,4 +322,12 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
       return alert;
     },
   );
+}
+_launchURL(String url) async {
+ url = '$url';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
 }

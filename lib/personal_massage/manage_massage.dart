@@ -32,30 +32,33 @@ class reportState extends State<report> {
   Future<Widget> listOfMass() async {
     if (globals.isMeneger == true) {
       return Container(
-        margin: const EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            new Align(
-              child: new Text(
-                "הודעות מנהל",
-                style: new TextStyle(fontSize: 40.0, color: Colors.black),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            SingleChildScrollView(
-              child: reportStream(),
-            ),
-            new Align(
-              child: new Text(
-                "דיווחים ואירועים",
-                style: new TextStyle(fontSize: 40.0),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            SingleChildScrollView(
-              child: eventStream(),
-            ),
-          ],
+
+        child: SingleChildScrollView(
+
+          child: Column(
+            children: <Widget>[
+              new Align(
+                child: new Text(
+                  "הודעות מנהל",
+                  style: new TextStyle(fontSize: 25, color: Colors.black),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+
+                reportStream(),
+
+              new Align(
+                child: new Text(
+                  "דיווחים ואירועים",
+                  style: new TextStyle(fontSize: 25),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+
+                eventStream(),
+
+            ],
+          ),
         ),
       );
     } else {
@@ -169,8 +172,8 @@ class personalMassStream extends StatelessWidget {
           }
         }
         return ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+
+
           children: reportsContainers,
         );
       },
@@ -214,9 +217,8 @@ class reportStream extends StatelessWidget {
           reportsContainers.add(reportsContainer);
           //  reports.sort((a, b) => b.time.compareTo(a.time));
         }
-        return ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+        return Column(
+
           children: reportsContainers,
         );
       },
@@ -249,51 +251,56 @@ class ReportsContainer extends StatelessWidget {
             fit: BoxFit.fill,
           )));
     } else {
-      return Text(text, style: TextStyle(color: Colors.black),
+      return Text(text, style: TextStyle(color: Colors.black,fontSize: 8),
           overflow: TextOverflow.ellipsis);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      leading: Container(
-        padding: EdgeInsets.only(right: 12.0),
-        decoration: new BoxDecoration(
-            border: new Border(
-                right: new BorderSide(width: 1.0, color: Colors.white24))),
-        child: Icon(Icons.receipt, color: Colors.black),
-      ),
-      title: Text(
-        sender,
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
 
-      subtitle: Row(
+    return Container(
 
-        children: <Widget>[
+      width: MediaQuery.of(context).size.width,
+      child: ListTile(
 
-          Flexible(child: thereport()),
+        leading: Container(
 
-        ],
-      ),
-      trailing: FlatButton(
-        child:
-            Icon(Icons.keyboard_arrow_left, color: Colors.black, size: 30.0),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => mass(
-                        sender: sender,
-                        topic: "הודעה פרטית",
-                         text: text,
-                        image_u: image_u,
-                        senderId: senderId,
-                      )));
-        },
+          decoration: new BoxDecoration(
+              border: new Border(
+                  right: new BorderSide(width: 1.0, color: Colors.white24))),
+          child: Container(
+              padding: const EdgeInsets.all(0.0),
+              child: Icon(Icons.receipt, color: Colors.black)),
+        ),
+        title: Text(
+          sender,
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 10),
+        ),
+        // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+        subtitle: thereport(),
+
+
+        trailing: FlatButton(
+          padding: const EdgeInsets.all(0.0),
+          child:
+              Container(
+
+                  child: Icon(Icons.keyboard_arrow_left, color: Colors.black, size: 30.0)),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => mass(
+                          sender: sender,
+                          topic: "הודעה פרטית",
+                           text: text,
+                          image_u: image_u,
+                          senderId: senderId,
+                        )));
+          },
+        ),
       ),
     );
   }
@@ -329,6 +336,7 @@ class eventStream extends StatelessWidget {
           final date=event.data["event_date"];
           final location=event.data["location"];
           final type_event=event.data["type_event"];
+          final whatapp=event.data['whatapp'];
           if (eventapprove == false) {
             final evenContainer = eventContainer(
               title: eventtitle,
@@ -343,15 +351,15 @@ class eventStream extends StatelessWidget {
               senderId: senderId,
               location:  location,
               type_event: type_event,
+                whatapp: whatapp,
             );
             eventContainers.add(evenContainer);
           }
 
           //  reports.sort((a, b) => b.time.compareTo(a.time));
         }
-        return ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
+        return Column(
+
           children: eventContainers,
         );
       },
@@ -372,9 +380,10 @@ class eventContainer extends StatelessWidget {
   final String senderId;
   final String type_event;
   final String location;
-
+final String whatapp;
   eventContainer(
       {this.approve,
+     this.whatapp,
       this.location,
         this.type_event,
         this.equipment,
@@ -389,9 +398,9 @@ class eventContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+
       leading: Container(
-        padding: EdgeInsets.only(right: 12.0),
+
         decoration: new BoxDecoration(
             border: new Border(
                 right: new BorderSide(width: 1.0, color: Colors.white24))),
@@ -399,7 +408,7 @@ class eventContainer extends StatelessWidget {
       ),
       title: Text(
         this.sender,
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 10),
       ),
       // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
 
@@ -407,7 +416,7 @@ class eventContainer extends StatelessWidget {
 
         children: <Widget>[
           Flexible(
-              child: Text('אירוע חדש:'+this.title, style: TextStyle(color: Colors.black),)
+              child: Text('אירוע חדש:'+this.title, style: TextStyle(color: Colors.black,fontSize: 8),)
           ),
 
         ],
@@ -430,6 +439,7 @@ class eventContainer extends StatelessWidget {
                     senderId: this.senderId,
                     location: this.location,
                     type_event: this.type_event,
+                    whatapp:this.whatapp,
                   )));
         },
       ),

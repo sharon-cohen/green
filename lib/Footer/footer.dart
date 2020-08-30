@@ -5,7 +5,7 @@ import 'package:greenpeace/personal_massage/manage_massage.dart';
 import 'package:greenpeace/create_struggle1.dart';
 import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/evants/calender.dart';
-
+import 'package:greenpeace/evants/list_event.dart';
 class BottomNavigationBarController extends StatefulWidget {
   static String id = "BottomNavigationBarController ";
   BottomNavigationBarController(this.page_num,this.come_from,);
@@ -33,15 +33,18 @@ class _BottomNavigationBarControllerState
         arguments: send
     ),
 
-    Calender(
-      key: PageStorageKey('Calender'),
+    List_event(
+      key: PageStorageKey('List_event'),
 
     ),
     create_struggle1(
         key: PageStorageKey(' StepperBody'),
         arguments: send
     ),
+    Calender(
+      key: PageStorageKey('Calender'),
 
+    ),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -110,9 +113,10 @@ class _BottomNavigationBarControllerState
       BottomNavigationBarItem(
           icon:ImageIcon(  AssetImage("image/icon_struggle.png"),color: Colors.black,), title: Text('מאבקים')),
       BottomNavigationBarItem(
-          icon:ImageIcon(  AssetImage("image/date.png"),color: Colors.black,), title: Text('אירועים')),
+          icon: Icon(Icons.format_list_bulleted,color: Colors.black,), title: Text('הודעות')),
       BottomNavigationBarItem(
           icon: Icon(Icons.add,color: Colors.black,), title: Text('אירועים')),
+
     ],
 
   );

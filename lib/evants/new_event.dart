@@ -23,6 +23,7 @@ class _newEventPage extends State<newEventPage> {
   TextEditingController _title;
   TextEditingController _description;
   TextEditingController _location;
+  TextEditingController _whatapp;
   String type_event;
   Data data=Data(
     dropdownValue:'',
@@ -66,6 +67,7 @@ class _newEventPage extends State<newEventPage> {
     _title = TextEditingController(text: widget.note != null ? widget.note.title : "");
     _description = TextEditingController(text:  widget.note != null ? widget.note.description : "");
     _location = TextEditingController(text:  widget.note != null ? widget.note.location : "");
+    _whatapp = TextEditingController(text:  widget.note != null ? widget.note.location : "");
     _eventDate = DateTime.now();
     processing = false;
   }
@@ -121,6 +123,19 @@ class _newEventPage extends State<newEventPage> {
                   style: style,
                   decoration: InputDecoration(
                       labelText: "תיאור הבעיה",
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: TextFormField(
+                  controller: _whatapp,
+                  minLines: 3,
+                  maxLines: 5,
+
+                  style: style,
+                  decoration: InputDecoration(
+                      labelText: "צרף קישור לקבוצת Whatapp",
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                 ),
               ),
@@ -247,6 +262,7 @@ class _newEventPage extends State<newEventPage> {
                             "senderId":currentUser.uid,
                             "location":_location.text,
                             "type_event":type_event,
+                            "whatapp":_whatapp.text,
                           });
                         }else{
 
@@ -260,6 +276,7 @@ class _newEventPage extends State<newEventPage> {
                             senderId: currentUser.uid,
                             type_event: type_event,
                             location: _location.text,
+                            whatapp: _whatapp.text,
                           ));
                         }
 

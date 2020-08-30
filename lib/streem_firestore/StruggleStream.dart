@@ -4,17 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:greenpeace/evants/add_event.dart';
-import 'package:greenpeace/home/haert_button.dart';
+import 'package:greenpeace/truggel_page/struggle_model.dart';
+import 'package:greenpeace/truggel_page/one_struggle.dart';
+
 final _firestore = Firestore.instance;
 
 class TruggleStream extends StatelessWidget {
   final String page_call;
   Data data;
-  TruggleStream({this.page_call,this.data});
+  TruggleStream({this.page_call, this.data});
   List<TtuggleContainer> TtuggleContainers = [];
   List<All_TtuggleContainer> ALL_TtuggleContainers = [];
-  List<String>NameStruggle=[];
+  List<String> NameStruggle = [];
   Widget result_stream() {
     if (page_call == 'home') {
       return Align(
@@ -40,94 +41,80 @@ class TruggleStream extends StatelessWidget {
         ),
       );
     }
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection("struggle").snapshots(),
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) {
-        return Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.lightBlueAccent,
-          ),
-        );
-      }
-
-        final truggls = snapshot.data.documents;
-        for (var truggl in truggls) {
-          final trugglNmae = truggl.data["name"];
-          final imag_url = truggl.data["url_image"];
-          final info = truggl.data["info"];
-          final messageTime = truggl.data["time"];
-          final sign_target = truggl.data["name"];
-          final url_money = truggl.data["url_money"];
-          final sign_num = truggl.data["sign_num"];
-          final All_TtuggleContainer_new = All_TtuggleContainer(
-            name: trugglNmae,
-            image_u: imag_url,
-            info: info,
-            sign_num: sign_num,
-            url_money: url_money,
-            sign_target: sign_target,
-          );
-          final TtuggleContainer_new = TtuggleContainer(
-            name: trugglNmae,
-            image_u: imag_url,
-            time: messageTime,
-          );
-          if (NameStruggle.contains(trugglNmae) == false) {
-            NameStruggle.add(trugglNmae);
+        stream: _firestore.collection("struggle").snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.lightBlueAccent,
+              ),
+            );
           }
-          TtuggleContainers.add(TtuggleContainer_new);
-          ALL_TtuggleContainers.add(All_TtuggleContainer_new);
-          TtuggleContainers.sort((a, b) => b.time.compareTo(a.time));
-        }
-        if (page_call == 'new_event') {
-          return Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Container(
-              child: DropDown(NameStruggle: NameStruggle, data: this.data,),
-            ),
 
-          );
-        }
-        return result_stream();
-      }
-
-
-    );
-
+          final truggls = snapshot.data.documents;
+          for (var truggl in truggls) {
+            final trugglNmae = truggl.data["name"];
+            final imag_url = truggl.data["url_image"];
+            final info = truggl.data["info"];
+            final url_money = truggl.data["petition"];
+            final share = truggl.data["url_share"];
+            final donation=truggl.data["donation"];
+            final All_TtuggleContainer_new = All_TtuggleContainer(
+              name: trugglNmae,
+              image_u: imag_url,
+              info: info,
+              sign_num: share,
+              url_money: url_money,
+            );
+            final TtuggleContainer_new = TtuggleContainer(
+                struggle: StruggleModel(
+              title: trugglNmae,
+              image: imag_url,
+              description: info,
+              share: share,
+              petition: url_money,
+              donation: donation,
+            ));
+            if (NameStruggle.contains(trugglNmae) == false) {
+              NameStruggle.add(trugglNmae);
+            }
+            TtuggleContainers.add(TtuggleContainer_new);
+            ALL_TtuggleContainers.add(All_TtuggleContainer_new);
+          }
+          if (page_call == 'new_event') {
+            return Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Container(
+                child: DropDown(
+                  NameStruggle: NameStruggle,
+                  data: this.data,
+                ),
+              ),
+            );
+          }
+          return result_stream();
+        });
   }
 }
 
 class TtuggleContainer extends StatefulWidget {
-  final Timestamp time;
-  final String name;
-  final String image_u;
-  TtuggleContainer({this.name, this.image_u,this.time});
+  final StruggleModel struggle;
+
+  TtuggleContainer({this.struggle});
   @override
   _TtuggleContainerState createState() => _TtuggleContainerState();
 }
+
 class _TtuggleContainerState extends State<TtuggleContainer> {
   final _auth = FirebaseAuth.instance;
-  bool love=false;
-  Future<void> readlike(String name)async{
-    final FirebaseUser user = await _auth.currentUser();
-    final uid = user.uid;
-    final document = await Firestore.instance.collection('users').document(uid
-    ).get();
-    List<String> likes=List.from(document['likes']);
-    if(likes.contains(widget.name)){
-      setState(() => love = true);
-    }
-  }
+
   @override
   Widget build(BuildContext context) {
-    readlike(widget.name);
     return Container(
       margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
       height: MediaQuery.of(context).size.height / (3.5),
@@ -136,36 +123,35 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
         children: <Widget>[
           new Expanded(
               flex: 6,
-              child: Container(
-                decoration: new BoxDecoration(
-                  image: DecorationImage(
-                    image:widget.image_u != null
-                        ? NetworkImage(widget.image_u)
-                        : AssetImage('image/image_icon.png'),
-                    fit: BoxFit.fill,
+              child: FlatButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => one_struggle(struggle: widget.struggle,)));
+                },
+                child: Container(
+                  decoration: new BoxDecoration(
+                    image: DecorationImage(
+                      image: widget.struggle.image != null
+                          ? NetworkImage(widget.struggle.image)
+                          : AssetImage('image/image_icon.png'),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               )),
           new Expanded(
               flex: 1,
               child: Container(
-
                 width: MediaQuery.of(context).size.width / (1),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  textDirection: TextDirection.rtl,
-
-                  children: <Widget>[
-                    Text(widget.name),
-
-                  ],
-                ),
+                child: Text(widget.struggle.title),
               )),
         ],
       ),
     );
   }
 }
+
 class All_TtuggleContainer extends StatelessWidget {
   final String name;
   final String image_u;
@@ -175,11 +161,11 @@ class All_TtuggleContainer extends StatelessWidget {
   final String sign_num;
   All_TtuggleContainer(
       {this.name,
-        this.image_u,
-        this.info,
-        this.sign_target,
-        this.url_money,
-        this.sign_num});
+      this.image_u,
+      this.info,
+      this.sign_target,
+      this.url_money,
+      this.sign_num});
   final _foldingCellKey = GlobalKey<SimpleFoldingCellState>();
   @override
   Widget build(BuildContext context) {
@@ -281,59 +267,55 @@ class All_TtuggleContainer extends StatelessWidget {
     );
   }
 }
+
 class DropDown extends StatefulWidget {
- DropDown({this.NameStruggle,this.data});
+  DropDown({this.NameStruggle, this.data});
   // ignore: non_constant_identifier_names
   Data data;
- List<String> NameStruggle;
+  List<String> NameStruggle;
   @override
   DropDownWidget createState() => DropDownWidget();
 }
 
 class DropDownWidget extends State<DropDown> {
-
   String dropdownValue = 'sharon';
   @override
   Widget build(BuildContext context) {
     print(widget.NameStruggle);
     return Center(
-        child :
-        Column(children: <Widget>[
-
-          DropdownButton<String>(
-            value: dropdownValue,
-            icon: Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            elevation: 16,
-            style: TextStyle(color: Colors.red, fontSize: 18),
-            underline: Container(
-              height: 2,
-              color: Colors.deepPurpleAccent,
-            ),
-            onChanged: (String data) {
-              setState(() {
-                widget.data.dropdownValue = data;
-                dropdownValue = data;
-              });
-            },
-            items: widget.NameStruggle.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+      child: Column(children: <Widget>[
+        DropdownButton<String>(
+          value: dropdownValue,
+          icon: Icon(Icons.arrow_drop_down),
+          iconSize: 24,
+          elevation: 16,
+          style: TextStyle(color: Colors.red, fontSize: 18),
+          underline: Container(
+            height: 2,
+            color: Colors.deepPurpleAccent,
           ),
-
-          Text('Selected Item = ' + '$dropdownValue',
-              style: TextStyle
-                (fontSize: 22,
-                  color: Colors.black)),
-        ]),
-      );
-
+          onChanged: (String data) {
+            setState(() {
+              widget.data.dropdownValue = data;
+              dropdownValue = data;
+            });
+          },
+          items:
+              widget.NameStruggle.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+        Text('Selected Item = ' + '$dropdownValue',
+            style: TextStyle(fontSize: 22, color: Colors.black)),
+      ]),
+    );
   }
 }
-class Data{
+
+class Data {
   String dropdownValue;
   Data({this.dropdownValue});
 }

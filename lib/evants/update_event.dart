@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'event_model.dart';
 import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:greenpeace/Footer/footer.dart';
-import 'dart:convert';
 class updateEventPage extends StatefulWidget {
   final EventModel note;
   final String sender;
@@ -20,8 +17,10 @@ class updateEventPage extends StatefulWidget {
   final String type_event;
   final String location;
   final String dataid;
+  final String whatapp;
   updateEventPage(
       {this.sender,
+       this.whatapp,
         this.text,
         this.senderId,
         this.topic,
@@ -46,7 +45,7 @@ class _updateEventPage extends State<updateEventPage> {
   TextEditingController _title;
   TextEditingController _description;
   TextEditingController _location;
-
+  TextEditingController _whatapp;
   Data data=Data(
     dropdownValue:'',
   );
@@ -97,28 +96,21 @@ for(int i=0; i<equipmentList.length; i++){
 }
 
   }
-  void _asyncMethod() async {
-   await set();
 
-  }
-  Future<void> set() async{
-
-
-  }
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
-
+    stringToList();
     _title = TextEditingController(text: widget.note != null ? widget.note.title : "");
     _description = TextEditingController(text:  widget.note != null ? widget.note.description : "");
     _location = TextEditingController(text:  widget.note != null ? widget.note.location : "");
     processing = false;
-
+    _whatapp = TextEditingController(text:  widget.note != null ? widget.note.location : "");
     _title = TextEditingController(text:widget.topic);
     _description = TextEditingController(text:widget.text );
     _location = TextEditingController(text: widget.location);
-
+    _whatapp = TextEditingController(text:widget.whatapp);
 
   }
 
@@ -129,13 +121,7 @@ for(int i=0; i<equipmentList.length; i++){
       });
     });
   }
-  String _email() {
-    if (currentUser != null) {
-      return currentUser.email;
-    } else {
-      return "no current user";
-    }
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,6 +171,17 @@ for(int i=0; i<equipmentList.length; i++){
                   decoration: InputDecoration(
                       labelText: "תיאור הבעיה",
 
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: TextFormField(
+                  controller: _whatapp,
+                  style: style,
+                  decoration: InputDecoration(
+                      labelText: "קישור לקבוצת Whatapp",
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                 ),
               ),
@@ -311,6 +308,7 @@ for(int i=0; i<equipmentList.length; i++){
                             "equipment":getCheckboxItems(),
                             "location":_location.text,
                             "type_event":widget.type_event,
+                            "whatapp":_whatapp.text,
                           });
 
 
@@ -318,7 +316,7 @@ for(int i=0; i<equipmentList.length; i++){
                           processing = false;
                         });
                       }
-                      successshowAlertDialog(context);
+                      successshowAlertDialog(context,currentUser.email,widget.senderId,widget.topic,widget.sender);
 
                     },
 
@@ -349,12 +347,28 @@ class Data{
   String dropdownValue;
   Data({this.dropdownValue});
 }
-successshowAlertDialog(BuildContext context) {
+successshowAlertDialog(BuildContext context, String email, String currentuserId,
+    String name_event, String createby) {
 
   // set up the button
   Widget okButton = FlatButton(
     child: Text("אישור"),
     onPressed: () {
+      DocumentReference documentReference =
+      Firestore.instance.collection("personalMess").document();
+      documentReference.setData({
+        "text":
+        'בוצע עדכון על ידי המנהל' + name_event + 'האירוע',
+        "sender": email,
+        "time": DateTime.now(),
+        "url": "",
+        "senderID": currentuserId,
+      });
+
+      Firestore.instance.collection("users").document(createby).updateData({
+        "personalMessId": FieldValue.arrayUnion([documentReference.documentID])
+      });
+
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -366,8 +380,8 @@ successshowAlertDialog(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("האירוע נוצר בהצלחה"),
-    content: Text("נשלח למנהלים לאישור תקבל עדכון בקרוב"),
+    title: Text("האירוע עודכן בהצלחה"),
+    content: Text("נשלח התראה ליוצר האירוע"),
     actions: [
       okButton,
     ],

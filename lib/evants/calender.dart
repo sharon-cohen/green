@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greenpeace/evants/event_firestore_service.dart';
 import 'event_model.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:greenpeace/evants/event_page.dart';
 class Calender extends StatefulWidget {
   Calender({Key key}) : super(key: key);
   static const String id = 'Calender';
@@ -41,7 +41,7 @@ class CalenderState extends State<Calender>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-
+        margin: const EdgeInsets.all(30),
         child: StreamBuilder<List<EventModel>>(
           stream: eventDBS.streamList(),
           builder: (context, snapshot) {
@@ -55,17 +55,7 @@ class CalenderState extends State<Calender>{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  new Container(
-                    margin: new EdgeInsets.only(left:0, right: 0, top: 0, bottom: 5.0),
-                    height: MediaQuery.of(context).size.height / (2.5),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: new BoxDecoration(
-                      image: DecorationImage(
-                        image: new AssetImage('image/green.jpeg'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
+
                   TableCalendar(
                     events: _events,
                     initialCalendarFormat: CalendarFormat.week,
@@ -144,29 +134,3 @@ class CalenderState extends State<Calender>{
 
 
 
-class EventDetailsPage extends StatelessWidget {
-  final EventModel event;
-
-  const EventDetailsPage({Key key, this.event}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Note details'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // ignore: deprecated_member_use
-            Text(event.title, style: Theme.of(context).textTheme.display1,),
-            SizedBox(height: 20.0),
-            Text(event.description)
-          ],
-        ),
-      ),
-    );
-  }
-}
