@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:greenpeace/evants/add_event.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:greenpeace/globalfunc.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/evants/update_event.dart';
-import 'package:greenpeace/globalfunc.dart';
+
 final databaseReference = Firestore.instance;
 
 

@@ -4,6 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:greenpeace/global.dart';
 import 'package:greenpeace/evants/update_event.dart';
 import 'package:greenpeace/globalfunc.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+final _firestore = Firestore.instance;
+
 class EventDetailsPage extends StatelessWidget {
   final EventModel event;
 
@@ -41,29 +45,44 @@ class EventDetailsPage extends StatelessWidget {
             } ,
                 child:Image.asset('image/whatsapp.png')),
             Text('הצטרף לקבוצת הwhatsapp שלנו'),
-           isMeneger? RaisedButton(
-              onPressed: () async {
-               String  idevent = await Getevent(event.title);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>updateEventPage(
-                          sender:event.sender,
-                          topic: event.title,
-                          text: event.description,
-                          equipment: event.equipment,
-                          eventDate: event.eventDate,
-                          senderId: event.senderId,
-                          location: event.location,
-                          type_event: event.type_event,
-                          dataid: idevent,
-                        )));
-              },
-              child: const Text('עריכת אירוע',
-                  style: TextStyle(fontSize: 20)),
-              color: Colors.blue,
-              textColor: Colors.white,
-            ):null
+           isMeneger? Row(
+             children: [
+               RaisedButton(
+                  onPressed: () async {
+                   String  idevent = await Getevent(event.title);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>updateEventPage(
+                              sender:event.sender,
+                              topic: event.title,
+                              text: event.description,
+                              equipment: event.equipment,
+                              eventDate: event.eventDate,
+                              senderId: event.senderId,
+                              location: event.location,
+                              type_event: event.type_event,
+                              dataid: idevent,
+                            )));
+                  },
+                  child: const Text('עריכת אירוע',
+                      style: TextStyle(fontSize: 20)),
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                ),
+               RaisedButton(
+                 onPressed: () async {
+                   String  idevent = await Getevent(event.title);
+                   _firestore.collection("events").document(idevent).delete();
+                   Navigator.pop(context, true);
+                 },
+                 child: const Text('מחיקת אירוע',
+                     style: TextStyle(fontSize: 20)),
+                 color: Colors.blue,
+                 textColor: Colors.white,
+               ),
+             ],
+           ):null
           ],
         ),
       ),

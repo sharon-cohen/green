@@ -8,6 +8,7 @@ import 'package:greenpeace/Footer/footer.dart';
 import 'package:greenpeace/streem_firestore/MessagesStream.dart';
 import 'package:greenpeace/home/send_mass_button.dart';
 import 'package:greenpeace/streem_firestore/StruggleStream.dart';
+import 'package:greenpeace/global.dart' as globals;
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 class Home_menager extends StatefulWidget {
@@ -84,9 +85,10 @@ class Home_menagerState extends State<Home_menager> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               BottomNavigationBarController(
-                                                2, 0,)));
+                                                3, 0,)));
                                 },
                               ),
+                              globals.isMeneger?
                               FlatButton(
                                 child: Text("מאבק חדש",style: TextStyle(fontSize: 20,color: Colors.green.shade900)),
                                 onPressed: () {
@@ -95,9 +97,9 @@ class Home_menagerState extends State<Home_menager> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               BottomNavigationBarController(
-                                                4, 0,)));
+                                                5, 0,)));
                                 },
-                              ),
+                              ):Container(),
                             ],
                           ),
                         ),

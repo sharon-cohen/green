@@ -17,8 +17,34 @@ class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
-
+  FirebaseUser currentUser;
   @override
+//  void initState() {
+//    super.initState();
+//    _loadCurrentUser();
+//
+//  }
+//  _loadCurrentUser()  {
+//    FirebaseAuth.instance.currentUser().then((FirebaseUser user) async {
+//      var document = await Firestore.instance.collection('users').document(user.uid
+//      ).get();
+//      setState(() { // call setState to rebuild the view
+//        currentUser = user;
+//        globals.emailUser=currentUser.email;
+//        if (user != null) {
+//          String role=document.data['role'];
+//          if(role=='menager'){
+//            globals.isMeneger = true;
+//
+//          }
+//        }
+//        if(user==null){
+//          globals. no_reg=true;
+//        }
+//      });
+//    });
+//  }
+
   Widget build(BuildContext context) {
 
     return Scaffold(
@@ -80,17 +106,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (user2 != null) {
                       FirebaseUser user1=user2.user;
                       String t=user1.uid;
-                      String userId = (await FirebaseAuth.instance.currentUser()).uid;
 
+                      String userId = (await FirebaseAuth.instance.currentUser()).uid;
+                      globals.emailUser=user1.email;
                       var document = await Firestore.instance.collection('users').document(userId
                       ).get();
+
                       String name=document.data['name'];
                       String role=document.data['role'];
                       if(role=='menager'){
                         globals.isMeneger = true;
-
                       }
-
+                      else{
+                        globals.isMeneger = false;
+                      }
                       Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments_m(
                           t,'sharon','menager'
                       ));

@@ -3,10 +3,9 @@ import 'package:greenpeace/evants/add_event.dart';
 class mass extends StatefulWidget {
   final String sender;
   final String text;
-  final String image_u;
   final String senderId;
   final String  topic;
-  mass({this.sender, this.text, this.image_u,this.senderId,this.topic});
+  mass({this.sender, this.text,this.senderId,this.topic});
   @override
   _massState createState() => _massState();
 }
@@ -59,10 +58,12 @@ class _massState extends State<mass> {
             children: [
               RaisedButton(
                 onPressed: () {
-
+                  print('test1');
+                  print(widget.senderId);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
+
                         builder: (context) =>
                             AddEventPage (
                            sender: widget.sender,senderId: widget.senderId, )));},

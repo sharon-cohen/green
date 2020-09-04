@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:greenpeace/streem_firestore/StruggleStream.dart';
+import 'package:greenpeace/global.dart' as globals;
 import 'event_model.dart';
 import 'package:flutter/material.dart';
-import 'event_firestore_service.dart';
+import 'package:greenpeace/Footer/footer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:greenpeace/global.dart' as globals;
+
 final _firestore = Firestore.instance;
 class AddEventPage extends StatefulWidget {
   final EventModel note;
@@ -42,13 +42,6 @@ class _AddEventPageState extends State<AddEventPage> {
       return "no current user";
     }
   }
-  //not used
-  // int votes = 0;
-  // void countT() {
-  //   setState(() {
-  //     votes++;
-  //   });
-  // }
 
   Widget text_field(){
     return TextField(
@@ -84,7 +77,7 @@ class _AddEventPageState extends State<AddEventPage> {
         padding: const EdgeInsets.all(30),
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          textDirection: TextDirection.rtl,
+
           children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width,
@@ -114,11 +107,10 @@ class _AddEventPageState extends State<AddEventPage> {
                     onPressed: () {
 
                       if(globals.isMeneger==false) {
-                        _firestore.collection("report").add({
+                        _firestore.collection("messageMenager").add({
                           "text": '$submitStr',
                           "sender": _email(),
                           "time": DateTime.now(),
-                          "url": "",
                           "senderID": currentUser.uid,
 
                         });
@@ -130,36 +122,51 @@ class _AddEventPageState extends State<AddEventPage> {
                           "text": '$submitStr',
                           "sender": _email(),
                           "time": DateTime.now(),
-                          "url": "",
                           "senderID": currentUser.uid,
 
                         });
 
+                        print('widget.senderId');
+                        print(widget.senderId);
                         Firestore.instance.collection("users").document(widget.senderId).updateData({"personalMessId": FieldValue.arrayUnion([documentReference.documentID])});
 
                       }
 
-                      Navigator.pop(context, true);
+                      showAlertDialog_mess_send(context);
+
                     },
                   ),
                 ],
               ),
             ),
-            Container(
+           globals.isMeneger? Container(
               width: MediaQuery.of(context).size.width,
               child: Text(
-                'אל המנהלים',
+                widget.sender,
               ),
 
-            ),
+            ):Container(
+             width: MediaQuery.of(context).size.width,
+             child: Text(
+               'אל המנהלים',
+             ),
+
+           ),
             Divider(
                 thickness: 1,
                 color: Colors.black
             ),
-            Container(
+            globals.isMeneger?  Container(
               width: MediaQuery.of(context).size.width,
               child: Text(
-                  'מאת: '+_email(),
+                  'מאת: מנהלים'
+
+              ),
+
+            ):Container(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                'מאת: '+_email(),
 
               ),
 
@@ -180,3 +187,35 @@ class _AddEventPageState extends State<AddEventPage> {
   }
 
 
+showAlertDialog_mess_send(BuildContext context) {
+
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BottomNavigationBarController(
+                    2, 2,)));
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("נשלח"),
+    content: Text("ההודעה נשלחה בהצלחה"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}

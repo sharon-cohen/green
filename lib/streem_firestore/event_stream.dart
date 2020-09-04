@@ -21,38 +21,40 @@ class event_stream extends StatelessWidget {
           );
         }
         final Events = snapshot.data.documents;
+       bool flage=false;
         List<event_container> eventsModel = [];
         for (var event in Events) {
+          if(event.data['approve']){
+          final title = event.data['title'];
+          final description = event.data['description'];
+          final eventDate = event.data['event_date'].toDate();
+          final approve = event.data['approve'];
+          final equipment = event.data['equipment'];
+          final sender = event.data['sender'];
+          final senderId = event.data['senderId'];
+          final location = event.data['location'];
+          final type_event = event.data['type_event'];
+          final whatapp = event.data['whatapp'];
+          final _eventmodel = event_container(
+            Event: EventModel(
+              title: title,
+              description: description,
+              eventDate: eventDate,
+              approve: approve,
+              equipment: equipment,
+              sender: sender,
+              senderId: senderId,
+              location: location,
+              type_event: type_event,
+              whatapp: whatapp,
 
-        final title= event.data['title'];
-        final description=event.data['description'];
-        final  eventDate= event.data['event_date'].toDate();
-        final  approve=event.data['approve'];
-        final   equipment= event.data['equipment'];
-        final  sender= event.data['sender'];
-        final  senderId= event.data['senderId'];
-        final  location= event.data['location'];
-        final  type_event= event.data['type_event'];
-        final  whatapp= event.data['whatapp'];
-        final _eventmodel = event_container(
-          Event:  EventModel(
-           title: title,
-          description: description,
-          eventDate: eventDate,
-          approve: approve,
-          equipment: equipment,
-          sender: sender,
-          senderId: senderId,
-          location: location,
-          type_event: type_event,
-          whatapp: whatapp,
-
-          ),
+            ),
 
 
-        );
-        eventsModel.add(_eventmodel);
-       // eventsModel.sort((a, b) => b.eventDate.compareTo(a.eventDate.));
+          );
+          eventsModel.add(_eventmodel);
+          // eventsModel.sort((a, b) => b.eventDate.compareTo(a.eventDate.));
+        }
         }
         return
           new Expanded(

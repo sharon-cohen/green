@@ -8,24 +8,27 @@ import 'globalfunc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'global.dart' as globals;
+
 FirebaseUser loggedInUser;
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
 
   @override
+
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
- List<Widget> button_in=[];
+  FirebaseUser currentUser;
+  List<Widget> button_in=[];
   final _auth = FirebaseAuth.instance;
   bool no_reg=false;
   AnimationController controller;
   Animation animation;
   List<Widget> log_in(){
-button_in.clear();
+      button_in.clear();
     if(no_reg==true){
       button_in.add(RoundedButton(
         title: 'Log In',
@@ -64,7 +67,7 @@ button_in.clear();
         },
       ),);
       button_in.add(   RoundedButton(
-      title:  loggedInUser.email+ ' היכנס בתור ',
+      title:  globals.emailUser+ ' היכנס בתור ',
       colour: Colors.lightBlueAccent,
       onPressed: () {
         //Navigator.pushNamed(context,profile.id);
@@ -78,15 +81,7 @@ button_in.clear();
   }
 
   @override
-  void initState() {
 
-    super.initState();
-    getCurrentUser();
-
-
-
-
-  }
 
   @override
   void dispose() {
@@ -96,27 +91,7 @@ button_in.clear();
 
 
 
-  void getCurrentUser() async {
 
-    final user = await _auth.currentUser();
-    if (user != null) {
-      loggedInUser = user;
-      print(loggedInUser.email);
-      var document = await Firestore.instance.collection('users').document(loggedInUser.uid
-      ).get();
-      String role=document.data['role'];
-      if(role=='menager'){
-        globals.isMeneger = true;
-
-      }
-    }
-    if(user==null){
-      no_reg=true;
-
-    }
-
-
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'movedoc.dart';
+
 import 'package:greenpeace/globalfunc.dart';
 class DialogUtils {
   static DialogUtils _instance = new DialogUtils.internal();
@@ -26,6 +26,7 @@ class DialogUtils {
     }
 
     Future doesNameAlreadyExist(String text_or_image, bool is_image) async {
+      final _firestore = Firestore.instance;
       if (is_image == true) {
         final QuerySnapshot result = await Firestore.instance
             .collection('messages')
@@ -33,10 +34,26 @@ class DialogUtils {
             .limit(1)
             .getDocuments();
         final List<DocumentSnapshot> documents = result.documents;
-
+        await Firestore.instance
+            .collection('messages')
+            .document(documents[0].documentID)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            final image=documentSnapshot.data['url'];
+            final text=documentSnapshot.data['text'];
+            final sender= documentSnapshot.data['sender'].toString();
+            final time=documentSnapshot.data['time'];
+            _firestore.collection('report').add({
+              "text": text,
+              "sender":sender,
+              "time":time,
+              "url":image,
+            });
+          }
+        });
         print(documents[0].documentID.toString());
-        await movedoc(uid: documents[0].documentID)
-            .updateUserData(sender, text, image_u);
+
         Navigator.pop(context);
       } else {
         final QuerySnapshot result = await Firestore.instance
@@ -45,11 +62,28 @@ class DialogUtils {
             .limit(1)
             .getDocuments();
         final List<DocumentSnapshot> documents = result.documents;
-        print(documents[0].documentID.toString());
-        await movedoc(uid: documents[0].documentID)
-            .updateUserData(sender, text, image_u);
+        await Firestore.instance
+            .collection('messages')
+            .document(documents[0].documentID)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            final image=documentSnapshot.data['url'];
+            final text=documentSnapshot.data['text'];
+            final sender= documentSnapshot.data['sender'].toString();
+            final time=documentSnapshot.data['time'];
+            _firestore.collection('report').add({
+              "text": text,
+              "sender":sender,
+              "time":time,
+              "url":image,
+            });
+          }
+        });
         Navigator.pop(context);
       }
+
+
     }
 
     showDialog(

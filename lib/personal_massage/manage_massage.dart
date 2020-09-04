@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greenpeace/globalfunc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:greenpeace/personal_massage/mass_page.dart';
 import 'package:greenpeace/evants/add_event.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/personal_massage/mass_event_page.dart';
-
+import 'package:greenpeace/report/report_model.dart';
+import 'package:greenpeace/report/report_mass.dart';
+import 'package:greenpeace/personal_massage/personalMessModel.dart';
+import 'package:greenpeace/personal_massage/messMenager.dart';
 final databaseReference = Firestore.instance;
 final _firestore = Firestore.instance;
 
@@ -24,9 +26,16 @@ class reportState extends State<report> {
   var height_page;
   var width_page;
   final _auth = FirebaseAuth.instance;
+
   height_width() {
-    height_page = MediaQuery.of(context).size.height;
-    width_page = MediaQuery.of(context).size.width;
+    height_page = MediaQuery
+        .of(context)
+        .size
+        .height;
+    width_page = MediaQuery
+        .of(context)
+        .size
+        .width;
   }
 
   Future<Widget> listOfMass() async {
@@ -39,23 +48,23 @@ class reportState extends State<report> {
             children: <Widget>[
               new Align(
                 child: new Text(
-                  "הודעות מנהל",
+                  "דיווחים והודעות מנהל",
                   style: new TextStyle(fontSize: 25, color: Colors.black),
                 ), //so big text
                 alignment: FractionalOffset.topRight,
               ),
-
-                reportStream(),
+              messMenager(),
+              reportStream(),
 
               new Align(
                 child: new Text(
-                  "דיווחים ואירועים",
+                  "אירועים",
                   style: new TextStyle(fontSize: 25),
                 ), //so big text
                 alignment: FractionalOffset.topRight,
               ),
 
-                eventStream(),
+              eventStream(),
 
             ],
           ),
@@ -64,7 +73,7 @@ class reportState extends State<report> {
     } else {
       final FirebaseUser user = await _auth.currentUser();
       final document =
-          await Firestore.instance.collection('users').document(user.uid).get();
+      await Firestore.instance.collection('users').document(user.uid).get();
       List<String> myMess = List.from(document['personalMessId']);
       return Container(
         margin: const EdgeInsets.all(20),
@@ -73,15 +82,15 @@ class reportState extends State<report> {
             Align(
               child: new Text(
                 "הודעות",
-                style: new TextStyle(fontSize: 40.0),
+                style: new TextStyle(fontSize: 25),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
-            SingleChildScrollView(
-              child: personalMassStream(
+
+              personalMassStream(
                 myMess: myMess,
               ),
-            ),
+
 
           ],
         ),
@@ -92,14 +101,14 @@ class reportState extends State<report> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: FloatingActionButton(
+      bottomNavigationBar: !globals.isMeneger?FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => AddEventPage()));
-          }),
+          }):null,
       body: new FutureBuilder<Widget>(
           future: listOfMass(),
           builder: (BuildContext context, AsyncSnapshot<Widget> text) {
@@ -110,32 +119,13 @@ class reportState extends State<report> {
           }),
     );
   }
-//  Widget build(BuildContext context) {
-//    height_width();
-//    return Scaffold(
-//
-//      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-//
-//      body: listOfMass(),
-//      floatingActionButton: FloatingActionButton(
-//        child: Icon(Icons.add),
-//        onPressed: () {
-//          Navigator.push(
-//              context,
-//              MaterialPageRoute(
-//                  builder: (context) =>
-//                      AddEventPage (
-//                      )));
-//        }
-//      ),
-//    );
-//  }
 }
 
 class personalMassStream extends StatelessWidget {
   personalMassStream({this.width_page, this.height_page, this.myMess});
   final height_page;
   final width_page;
+
   final List<String> myMess;
   @override
   Widget build(BuildContext context) {
@@ -151,30 +141,33 @@ class personalMassStream extends StatelessWidget {
           );
         }
         final reports = snapshot.data.documents;
-        List<ReportsContainer> reportsContainers = [];
+
+        List<personalMessContainer> personalsList = [];
         for (var report in reports) {
           if (myMess.contains(report.documentID)) {
             print(report.documentID);
             final messageText = report.data["text"];
             final messageSender = report.data["sender"];
-            final messageImage = report.data["url"];
+            final time = report.data["time"].toDate();
             final messageSenderId = report.data["senderId"];
-            final reportsContainer = ReportsContainer(
-              sender: messageSender,
-              text: messageText,
-              image_u: messageImage,
-              senderId: messageSenderId,
+            final personalsContainer = personalMessContainer(
+             mess: personalMessModel(
+               sender: messageSender,
+               senderId: messageSenderId,
+               time: time,
+               text: messageText,
+             ),
               height_page: height_page,
               width_page: width_page,
             );
-            reportsContainers.add(reportsContainer);
+            personalsList.add(personalsContainer);
             //  reports.sort((a, b) => b.time.compareTo(a.time));
           }
         }
-        return ListView(
+        return Column(
 
 
-          children: reportsContainers,
+          children: personalsList,
         );
       },
     );
@@ -187,8 +180,8 @@ class reportStream extends StatelessWidget {
   final width_page;
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
+  Widget build(BuildContext context){
+    return  StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection("report").snapshots(),
       // ignore: missing_return
       builder: (context, snapshot) {
@@ -200,17 +193,23 @@ class reportStream extends StatelessWidget {
           );
         }
         final reports = snapshot.data.documents;
+
         List<ReportsContainer> reportsContainers = [];
         for (var report in reports) {
-          final messageText = report.data["text"];
-          final messageSender = report.data["sender"];
-          final messageImage = report.data["url"];
-          final messageSenderId = report.data["senderId"];
-          final reportsContainer = ReportsContainer(
-            sender: messageSender,
-            text: messageText,
-            image_u: messageImage,
-            senderId: messageSenderId,
+          final  sender=report.data['sender'];
+          final  text=report.data['text'];
+          final  time=report.data['time'];
+          final  image=report.data['image'];
+
+       //print( reportModel.getReportfromMess(messId).text.toString());
+        final reportsContainer = ReportsContainer(
+
+            report: reportModel(
+              sender: sender,
+              text: text,
+              time: time.toDate(),
+              image: image,
+            ),
             height_page: height_page,
             width_page: width_page,
           );
@@ -227,45 +226,38 @@ class reportStream extends StatelessWidget {
 }
 
 class ReportsContainer extends StatelessWidget {
-  final String sender;
-  final String text;
-  final String image_u;
-  final String senderId;
+  final reportModel report;
   var height_page;
   var width_page;
   ReportsContainer(
-      {this.sender,
-      this.text,
-      this.image_u,
-      this.height_page,
+      {
+      this.report,
+        this.height_page,
       this.width_page,
-      this.senderId});
+     });
   Widget thereport() {
-    if (image_u != '') {
+
+    if (report.image!=null) {
       return Container(
           height: 100,
           width: 100,
           decoration: new BoxDecoration(
               image: new DecorationImage(
-            image: new NetworkImage(image_u),
+            image: new NetworkImage(report.image),
             fit: BoxFit.fill,
           )));
     } else {
-      return Text(text, style: TextStyle(color: Colors.black,fontSize: 8),
+      return Text('דיווח חדש', style: TextStyle(color: Colors.black,fontSize: 8),
           overflow: TextOverflow.ellipsis);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-
       width: MediaQuery.of(context).size.width,
       child: ListTile(
-
         leading: Container(
-
           decoration: new BoxDecoration(
               border: new Border(
                   right: new BorderSide(width: 1.0, color: Colors.white24))),
@@ -274,30 +266,22 @@ class ReportsContainer extends StatelessWidget {
               child: Icon(Icons.receipt, color: Colors.black)),
         ),
         title: Text(
-          sender,
+         report.sender.toString(),
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 10),
         ),
         // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
         subtitle: thereport(),
-
-
         trailing: FlatButton(
           padding: const EdgeInsets.all(0.0),
           child:
               Container(
-
                   child: Icon(Icons.keyboard_arrow_left, color: Colors.black, size: 30.0)),
           onPressed: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => mass(
-                          sender: sender,
-                          topic: "הודעה פרטית",
-                           text: text,
-                          image_u: image_u,
-                          senderId: senderId,
+                    builder: (context) =>reportMass(
+                            report: report,
                         )));
           },
         ),

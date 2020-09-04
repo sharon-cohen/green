@@ -77,22 +77,7 @@ Future<String> GetExistMass(String email,String text,String image) async {
   }
 }
 
-Future<String> Getevent(String title) async {
 
-    final QuerySnapshot result = await Firestore.instance
-        .collection('events')
-        .where('title', isEqualTo: title)
-        .limit(1)
-        .getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    if(documents.length == 1)
-      return documents[0].documentID;
-    else
-      return "not exist";
-
-
-
-}
 class RoundedButton extends StatelessWidget {
   RoundedButton({this.title, this.colour, @required this.onPressed});
 
