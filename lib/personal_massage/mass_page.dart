@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:greenpeace/evants/add_event.dart';
+import 'package:greenpeace/global.dart' as globals;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
+final _firestore = Firestore.instance;
 class mass extends StatefulWidget {
   final String sender;
   final String text;
@@ -58,8 +62,7 @@ class _massState extends State<mass> {
             children: [
               RaisedButton(
                 onPressed: () {
-                  print('test1');
-                  print(widget.senderId);
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -72,8 +75,23 @@ class _massState extends State<mass> {
                 textColor: Colors.white,
               ),
               RaisedButton(
-                onPressed: () {
-
+                onPressed: ()  async {
+                    if(globals.isMeneger){
+                      String idevent = await  GetMenagerMess(widget.text, widget.sender);
+                      await _firestore
+                          .collection("messageMenager")
+                          .document(idevent)
+                          .delete();
+                      Navigator.pop(context);
+                    }
+                    else{
+                      String idevent = await GetPersonalMess(widget.text, widget.sender);
+                      await _firestore
+                          .collection("personalMess")
+                          .document(idevent)
+                          .delete();
+                      Navigator.pop(context);
+                    }
                 },
                 child: const Text('מחק', style: TextStyle(fontSize: 20)),
                 color: Colors.blue,

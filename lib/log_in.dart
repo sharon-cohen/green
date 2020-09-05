@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'globalfunc.dart';
 import 'global.dart' as globals;
+import 'package:greenpeace/register.dart';
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
   @override
@@ -19,31 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String password;
   FirebaseUser currentUser;
   @override
-//  void initState() {
-//    super.initState();
-//    _loadCurrentUser();
-//
-//  }
-//  _loadCurrentUser()  {
-//    FirebaseAuth.instance.currentUser().then((FirebaseUser user) async {
-//      var document = await Firestore.instance.collection('users').document(user.uid
-//      ).get();
-//      setState(() { // call setState to rebuild the view
-//        currentUser = user;
-//        globals.emailUser=currentUser.email;
-//        if (user != null) {
-//          String role=document.data['role'];
-//          if(role=='menager'){
-//            globals.isMeneger = true;
-//
-//          }
-//        }
-//        if(user==null){
-//          globals. no_reg=true;
-//        }
-//      });
-//    });
-//  }
+
 
   Widget build(BuildContext context) {
 
@@ -62,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   tag: 'logo',
                   child: Container(
                     height: 200.0,
-                    child: Image.asset('image/logo.png'),
+                    child: Image.asset('image/logo_greem.png'),
                   ),
                 ),
               ),
@@ -124,13 +101,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           t,'sharon','menager'
                       ));
 
+
                     }
 
+                  } catch (e) {
                     setState(() {
                       showSpinner = false;
                     });
-                  } catch (e) {
-                    print(e);
+                    showAlertDialog_error_login(context);
                   }
                 },
               ),
@@ -143,7 +121,40 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 
+showAlertDialog_error_login(BuildContext context) {
 
+  // set up the button
+  Widget cancelButton = FlatButton(
+    child: Text("הירשם"),
+    onPressed:  () {
+      Navigator.pushNamed(context, RegistrationScreen.id);
+    },
+  );
+  Widget continueButton = FlatButton(
+    child: Text("נסה שנית"),
+    onPressed:  () {
+      Navigator.pop(context, true);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("נכשל"),
+    content: Text("משתמש זה לא נמצא נסה שוב או הירשם"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 class RoundedButton extends StatelessWidget {
   RoundedButton({this.title, this.colour, @required this.onPressed});
 

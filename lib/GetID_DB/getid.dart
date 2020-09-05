@@ -93,3 +93,20 @@ Future<String> GetPersonalMess(String text,String sender) async {
 
 
 }
+Future<String> GetMenagerMess(String text,String sender) async {
+
+  final QuerySnapshot result = await Firestore.instance
+      .collection('messageMenager')
+      .where('text', isEqualTo: text)
+      .where('sender',isEqualTo: sender)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+
+
+
+}

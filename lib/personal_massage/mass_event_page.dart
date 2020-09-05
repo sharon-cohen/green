@@ -8,7 +8,6 @@ import 'package:greenpeace/evants/update_event.dart';
 
 final databaseReference = Firestore.instance;
 
-
 class mass_event extends StatefulWidget {
   final String sender;
   final String text;
@@ -23,7 +22,7 @@ class mass_event extends StatefulWidget {
       {this.sender,
       this.text,
       this.whatapp,
-        this.senderId,
+      this.senderId,
       this.topic,
       this.equipment,
       this.eventDate,
@@ -68,7 +67,6 @@ class _mass_eventState extends State<mass_event> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,205 +75,219 @@ class _mass_eventState extends State<mass_event> {
         height: MediaQuery.of(context).size.height,
         margin: const EdgeInsets.all(30),
         child: ListView(
-
-            children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.keyboard_arrow_left,
-                ),
-                iconSize: 30,
-                color: Colors.grey,
-                splashColor: Colors.purple,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.keyboard_arrow_left,
+              ),
+              iconSize: 30,
+              color: Colors.grey,
+              splashColor: Colors.purple,
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+            new Align(
+              child: new Text(
+                "מאת " + widget.sender,
+                style: new TextStyle(fontSize: 20),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            Divider(thickness: 1, color: Colors.black),
+            new Align(
+              child: new Text(
+                "נושא " + widget.topic,
+                style: new TextStyle(fontSize: 20),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            Divider(thickness: 1, color: Colors.black),
+            new Align(
+              child: new Text(
+                widget.topic,
+                style: new TextStyle(fontSize: 30),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                widget.text,
+                style: new TextStyle(fontSize: 15),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                "רשימת ציוד",
+                style: new TextStyle(fontSize: 30),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                widget.equipment.toString(),
+                style: new TextStyle(fontSize: 15),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                "תאריך",
+                style: new TextStyle(fontSize: 30),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                widget.eventDate.toString(),
+                style: new TextStyle(fontSize: 15),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                "סוג האירוע",
+                style: new TextStyle(fontSize: 30),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                widget.type_event,
+                style: new TextStyle(fontSize: 15),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: FlatButton(
                 onPressed: () {
-                  Navigator.pop(context, true);
+                  _launchURL(widget.whatapp);
                 },
-              ),
-              new Align(
                 child: new Text(
-                  "מאת " + widget.sender,
-                  style: new TextStyle(fontSize: 20),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              Divider(thickness: 1, color: Colors.black),
-              new Align(
-                child: new Text(
-                  "נושא " + widget.topic,
-                  style: new TextStyle(fontSize: 20),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              Divider(thickness: 1, color: Colors.black),
-              new Align(
-                child: new Text(
-                  widget.topic,
+                  "הצרפות לקבוצת whatapp",
                   style: new TextStyle(fontSize: 30),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  widget.text,
-                  style: new TextStyle(fontSize: 15),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  "רשימת ציוד",
-                  style: new TextStyle(fontSize: 30),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  widget.equipment.toString(),
-                  style: new TextStyle(fontSize: 15),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  "תאריך",
-                  style: new TextStyle(fontSize: 30),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  widget.eventDate.toString(),
-                  style: new TextStyle(fontSize: 15),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  "סוג האירוע",
-                  style: new TextStyle(fontSize: 30),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  widget.type_event,
-                  style: new TextStyle(fontSize: 15),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: FlatButton(
-                  onPressed: (){
-                    _launchURL(widget.whatapp);
-                  },
-                  child: new Text(
-                    "הצרפות לקבוצת whatapp",
-                    style: new TextStyle(fontSize: 30),
-                  ),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  widget.whatapp,
-                  style: new TextStyle(fontSize: 15),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              new Align(
-                child: new Text(
-                  "מיקום",
-                  style: new TextStyle(fontSize: 30),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-
-              new Align(
-                child: FlatButton(
-                  color: Colors.white,
-                  textColor: Colors.green,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(8.0),
-                  splashColor: Colors.blueAccent,
-                  onPressed: () {
-                    launchMap(widget.location);
-                  },
-                  child: Text(
-                    widget.location,
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: RaisedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddEventPage(
-                                        sender: widget.sender,
-                                        senderId: widget.senderId,
-                                      )));
-                        },
-                        child: const Text('השב', style: TextStyle(fontSize: 20)),
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                      ),
-                    ),
-                    Expanded(
-                      child: RaisedButton(
-                        onPressed: () async {
-                          idevent = await Getevent(widget.topic);
-                          databaseReference
-                              .collection('events')
-                              .document(idevent)
-                              .updateData({'approve': true});
-                          successshowAlertDialog(context, _email(),
-                              currentUser.uid, widget.topic, widget.senderId);
-                        },
-                        child: const Text('אישור האירוע',
-                            style: TextStyle(fontSize: 20)),
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                      ),
-                    ),
-                    Expanded(
-                      child: RaisedButton(
-                        onPressed: () async {
-                          idevent = await Getevent(widget.topic);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>updateEventPage(
-                                    sender: widget.sender,
-                                    topic: widget.topic,
-                                    text: widget.text,
-                                    equipment: widget.equipment,
-                                    eventDate: widget.eventDate,
-                                    senderId: widget.senderId,
-                                    location: widget.location,
-                                    type_event: widget.type_event,
-                                     dataid: idevent,
-                                      )));
-                        },
-                        child: const Text('עריכת אירוע',
-                            style: TextStyle(fontSize: 20)),
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                      ),
-                    ),
-                  ],
                 ),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                widget.whatapp,
+                style: new TextStyle(fontSize: 15),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: new Text(
+                "מיקום",
+                style: new TextStyle(fontSize: 30),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: FlatButton(
+                color: Colors.white,
+                textColor: Colors.green,
+                disabledColor: Colors.grey,
+                disabledTextColor: Colors.black,
+                padding: EdgeInsets.all(8.0),
+                splashColor: Colors.blueAccent,
+                onPressed: () {
+                  launchMap(widget.location);
+                },
+                child: Text(
+                  widget.location,
+                  style: TextStyle(fontSize: 20.0),
+                ),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: RaisedButton(
+                      onPressed: () async {
+                        String idevent =
+                            await Getevent(widget.topic);
+                            await databaseReference
+                            .collection("events")
+                            .document(idevent)
+                            .delete();
+                        Navigator.pop(context);
+                      },
+                      child:
+                          const Text('מחיקה', style: TextStyle(fontSize: 20)),
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                    ),
+                  ),
+                  Expanded(
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddEventPage(
+                                      sender: widget.sender,
+                                      senderId: widget.senderId,
+                                    )));
+                      },
+                      child: const Text('השב', style: TextStyle(fontSize: 20)),
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                    ),
+                  ),
+                  Expanded(
+                    child: RaisedButton(
+                      onPressed: () async {
+                        idevent = await Getevent(widget.topic);
+                        databaseReference
+                            .collection('events')
+                            .document(idevent)
+                            .updateData({'approve': true});
+                        successshowAlertDialog(context, _email(),
+                            currentUser.uid, widget.topic, widget.senderId);
+                      },
+                      child: const Text('אישור האירוע',
+                          style: TextStyle(fontSize: 20)),
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                    ),
+                  ),
+                  Expanded(
+                    child: RaisedButton(
+                      onPressed: () async {
+                        idevent = await Getevent(widget.topic);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => updateEventPage(
+                                      sender: widget.sender,
+                                      topic: widget.topic,
+                                      text: widget.text,
+                                      equipment: widget.equipment,
+                                      eventDate: widget.eventDate,
+                                      senderId: widget.senderId,
+                                      location: widget.location,
+                                      type_event: widget.type_event,
+                                      dataid: idevent,
+                                    )));
+                      },
+                      child: const Text('עריכת אירוע',
+                          style: TextStyle(fontSize: 20)),
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-
+      ),
     );
   }
 }
@@ -323,8 +335,9 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
     },
   );
 }
+
 _launchURL(String url) async {
- url = '$url';
+  url = '$url';
   if (await canLaunch(url)) {
     await launch(url);
   } else {
