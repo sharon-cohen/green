@@ -9,6 +9,7 @@ import 'package:greenpeace/streem_firestore/MessagesStream.dart';
 import 'package:greenpeace/home/send_mass_button.dart';
 import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'package:greenpeace/global.dart' as globals;
+import 'package:greenpeace/common/Header.dart';
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 class Home_menager extends StatefulWidget {
@@ -22,12 +23,15 @@ class Home_menagerState extends State<Home_menager> {
   final _auth = FirebaseAuth.instance;
   bool ok = false;
   bool showSpinner = false;
+  double offset = 0;
   bool no_reg=false;
   @override
   void initState() {
     super.initState();
     getCurrentUser();
   }
+
+
   void getCurrentUser() async {
 
     final user = await _auth.currentUser();
@@ -50,17 +54,13 @@ class Home_menagerState extends State<Home_menager> {
             ListView(
               scrollDirection: Axis.vertical,
               children: ListTile.divideTiles(context: context, tiles: [
-                new Container(
-                  margin: new EdgeInsets.only(left:0, right: 0, top: 0, bottom: 5.0),
-                  height: MediaQuery.of(context).size.height / (2.5),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: new BoxDecoration(
-                    image: DecorationImage(
-                      image: new AssetImage('image/green.jpeg'),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+
+                MyHeader(
+                  image: "image/green.jpeg",
+
+                  offset: offset,
                 ),
+
 
                 Card(
                   margin: new EdgeInsets.only( top: 8.0, bottom: 5.0),
@@ -174,7 +174,7 @@ class MessagesStream extends StatelessWidget {
             sender: messageSender,
             text: messageText,
             time: messageTime,
-            isMe: currentUsser == messageSender,
+            isMe: globals.name == messageSender,
             image_u: imag_url,
           );
           messageBubbles.add(messageBubble);
@@ -191,6 +191,5 @@ class MessagesStream extends StatelessWidget {
     );
   }
 }
-
 
 

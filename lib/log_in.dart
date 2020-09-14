@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
+  String name;
   FirebaseUser currentUser;
   @override
 
@@ -67,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your password'),
               ),
+
               SizedBox(
                 height: 24.0,
               ),
@@ -91,14 +93,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       String name=document.data['name'];
                       String role=document.data['role'];
+
                       if(role=='menager'){
                         globals.isMeneger = true;
                       }
                       else{
                         globals.isMeneger = false;
                       }
+                      globals.name=name;
                       Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments_m(
-                          t,'sharon','menager'
+                          t,name,'menager'
                       ));
 
 

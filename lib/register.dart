@@ -20,6 +20,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
   String email;
+  String name;
   String password;
 
   @override
@@ -68,6 +69,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     hintText: 'Enter your password'),
               ),
               SizedBox(
+                height: 8.0,
+              ),
+              TextField(
+
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  name = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Enter your name'),
+              ),
+              SizedBox(
                 height: 24.0,
               ),
               RoundedButton(
@@ -83,21 +96,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     if (newUser != null) {
                       FirebaseUser user=newUser.user;
                       String t=user.uid;
+                      databaseReference
+                          .collection('user')
+                          .document(t)
+                          .updateData({'name': name});
+                     globals.name=name;
                       bool menag=await doesNameAlreadyExist(email);
                       print(menag);
                        if(menag==true){
                          globals.isMeneger = true;
                          print(globals.isMeneger);
-                         await databaseservice(uid: user.uid).updateUserData('sharon','menager');
+                         await databaseservice(uid: user.uid).updateUserData(name,'menager');
                          Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments_m(
-                             t,'sharon','menager'
+                             t,name,'menager'
                          ));
                        }
 
                        else{
-                         await databaseservice(uid: user.uid).updateUserData('sharon','regular');
+                         await databaseservice(uid: user.uid).updateUserData(name,'regular');
                          Navigator.pushNamed(context,Home.id,arguments:ScreenArguments(
-                           t,'sharon','regular'
+                           t,name,'regular'
                        ));}
 
 

@@ -35,6 +35,7 @@ class event_stream extends StatelessWidget {
           final location = event.data['location'];
           final type_event = event.data['type_event'];
           final whatapp = event.data['whatapp'];
+
           final _eventmodel = event_container(
             Event: EventModel(
               title: title,
@@ -58,8 +59,8 @@ class event_stream extends StatelessWidget {
         }
         return
           new Expanded(
-            child: new ListView(
-            shrinkWrap: true,
+            child: new Column(
+
           children: eventsModel,
         )
           );

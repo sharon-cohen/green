@@ -109,7 +109,7 @@ class _AddEventPageState extends State<AddEventPage> {
                       if(globals.isMeneger==false) {
                         _firestore.collection("messageMenager").add({
                           "text": '$submitStr',
-                          "sender": _email(),
+                          "sender": globals.name,
                           "time": DateTime.now(),
                           "senderID": currentUser.uid,
 
@@ -120,7 +120,7 @@ class _AddEventPageState extends State<AddEventPage> {
                         documentReference.setData({
 
                           "text": '$submitStr',
-                          "sender": _email(),
+                          "sender": globals.name,
                           "time": DateTime.now(),
                           "senderID": currentUser.uid,
 
@@ -166,7 +166,7 @@ class _AddEventPageState extends State<AddEventPage> {
             ):Container(
               width: MediaQuery.of(context).size.width,
               child: Text(
-                'מאת: '+_email(),
+                'מאת: '+globals.name,
 
               ),
 

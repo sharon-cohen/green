@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import '../globalfunc.dart';
 import '../register.dart';
+import 'package:greenpeace/global.dart' as globals;
 
 final _firestore = Firestore.instance;
 class button_send extends StatefulWidget {
@@ -54,7 +55,7 @@ class _button_sendState extends State<button_send> {
           messageTextContoller.clear();
           _firestore.collection("messages").add({
             "text": "",
-            "sender":  _email(),
+            "sender": globals.name ,
             "time": DateTime.now(),
             "url": fileUrl,
           });
@@ -134,7 +135,7 @@ class _button_sendState extends State<button_send> {
             messageTextContoller.clear();
             _firestore.collection("messages").add({
               "text": messageText,
-              "sender":  _email(),
+              "sender":  globals.name,
               "time": DateTime.now(),
               "url": fileUrl,
             });

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/Component/Alret_Dealog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:greenpeace/global.dart' as globals;
+import 'package:intl/intl.dart';
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 class MessageBubble extends StatelessWidget {
@@ -12,7 +14,7 @@ class MessageBubble extends StatelessWidget {
   final bool isMe;
   final String image_u;
   MessageBubble({this.sender, this.text, this.isMe, this.time, this.image_u});
-
+  DateFormat dateFormat = DateFormat("yyyy-MM-dd");
   int report = 0;
   Widget nassege() {
     if (image_u == "") {
@@ -74,18 +76,18 @@ class MessageBubble extends StatelessWidget {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    "$sender ${time.toDate()}",
+                   globals.name+"\n${dateFormat.format(time.toDate())}",
                     style: TextStyle(
                       color: Colors.grey,
-                      fontSize: 7,
+                      fontSize: 12,
                     ),
                     textAlign: TextAlign.end,
                   ),
                 ),
-              ):Text("$sender ${time.toDate()}",
+              ):Text(" ${dateFormat.format(time.toDate())}\n"+globals.name,
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 7,
+                  fontSize:12,
                 ),
                ),
               Container(

@@ -4,7 +4,7 @@ import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'event_model.dart';
 import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:greenpeace/global.dart' as globals;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:greenpeace/Footer/footer.dart';
@@ -258,7 +258,7 @@ class _newEventPage extends State<newEventPage> {
                             "description": _description.text,
                             "event_date": widget.note.eventDate,
                             "equipment":tmpArray.toString(),
-                            "sender":_email(),
+                            "sender":globals.name,
                             "senderId":currentUser.uid,
                             "location":_location.text,
                             "type_event":type_event,
@@ -272,7 +272,7 @@ class _newEventPage extends State<newEventPage> {
                             eventDate: _eventDate,
                             approve: false,
                             equipment: getCheckboxItems(),
-                            sender: _email(),
+                            sender: globals.name,
                             senderId: currentUser.uid,
                             type_event: type_event,
                             location: _location.text,

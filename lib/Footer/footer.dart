@@ -7,7 +7,7 @@ import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/evants/calender.dart';
 import 'package:greenpeace/evants/list_event.dart';
 import 'package:greenpeace/splash_page.dart';
-
+import 'package:greenpeace/ConnectUs/connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 final _firestore = Firestore.instance;
 class BottomNavigationBarController extends StatefulWidget {
@@ -27,24 +27,22 @@ class _BottomNavigationBarControllerState
 
   final List<Widget> pages = [
 
+    connect(
+        key: PageStorageKey('connect')
+    ),
     Home_menager(
         key: PageStorageKey('home'),
-        arguments: send
-    ),
-
-    report(
-        key: PageStorageKey('report'),
         arguments: send
     ),
     All_truggle(
         key: PageStorageKey(' All_truggle'),
         arguments: send
     ),
-
-    List_event(
-      key: PageStorageKey('List_event'),
-
+    report(
+        key: PageStorageKey('report'),
+        arguments: send
     ),
+
     create_struggle1(
         key: PageStorageKey(' StepperBody'),
         arguments: send
@@ -61,7 +59,7 @@ class _BottomNavigationBarControllerState
   int _index_bifore;
   static ScreenArguments_m send;
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
-    currentIndex: selectedIndex,
+    currentIndex: _selectedIndex,
     onTap: (int index) async {
       if(index == 0){
         await showMenu<String>(
@@ -83,6 +81,28 @@ class _BottomNavigationBarControllerState
                 },
               ),
 
+            ),
+            new PopupMenuItem<String>(
+              child: FlatButton(
+                child: Row(
+
+                  children: [
+                    const Icon(Icons.contact_phone),
+                    const Text('התחבר אלינו'),
+
+                  ],
+                ),
+                onPressed: (){
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              List_event(
+
+                              )));
+                },
+              ),
             ),
             new PopupMenuItem<String>(
               child: FlatButton(
@@ -148,16 +168,23 @@ class _BottomNavigationBarControllerState
     },
     items: const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
+          // ignore: deprecated_member_use
           icon: Icon(Icons.add,color: Colors.black,), title: Text('אירועים')),
       BottomNavigationBarItem(
+        // ignore: deprecated_member_use
+          icon: Icon(Icons.all_inclusive,color: Colors.black,), title: Text('התחבר')),
+      BottomNavigationBarItem(
+        // ignore: deprecated_member_use
           icon: Icon(Icons.home,color: Colors.black,), title: Text('עמוד הבית')),
       BottomNavigationBarItem(
-          icon: Icon(Icons.chat,color: Colors.black,), title: Text('הודעות')),
-      BottomNavigationBarItem(
+          // ignore: deprecated_member_use
           icon:ImageIcon(  AssetImage("image/icon_struggle.png"),color: Colors.black,), title: Text('מאבקים')),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.format_list_bulleted,color: Colors.black,), title: Text('הודעות')),
 
+
+
+      BottomNavigationBarItem(
+        // ignore: deprecated_member_use
+          icon: Icon(Icons.chat,color: Colors.black,), title: Text('הודעות')),
     ],
 
   );
@@ -168,7 +195,6 @@ class _BottomNavigationBarControllerState
     _c = new TextEditingController();
     super.initState();
 
-    print("Df");
 setState(() {
   _selectedIndex = widget.page_num;
   _index_bifore=widget.come_from;

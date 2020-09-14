@@ -124,3 +124,17 @@ AssetImage getimage(String type){
     return AssetImage('image/green.jpeg');
   }
 }
+String getimageString(String type){
+  if(type=='נקיון'){
+   return 'image/clean.jpg';
+  }
+  if(type=='הפגנה'){
+    return  'image/struggle.jpg';
+  }
+  if(type=='הרצאה'){
+    return  'image/lecture.jpg';
+  }
+  else{
+    return'image/green.jpeg';
+  }
+}

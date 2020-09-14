@@ -28,6 +28,8 @@ class _splash_pageState extends State<splash_page> {
         globals.emailUser=currentUser.email;
         if (user != null) {
           String role=document.data['role'];
+          String name=document.data['name'];
+          globals.name=name;
           if(role=='menager'){
             globals.isMeneger = true;
 
@@ -35,9 +37,14 @@ class _splash_pageState extends State<splash_page> {
         }
         if(user==null){
           globals. no_reg=true;
+          globals.name="User";
         }
+
       });
-    });
+
+    }
+
+    );
   }
 
 

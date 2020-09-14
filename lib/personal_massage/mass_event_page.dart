@@ -219,7 +219,7 @@ class _mass_eventState extends State<mass_event> {
                         Navigator.pop(context);
                       },
                       child:
-                          const Text('מחיקה', style: TextStyle(fontSize: 20)),
+                          const Text('הסר', style: TextStyle(fontSize: 20)),
                       color: Colors.blue,
                       textColor: Colors.white,
                     ),
@@ -251,7 +251,7 @@ class _mass_eventState extends State<mass_event> {
                         successshowAlertDialog(context, _email(),
                             currentUser.uid, widget.topic, widget.senderId);
                       },
-                      child: const Text('אישור האירוע',
+                      child: const Text('אישור',
                           style: TextStyle(fontSize: 20)),
                       color: Colors.blue,
                       textColor: Colors.white,
@@ -276,7 +276,7 @@ class _mass_eventState extends State<mass_event> {
                                       dataid: idevent,
                                     )));
                       },
-                      child: const Text('עריכת אירוע',
+                      child: const Text('עריכה',
                           style: TextStyle(fontSize: 20)),
                       color: Colors.blue,
                       textColor: Colors.white,

@@ -131,6 +131,7 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
                 },
                 child: Container(
                   decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.all(const Radius.circular(20)),
                     image: DecorationImage(
                       image: widget.struggle.image != null
                           ? NetworkImage(widget.struggle.image)

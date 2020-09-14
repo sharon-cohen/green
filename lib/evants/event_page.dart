@@ -6,6 +6,8 @@ import 'package:greenpeace/evants/update_event.dart';
 import 'package:greenpeace/globalfunc.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:greenpeace/common/Header.dart';
+import 'package:intl/intl.dart';
 final _firestore = Firestore.instance;
 
 class EventDetailsPage extends StatelessWidget {
@@ -17,6 +19,8 @@ class EventDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    double offset=0;
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     return Scaffold(
 
       body: SingleChildScrollView(
@@ -24,19 +28,13 @@ class EventDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Container(
-              margin: new EdgeInsets.only(left:0, right: 0, top: 0, bottom: 5.0),
-              height: MediaQuery.of(context).size.height / (2.5),
-              width: MediaQuery.of(context).size.width,
-              decoration: new BoxDecoration(
-                image: DecorationImage(
-                  image: getimage(event.type_event),
-                  fit: BoxFit.fill,
-                ),
-              ),
+            MyHeader(
+              page:"event",
+              image: getimageString(event.type_event),
+              offset: offset,
             ),
 
-            Text('ב-'+event.eventDate.toString()),
+            Text('ב-'+" ${dateFormat.format(event.eventDate)}"),
             Text(event.title, style: Theme.of(context).textTheme.display1,),
             SizedBox(height: 20.0),
             Text(event.description),
@@ -90,7 +88,6 @@ class EventDetailsPage extends StatelessWidget {
   }
 }
 _launchURL(String url) async {
-  const url = 'https://chat.whatsapp.com/Eb12U02niq2EEhK290DoiL';
   if (await canLaunch(url)) {
     await launch(url);
   } else {

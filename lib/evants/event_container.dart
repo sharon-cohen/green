@@ -34,9 +34,10 @@ class event_container extends StatelessWidget {
         alignment: Alignment.center,
         padding: new EdgeInsets.only(left: 16.0, bottom: 8.0),
         decoration: new BoxDecoration(
-
+          borderRadius: BorderRadius.all(const Radius.circular(20)),
           image: new DecorationImage(
             colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
+
             image: getimage(Event.type_event),
             fit: BoxFit.cover,
           ),
@@ -45,7 +46,7 @@ class event_container extends StatelessWidget {
             style: new TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 20.0,
+              fontSize: 30,
             )
         ),
       ),

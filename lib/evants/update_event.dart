@@ -110,7 +110,7 @@ for(int i=0; i<equipmentList.length; i++){
     _title = TextEditingController(text:widget.topic);
     _description = TextEditingController(text:widget.text );
     _location = TextEditingController(text: widget.location);
-    _whatapp = TextEditingController(text:widget.whatapp);
+    _whatapp = TextEditingController(text:'https://chat.whatsapp.com/Eb12U02niq2EEhK290DoiL');
 
   }
 

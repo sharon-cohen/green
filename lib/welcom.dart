@@ -67,7 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         },
       ),);
       button_in.add(   RoundedButton(
-      title:  globals.emailUser+ ' היכנס בתור ',
+      title:  globals.name,
       colour: Colors.lightBlueAccent,
       onPressed: () {
         //Navigator.pushNamed(context,profile.id);
