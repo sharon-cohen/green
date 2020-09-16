@@ -110,3 +110,20 @@ Future<String> GetMenagerMess(String text,String sender) async {
 
 
 }
+Future<String> GetHotMess(String text,String sender) async {
+
+  final QuerySnapshot result = await Firestore.instance
+      .collection('hotReport')
+      .where('text', isEqualTo: text)
+      .where('sender',isEqualTo: sender)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+
+
+
+}

@@ -9,6 +9,8 @@ import 'package:greenpeace/evants/list_event.dart';
 import 'package:greenpeace/splash_page.dart';
 import 'package:greenpeace/ConnectUs/connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:greenpeace/HotReport/hotReport.dart';
+import 'package:greenpeace/global.dart' as globals;
 final _firestore = Firestore.instance;
 class BottomNavigationBarController extends StatefulWidget {
   static String id = "BottomNavigationBarController ";
@@ -44,7 +46,7 @@ class _BottomNavigationBarControllerState
     ),
 
     create_struggle1(
-        key: PageStorageKey(' StepperBody'),
+        key: PageStorageKey('create_struggle1'),
         arguments: send
     ),
     Calender(
@@ -75,9 +77,10 @@ class _BottomNavigationBarControllerState
                   ],
                 ),
                 onPressed: (){
-                  setState(() {
-                    _selectedIndex=6;
-                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>Calender() ));
                 },
               ),
 
@@ -88,7 +91,7 @@ class _BottomNavigationBarControllerState
 
                   children: [
                     const Icon(Icons.contact_phone),
-                    const Text('התחבר אלינו'),
+                    const Text('אירועים'),
 
                   ],
                 ),
@@ -104,7 +107,7 @@ class _BottomNavigationBarControllerState
                 },
               ),
             ),
-            new PopupMenuItem<String>(
+           if(globals.isMeneger==true) new PopupMenuItem<String>(
               child: FlatButton(
                 child: Row(
                   children: [
@@ -207,6 +210,24 @@ setState(() {
 
     return Scaffold(
       bottomNavigationBar: _bottomNavigationBar( _index_bifore),
+      floatingActionButton: !globals.isMeneger?FloatingActionButton(
+        heroTag:2,
+        backgroundColor: Colors.red,
+
+        onPressed: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HotReport()));
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(Icons.message), // icon
+            Text("דווח"), // text
+          ],
+        ),
+      ):null,
       body: PageStorage(
         child: pages[_selectedIndex-1],
         bucket: bucket,

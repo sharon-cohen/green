@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:folding_cell/folding_cell.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:greenpeace/Component/text_class.dart';
 import 'package:greenpeace/truggel_page/struggle_model.dart';
 import 'package:greenpeace/truggel_page/one_struggle.dart';
+import 'package:greenpeace/truggel_page/struggle_model.dart';
 
 final _firestore = Firestore.instance;
 
@@ -65,11 +67,14 @@ class TruggleStream extends StatelessWidget {
             final share = truggl.data["url_share"];
             final donation=truggl.data["donation"];
             final All_TtuggleContainer_new = All_TtuggleContainer(
-              name: trugglNmae,
-              image_u: imag_url,
-              info: info,
-              sign_num: share,
-              url_money: url_money,
+                struggle: StruggleModel(
+                  title: trugglNmae,
+                  image: imag_url,
+                  description: info,
+                  share: share,
+                  petition: url_money,
+                  donation: donation,
+                )
             );
             final TtuggleContainer_new = TtuggleContainer(
                 struggle: StruggleModel(
@@ -154,32 +159,43 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
 }
 
 class All_TtuggleContainer extends StatelessWidget {
-  final String name;
-  final String image_u;
-  final String info;
-  final String sign_target;
-  final String url_money;
-  final String sign_num;
+  final StruggleModel struggle;
   All_TtuggleContainer(
-      {this.name,
-      this.image_u,
-      this.info,
-      this.sign_target,
-      this.url_money,
-      this.sign_num});
+      {this.struggle});
   final _foldingCellKey = GlobalKey<SimpleFoldingCellState>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white30,
+    return FlatButton(
+      onPressed: (){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => one_struggle(struggle: struggle)));
+      },
       child: Container(
-        child: SimpleFoldingCell(
-          key: _foldingCellKey,
-          frontWidget: FrontWidget(),
-          innerTopWidget: InnerTopWidget(),
-          innerBottomWidget: InnerBottomWidget(),
-          cellSize: Size(MediaQuery.of(context).size.width, 160),
-          padding: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
+        constraints: new BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height/(5),
+          maxHeight: MediaQuery.of(context).size.height/(5),
+
+        ),
+        alignment: Alignment.center,
+        padding: new EdgeInsets.only(left: 16.0, bottom: 8.0),
+        decoration: new BoxDecoration(
+          borderRadius: BorderRadius.all(const Radius.circular(20)),
+          image: new DecorationImage(
+            colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
+
+            image:NetworkImage(struggle.image),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: new Text(struggle.title,
+            style: new TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            )
         ),
       ),
     );
@@ -188,7 +204,7 @@ class All_TtuggleContainer extends StatelessWidget {
   Container InnerTopWidget() {
     return Container(
         color: Colors.green.shade200,
-        child: Text(name,
+        child: Text(struggle.title,
             style: TextStyle(
                 color: Color(0xFF2e282a),
                 fontFamily: 'OpenSans',
@@ -221,8 +237,8 @@ class All_TtuggleContainer extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: image_u != null
-                      ? NetworkImage(image_u)
+                  image: struggle.image != null
+                      ? NetworkImage(struggle.image)
                       : AssetImage('image/image_icon.png'),
                   fit: BoxFit.fill,
                 ),
@@ -242,7 +258,7 @@ class All_TtuggleContainer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(name,
+                    Text(struggle.title,
                         style: TextStyle(
                             color: Color(0xFF2e282a),
                             fontFamily: 'OpenSans',

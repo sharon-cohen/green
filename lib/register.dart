@@ -113,8 +113,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                        }
 
                        else{
+                         globals.isMeneger =false;
                          await databaseservice(uid: user.uid).updateUserData(name,'regular');
-                         Navigator.pushNamed(context,Home.id,arguments:ScreenArguments(
+                         Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments(
                            t,name,'regular'
                        ));}
 

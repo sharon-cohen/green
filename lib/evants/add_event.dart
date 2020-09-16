@@ -35,13 +35,7 @@ class _AddEventPageState extends State<AddEventPage> {
       });
     });
   }
-  String _email() {
-    if (currentUser != null) {
-      return currentUser.email;
-    } else {
-      return "no current user";
-    }
-  }
+
 
   Widget text_field(){
     return TextField(

@@ -84,7 +84,7 @@ class MessageBubble extends StatelessWidget {
                     textAlign: TextAlign.end,
                   ),
                 ),
-              ):Text(" ${dateFormat.format(time.toDate())}\n"+globals.name,
+              ):Text(" ${dateFormat.format(time.toDate())}\n"+sender,
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize:12,

@@ -26,7 +26,8 @@ class EventDetailsPage extends StatelessWidget {
       body: SingleChildScrollView(
 
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             MyHeader(
               page:"event",
@@ -38,12 +39,22 @@ class EventDetailsPage extends StatelessWidget {
             Text(event.title, style: Theme.of(context).textTheme.display1,),
             SizedBox(height: 20.0),
             Text(event.description),
-            FlatButton(onPressed:(){
-              _launchURL(event.whatapp);
-            } ,
-                child:Image.asset('image/whatsapp.png')),
-            Text('הצטרף לקבוצת הwhatsapp שלנו'),
+
+            Row(
+
+              children: [
+                FlatButton(onPressed:(){
+                  _launchURL(event.whatapp);
+                } ,
+                    child:Image.asset('image/whatsapp.png')),
+                Text('הצטרף לקבוצת הwhatsapp שלנו'),
+              ],
+
+            ),
+
            isMeneger? Row(
+             mainAxisAlignment: MainAxisAlignment.center ,//Center Row contents horizontally,
+             crossAxisAlignment: CrossAxisAlignment.center,
              children: [
                RaisedButton(
                   onPressed: () async {
@@ -80,7 +91,7 @@ class EventDetailsPage extends StatelessWidget {
                  textColor: Colors.white,
                ),
              ],
-           ):null
+           ):Container(),
           ],
         ),
       ),

@@ -20,7 +20,7 @@ class event_container extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => EventDetailsPage(
+                builder: (context) => EventDetailsPage(
                   event: Event,
                 )));
       },

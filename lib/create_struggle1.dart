@@ -58,7 +58,7 @@ class create_struggle1State extends State<create_struggle1> {
   String base64Image;
   File tmpFile;
   String errMessage = 'Error Uploading Image';
-
+  Color imageColorTitle=Colors.green;
   chooseImage() {
     setState(() {
       file = ImagePicker.pickImage(source: ImageSource.gallery);
@@ -93,39 +93,12 @@ class create_struggle1State extends State<create_struggle1> {
     });
   }
 
-//  Widget showImage() {
-//    return FutureBuilder<File>(
-//      future: file,
-//      builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-//        if (snapshot.connectionState == ConnectionState.done &&
-//            null != snapshot.data) {
-//          tmpFile = snapshot.data;
-//          base64Image = base64Encode(snapshot.data.readAsBytesSync());
-//          return Flexible(
-//            child: Image.file(
-//              snapshot.data,
-//              fit: BoxFit.fill,
-//            ),
-//          );
-//        } else if (null != snapshot.error) {
-//          return const Text(
-//            'Error Picking Image',
-//            textAlign: TextAlign.center,
-//          );
-//        } else {
-//          return const Text(
-//            'No Image Selected',
-//            textAlign: TextAlign.center,
-//          );
-//        }
-//      },
-//    );
-//  }
+
   bool _isLoading = true;
   int timestamp;
   var imageFile;
   bool choose=false;
-  String  fileUrl;
+  String  fileUrl="";
   Widget showImage(String image) {
     if(image==null){
       return Container();
@@ -163,7 +136,19 @@ class create_struggle1State extends State<create_struggle1> {
           alignment: Alignment.center,
           child: ListView(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  top: 30,
 
+                ),
+                child: Align(alignment: Alignment.topRight,
+                    child: IconButton(onPressed: () {
+                      Navigator.pop(context, true);
+                    }, icon: Icon(Icons.clear,
+                      color: Colors.black,
+                    ),)),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
@@ -242,7 +227,7 @@ class create_struggle1State extends State<create_struggle1> {
 
               const SizedBox(height: 10.0),
               ListTile(
-                title: Text("בחר בתמונה",style: new TextStyle(fontSize: 30),),
+                title: Text("בחר בתמונה",style: new TextStyle(fontSize: 30,color: imageColorTitle),),
 
                 onTap: () async{
                   imageFile = await ImagePicker.pickImage(
@@ -271,7 +256,7 @@ class create_struggle1State extends State<create_struggle1> {
                 height: 20.0,
               ),
 
-              showImage(fileUrl),
+              if(fileUrl!="")showImage(fileUrl),
 
               SizedBox(
                 height: 20.0,
@@ -285,9 +270,8 @@ class create_struggle1State extends State<create_struggle1> {
                   fontSize: 20.0,
                 ),
               ),
-              SizedBox(
-                height: 20.0,
-              ),
+
+              SizedBox(height: 10.0),
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
@@ -299,6 +283,11 @@ class create_struggle1State extends State<create_struggle1> {
                   child: MaterialButton(
                     onPressed: () async {
 
+                      if (_formKey.currentState.validate()&& fileUrl!="") {
+                        setState(() {
+
+                          processing = true;
+                        });
 
                         _firestore.collection("struggle").add({
                           "info": _title.text,
@@ -308,28 +297,24 @@ class create_struggle1State extends State<create_struggle1> {
                           "url_share": _location.text,
                           "donation":_donation.text,
                         });
-                        // successshowAlertDialog(context,_title.text,_description.text,_petition.text,fileUrl,_location.text);
-//                        }else{
-//
-//                          await eventDBS.createItem(EventModel(
-//                            title: _title.text,
-//                            description: _description.text,
-//                            eventDate: _eventDate,
-//                            approve: false,
-//                            equipment: getCheckboxItems(),
-//                            sender: _email(),
-//                            senderId: currentUser.uid,
-//                            type_event: type_event,
-//                            location: _location.text,
-//                          ));
-//                        }
+
+
 
                         setState(() {
+
                           processing = false;
                         });
-                      },
+                      }
+                     else{
+                        setState(() {
 
+                          imageColorTitle=Colors.red;
+                        });
+                      }
 
+                      //successshowAlertDialog(context);
+
+                    },
 
                     child: Text(
                       "Save",
@@ -357,33 +342,4 @@ class create_struggle1State extends State<create_struggle1> {
 class Data{
   String dropdownValue;
   Data({this.dropdownValue});
-}
-successshowAlertDialog(BuildContext context,String title,String text,String petition,String img,String share) {
-
-  // set up the button
-  Widget okButton = FlatButton(
-    child: Text("אישור"),
-    onPressed: () {
-
-
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("האירוע נוצר בהצלחה"),
-    content: Text("נשלח למנהלים לאישור תקבל עדכון בקרוב"),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }

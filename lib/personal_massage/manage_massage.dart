@@ -10,6 +10,7 @@ import 'package:greenpeace/report/report_model.dart';
 import 'package:greenpeace/report/report_mass.dart';
 import 'package:greenpeace/personal_massage/personalMessModel.dart';
 import 'package:greenpeace/personal_massage/messMenager.dart';
+import 'package:greenpeace/HotReport/HotReportStream.dart';
 final databaseReference = Firestore.instance;
 final _firestore = Firestore.instance;
 
@@ -48,24 +49,32 @@ class reportState extends State<report> {
             children: <Widget>[
               new Align(
                 child: new Text(
-                  "דיווחים והודעות מנהל",
+                  "דיווחים חמים",
+                  style: new TextStyle(fontSize: 25, color: Colors.redAccent),
+                ), //so big text
+                alignment: FractionalOffset.topRight,
+              ),
+              HotStream(),
+              new Align(
+                child: new Text(
+                  "הודעות מנהל",
                   style: new TextStyle(fontSize: 25, color: Colors.black),
                 ), //so big text
                 alignment: FractionalOffset.topRight,
               ),
               messMenager(),
-              reportStream(),
+
 
               new Align(
                 child: new Text(
-                  "אירועים",
+                  "שונות",
                   style: new TextStyle(fontSize: 25),
                 ), //so big text
                 alignment: FractionalOffset.topRight,
               ),
 
               eventStream(),
-
+              reportStream(),
             ],
           ),
         ),

@@ -10,6 +10,7 @@ import 'package:greenpeace/home/send_mass_button.dart';
 import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:greenpeace/common/Header.dart';
+import 'package:greenpeace/create_struggle1.dart';
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 class Home_menager extends StatefulWidget {
@@ -31,7 +32,18 @@ class Home_menagerState extends State<Home_menager> {
     getCurrentUser();
   }
 
+  Future<Widget> listOfMass() async {
 
+      return Container(
+
+        child: SingleChildScrollView(
+
+          child:TruggleStream(page_call:'home')
+        ),
+      );
+
+
+  }
   void getCurrentUser() async {
 
     final user = await _auth.currentUser();
@@ -95,15 +107,21 @@ class Home_menagerState extends State<Home_menager> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              BottomNavigationBarController(
-                                                5, 0,)));
+                                          builder: (context) =>create_struggle1() ));
                                 },
                               ):Container(),
                             ],
                           ),
                         ),
-                        Container(child: TruggleStream(page_call:'home')),
+                         new FutureBuilder<Widget>(
+                            future: listOfMass(),
+                            builder: (BuildContext context, AsyncSnapshot<Widget> text) {
+                              return new SingleChildScrollView(
+                                padding: new EdgeInsets.all(8.0),
+                                child: text.data,
+                              );
+                            }),
+
                       ],
                     ),
                   ),
@@ -168,7 +186,7 @@ class MessagesStream extends StatelessWidget {
           final messageText = message.data['text'];
           final messageSender = message.data["sender"];
           final messageTime = message.data["time"];
-          final currentUsser = loggedInUser.email;
+          //final currentUsser = loggedInUser.email;
           final imag_url = message.data["url"];
           final messageBubble = MessageBubble(
             sender: messageSender,

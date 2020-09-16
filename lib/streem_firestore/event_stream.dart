@@ -58,12 +58,12 @@ class event_stream extends StatelessWidget {
         }
         }
         return
-          new Expanded(
-            child: new Column(
+
+             Column(
 
           children: eventsModel,
-        )
-          );
+        );
+
       },
     );
   }

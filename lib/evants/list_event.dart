@@ -11,18 +11,25 @@ class List_event extends StatefulWidget {
 class _List_event extends State<List_event> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-       color: Colors.white,
-        //margin: const EdgeInsets.only(top:20),
-        child: Column(
-      children: [
+    return Scaffold(
+      body: Container(
+         color: Colors.white,
+         //height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Column(
+        children: [
+            IconButton(onPressed: () {
+              Navigator.pop(context, true);
+            }, icon: Icon(Icons.clear,
+              color: Colors.black,
+            ),),
 
 
-           Text('כל האירועים'),
+              event_stream(),
 
-
- event_stream(),
-      ],
-    ));
+        ],
+      ),
+          )),
+    );
   }
 }

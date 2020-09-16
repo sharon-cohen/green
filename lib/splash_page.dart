@@ -3,6 +3,10 @@ import 'package:splashscreen/splashscreen.dart';
 import 'welcom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:geolocator/geolocator.dart';
+//import 'package:flutter/services.dart';
+
+
 import 'global.dart' as globals;
 
 class splash_page extends StatefulWidget {
@@ -12,6 +16,10 @@ class splash_page extends StatefulWidget {
 }
 
 class _splash_pageState extends State<splash_page> {
+//  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+//
+//  Position _currentPosition;
+//  String _currentAddress;
   FirebaseUser currentUser;
   @override
   void initState() {
@@ -25,6 +33,7 @@ class _splash_pageState extends State<splash_page> {
       ).get();
       setState(() { // call setState to rebuild the view
         currentUser = user;
+        globals.UserId=currentUser.uid;
         globals.emailUser=currentUser.email;
         if (user != null) {
           String role=document.data['role'];
@@ -53,13 +62,13 @@ class _splash_pageState extends State<splash_page> {
     return new SplashScreen(
       seconds: 5,
       navigateAfterSeconds: new WelcomeScreen(),
-      title: new Text('Welcome In SplashScreen',
+      title: new Text('Welcome Greenpeace"',
         style: new TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20.0
         ),
       ),
-      image: new Image.network('https://flutter.io/images/catalog-widget-placeholder.png'),
+      image: new Image.asset("image/green.jpeg"),
 
       backgroundColor: Colors.white,
       styleTextUnderTheLoader: new TextStyle(),

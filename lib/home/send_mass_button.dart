@@ -34,13 +34,6 @@ class _button_sendState extends State<button_send> {
       });
     });
   }
-  String _email() {
-    if (currentUser != null) {
-      return currentUser.email;
-    } else {
-      return "no current user";
-    }
-  }
 
   image_sent_pro(BuildContext context, String image_show) {
     // set up the buttons
