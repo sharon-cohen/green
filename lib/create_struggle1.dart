@@ -125,209 +125,252 @@ class create_struggle1State extends State<create_struggle1> {
       timestamp = new DateTime.now().millisecondsSinceEpoch;
     });
   }
+  Widget setUserForm() {
+    return Stack(children: <Widget>[
+      // Background with gradient
+      Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.red[900], Colors.blue[700]])),
+          height: MediaQuery.of(context).size.height * 0.3
+      ),
+      //Above card
+      Card(
+          elevation: 20.0,
+          margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 100.0),
+          child: ListView(
+              padding:
+              EdgeInsets.only(top: 20.0, left: 20.0, right: 18.0, bottom: 5.0),
+              children: <Widget>[
+                TextField(),
+                TextField()
+              ]
+
+          )),
+      // Positioned to take only AppBar size
+      Positioned(
+        top: 0.0,
+        left: 0.0,
+        right: 0.0,
+        child: AppBar(        // Add AppBar here only
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          title: Text("Doctor Form"),
+        ),
+      ),
+
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
       key: _key,
-      body: Form(
-        key: _formKey,
-        child: Container(
-          alignment: Alignment.center,
-          child: ListView(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  top: 30,
+      body: Stack   (
+        children: [
+          Form(
+            key: _formKey,
+            child: Container(
+              alignment: Alignment.center,
+              child: ListView(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      top: 30,
 
-                ),
-                child: Align(alignment: Alignment.topRight,
-                    child: IconButton(onPressed: () {
-                      Navigator.pop(context, true);
-                    }, icon: Icon(Icons.clear,
-                      color: Colors.black,
-                    ),)),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _title,
-                  validator: (value) =>
-                  (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
-                  style: style,
-                  decoration: InputDecoration(
-                      labelText: "שם המאבק",
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _description,
-                  minLines: 3,
-                  maxLines: 5,
-                  validator: (value) =>
-                  (value.isEmpty) ? "שדה תיאור המאבק חובה" : null,
-                  style: style,
-                  decoration: InputDecoration(
-                      labelText: "תיאור המאבק",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _location,
-                  validator: (value) =>
-                  (value.isEmpty) ? "שדה קישור זה חובה" : null,
-                  style: style,
-                  decoration: InputDecoration(
-                      labelText: "קישור לעמוד המאבק באתר",
+                    ),
+                    child: Align(alignment: Alignment.topRight,
+                        child: IconButton(onPressed: () {
+                          Navigator.pop(context, true);
+                        }, icon: Icon(Icons.clear,
+                          color: Colors.black,
+                        ),)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: TextFormField(
+                      controller: _title,
+                      validator: (value) =>
+                      (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
+                      style: style,
+                      decoration: InputDecoration(
+                          labelText: "שם המאבק",
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: TextFormField(
+                      controller: _description,
+                      minLines: 3,
+                      maxLines: 5,
+                      validator: (value) =>
+                      (value.isEmpty) ? "שדה תיאור המאבק חובה" : null,
+                      style: style,
+                      decoration: InputDecoration(
+                          labelText: "תיאור המאבק",
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: TextFormField(
+                      controller: _location,
+                      validator: (value) =>
+                      (value.isEmpty) ? "שדה קישור זה חובה" : null,
+                      style: style,
+                      decoration: InputDecoration(
+                          labelText: "קישור לעמוד המאבק באתר",
 
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _petition,
-                  validator: (value) =>
-                  (value.isEmpty) ? "שדה קישור זה חובה" : null,
-                  style: style,
-                  decoration: InputDecoration(
-                      labelText: "קישור לעצומה",
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: TextFormField(
+                      controller: _petition,
+                      validator: (value) =>
+                      (value.isEmpty) ? "שדה קישור זה חובה" : null,
+                      style: style,
+                      decoration: InputDecoration(
+                          labelText: "קישור לעצומה",
 
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: TextFormField(
-                  controller: _donation,
-                  validator: (value) =>
-                  (value.isEmpty) ? "שדה קישור זה חובה" : null,
-                  style: style,
-                  decoration: InputDecoration(
-                      labelText: "קישור לעמוד התרומה",
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: TextFormField(
+                      controller: _donation,
+                      validator: (value) =>
+                      (value.isEmpty) ? "שדה קישור זה חובה" : null,
+                      style: style,
+                      decoration: InputDecoration(
+                          labelText: "קישור לעמוד התרומה",
 
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                ),
-              ),
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    ),
+                  ),
 
 //           Padding(
 //                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
 //                child: TruggleStream(page_call:'new_event'),
 //             ),
 
-              const SizedBox(height: 10.0),
-              ListTile(
-                title: Text("בחר בתמונה",style: new TextStyle(fontSize: 30,color: imageColorTitle),),
+                  const SizedBox(height: 10.0),
+                  ListTile(
+                    title: Text("בחר בתמונה",style: new TextStyle(fontSize: 30,color: imageColorTitle),),
 
-                onTap: () async{
-                  imageFile = await ImagePicker.pickImage(
-                      source: ImageSource.gallery);
+                    onTap: () async{
+                      imageFile = await ImagePicker.pickImage(
+                          source: ImageSource.gallery);
 
-                  int timestamp = new DateTime.now().millisecondsSinceEpoch;
-                  StorageReference storageReference = FirebaseStorage
-                      .instance
-                      .ref()
-                      .child('chats/img_' + timestamp.toString() + '.jpg');
-                  StorageUploadTask uploadTask =
-                  storageReference.putFile(imageFile);
-                  await uploadTask.onComplete;
-                  fileUrl =
-                  await storageReference.getDownloadURL();
-
-                    setState(() {
-
-                    });
-                  }
-
-              ),
-
-              SizedBox(height: 10.0),
-              SizedBox(
-                height: 20.0,
-              ),
-
-              if(fileUrl!="")showImage(fileUrl),
-
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                status,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20.0,
-                ),
-              ),
-
-              SizedBox(height: 10.0),
-              processing
-                  ? Center(child: CircularProgressIndicator())
-                  : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Material(
-                  elevation: 5.0,
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Theme.of(context).primaryColor,
-                  child: MaterialButton(
-                    onPressed: () async {
-
-                      if (_formKey.currentState.validate()&& fileUrl!="") {
-                        setState(() {
-
-                          processing = true;
-                        });
-
-                        _firestore.collection("struggle").add({
-                          "info": _title.text,
-                          "name":  _description.text,
-                          "petition":_petition.text,
-                          "url_image": fileUrl,
-                          "url_share": _location.text,
-                          "donation":_donation.text,
-                        });
-
-
+                      int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                      StorageReference storageReference = FirebaseStorage
+                          .instance
+                          .ref()
+                          .child('chats/img_' + timestamp.toString() + '.jpg');
+                      StorageUploadTask uploadTask =
+                      storageReference.putFile(imageFile);
+                      await uploadTask.onComplete;
+                      fileUrl =
+                      await storageReference.getDownloadURL();
 
                         setState(() {
 
-                          processing = false;
-                        });
-                      }
-                     else{
-                        setState(() {
-
-                          imageColorTitle=Colors.red;
                         });
                       }
 
-                      //successshowAlertDialog(context);
+                  ),
 
-                    },
+                  SizedBox(height: 10.0),
+                  SizedBox(
+                    height: 20.0,
+                  ),
 
-                    child: Text(
-                      "Save",
-                      style: style.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                  if(fileUrl!="")showImage(fileUrl),
+
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    status,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20.0,
                     ),
                   ),
-                ),
+
+                  SizedBox(height: 10.0),
+                  processing
+                      ? Center(child: CircularProgressIndicator())
+                      : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Material(
+                      elevation: 5.0,
+                      borderRadius: BorderRadius.circular(30.0),
+                      color: Theme.of(context).primaryColor,
+                      child: MaterialButton(
+                        onPressed: () async {
+
+                          if (_formKey.currentState.validate()&& fileUrl!="") {
+                            setState(() {
+
+                              processing = true;
+                            });
+
+                            _firestore.collection("struggle").add({
+                              "info": _title.text,
+                              "name":  _description.text,
+                              "petition":_petition.text,
+                              "url_image": fileUrl,
+                              "url_share": _location.text,
+                              "donation":_donation.text,
+                            });
+
+
+
+                            setState(() {
+
+                              processing = false;
+                            });
+                          }
+                         else{
+                            setState(() {
+
+                              imageColorTitle=Colors.red;
+                            });
+                          }
+
+                          //successshowAlertDialog(context);
+
+                        },
+
+                        child: Text(
+                          "Save",
+                          style: style.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

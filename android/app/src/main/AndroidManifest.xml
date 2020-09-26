@@ -34,9 +34,25 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <provider
+        <meta-data android:name="com.facebook.sdk.ApplicationName"
+            android:value="@string/app_name"/>
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider975359176210597"
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider975359176210597"
-            android:exported="false" />
+            android:exported="true"/>
+
+        <provider android:name="androidx.core.content.FileProvider"
+            android:authorities="com.cygnati.social_share_plugin_example.social.share.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 </manifest>

@@ -28,6 +28,8 @@ class reportState extends State<report> {
   var width_page;
   final _auth = FirebaseAuth.instance;
 
+
+
   height_width() {
     height_page = MediaQuery
         .of(context)
@@ -110,6 +112,8 @@ class reportState extends State<report> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+
       bottomNavigationBar: !globals.isMeneger?FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {

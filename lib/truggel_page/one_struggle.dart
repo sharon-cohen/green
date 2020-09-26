@@ -6,6 +6,8 @@ import 'package:greenpeace/truggel_page/struggle_model.dart';
 import 'package:greenpeace/common/Header.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:social_share_plugin/social_share_plugin.dart';
+import 'dart:io' show Platform;
 final databaseReference = Firestore.instance;
 
 
@@ -69,12 +71,28 @@ class _one_struggle extends State<one_struggle> {
 
             
             Expanded(
-              child: IconButton(icon: Icon(Icons.share), onPressed:() {
-                FlutterShareMe().shareToFacebook(
-                    url: widget.struggle.share, msg: "הצטרפו למאבק!");
+              child: IconButton(icon: Icon(Icons.share), onPressed:() async {
+                String url = 'https://flutter.dev/';
+                final quote =
+                    'Flutter is Google’s portable UI toolkit for building beautiful, natively-compiled applications for mobile, web, and desktop from a single codebase.';
+                final result = await SocialSharePlugin.shareToFeedFacebookLink(
+                  quote: quote,
+                  url: url,
+                  onSuccess: (_) {
+                    print('FACEBOOK SUCCESS');
+                    return;
+                  },
+                  onCancel: () {
+                    print('FACEBOOK CANCELLED');
+                    return;
+                  },
+                  onError: (error) {
+                    print('FACEBOOK ERROR $error');
+                    return;
+                  },
+                );
 
-
-
+                print(result);
               },),
             ),
 
