@@ -7,6 +7,7 @@ import 'package:greenpeace/global.dart' as globals;
 import 'package:intl/intl.dart';
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
+
 class MessageBubble extends StatelessWidget {
   final String sender;
   final String text;
@@ -16,6 +17,17 @@ class MessageBubble extends StatelessWidget {
   MessageBubble({this.sender, this.text, this.isMe, this.time, this.image_u});
   DateFormat dateFormat = DateFormat("yyyy-MM-dd");
   int report = 0;
+  void showMyDialog() {
+    showDialog(
+        context: navigatorKey.currentState.overlay.context, // Using overlay's context
+        builder: (context) => Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Text('Hello'),
+          ),
+        )
+    );
+  }
   Widget nassege() {
     if (image_u == "") {
       return Material(
@@ -51,14 +63,21 @@ class MessageBubble extends StatelessWidget {
         ),
       );
     } else
-      return Container(
-          height: 100,
-          width: 100,
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new NetworkImage(image_u),
-                fit: BoxFit.fill,
-              )));
+      return FlatButton(
+        onPressed: () {
+          showAlertDialogImagemessage(image_u);
+        },
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: new BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                image: new DecorationImage(
+                  image: new NetworkImage(image_u),
+                  fit: BoxFit.fill,
+                )
+            )),
+      );
   }
 
   @override

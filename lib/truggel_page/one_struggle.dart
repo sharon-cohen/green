@@ -6,8 +6,16 @@ import 'package:greenpeace/truggel_page/struggle_model.dart';
 import 'package:greenpeace/common/Header.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:social_share_plugin/social_share_plugin.dart';
-import 'dart:io' show Platform;
+import 'package:social_share/social_share.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'package:screenshot/screenshot.dart';
+import 'package:social_share/social_share.dart';
+import 'dart:async';
+import 'package:greenpeace/truggel_page/updateStrugle.dart';
+import 'package:greenpeace/global.dart' as globals;
 final databaseReference = Firestore.instance;
 
 
@@ -22,107 +30,137 @@ class _one_struggle extends State<one_struggle> {
   FirebaseUser currentUser;
   ScreenshotController screenshotController = ScreenshotController();
   double offset=0;
+  String _platformVersion = 'Unknown';
+  final Color yellow = Color(0xfffbc31b);
+  final Color orange = Color(0xfffb6900);
   @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    String platformVersion;
+
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
+  @override
+
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return Screenshot(
+          controller: screenshotController,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            floatingActionButton: globals.isMeneger?FloatingActionButton(
+              heroTag:2,
+              backgroundColor: Colors.red,
 
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => updatestrugle(strugle: widget.struggle,)));
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.edit), // icon
 
-       body:SingleChildScrollView(
-         child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: <Widget>[
-              MyHeader(
-                image: widget.struggle.image,
-                page:"struggle",
-                offset: offset,
+                ],
               ),
+            ):null,
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
 
-            
-              new Align(
-                child: new Text(
-               widget.struggle.title,
-                  style: new TextStyle(fontSize: 30),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
+                  MyHeader(
+                    image: widget.struggle.image,
+                    page:"struggle",
+                    offset: offset,
+                  ),
+
+                        new Align(
+                          child: new Text(
+                            widget.struggle.title,
+                            style: new TextStyle(fontSize: 30),
+                          ), //so big text
+                          alignment: FractionalOffset.topRight,
+                        ),
+
+
+                           Align(
+                            child: new Text(
+                              widget.struggle.description,
+                              style: new TextStyle(fontSize: 20),
+                            ), //so big text
+                            alignment: FractionalOffset.topRight,
+                          ),
+
+
+
+
+
+
+
+                  RaisedButton(
+                    onPressed: () async {
+                      await screenshotController.capture().then((image) async {
+                        //facebook appId is mandatory for andorid or else share won't work
+                        Platform.isAndroid
+                            ?
+
+                        SocialShare.shareFacebookStory(image.path,
+                            "#ffffff", "#000000", "https://google.com",
+                            appId: "9753591s76210597")
+                            .then((data) {
+                          print(data);
+
+                        })
+                            : SocialShare.shareFacebookStory(image.path,
+                            "#ffffff", "#000000", "https://google.com")
+                            .then((data) {
+                          print(data);
+                        });
+                      });
+                    },
+                    child: Text("Share On Facebook Story"),
+                  ),
+
+
+
+                  RaisedButton(
+                    onPressed: () async {
+                      await screenshotController.capture().then((image) async {
+                        SocialShare.shareOptions("Hello world").then((data) {
+                          print(data);
+                        });
+                      });
+                    },
+                    child: Text("Share Options"),
+                  ),
+                  RaisedButton(
+                    onPressed: () async {
+                      SocialShare.shareWhatsapp(
+                          "Hello World \n https://google.com")
+                          .then((data) {
+                        print(data);
+                      });
+                    },
+                    child: Text("Share on Whatsapp"),
+                  ),
+
+                ],
               ),
-               Expanded(
-
-                 child: Align(
-                  child: new Text(
-                    widget.struggle.description,
-                    style: new TextStyle(fontSize: 20),
-                  ), //so big text
-                  alignment: FractionalOffset.topRight,
-              ),
-               ),
-
-            ],
+            ),
           ),
-      ),
-       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(8.0),
-        child:  Row(
-          mainAxisAlignment: MainAxisAlignment.center ,//Center Row contents horizontally,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
 
-            
-            Expanded(
-              child: IconButton(icon: Icon(Icons.share), onPressed:() async {
-                String url = 'https://flutter.dev/';
-                final quote =
-                    'Flutter is Google’s portable UI toolkit for building beautiful, natively-compiled applications for mobile, web, and desktop from a single codebase.';
-                final result = await SocialSharePlugin.shareToFeedFacebookLink(
-                  quote: quote,
-                  url: url,
-                  onSuccess: (_) {
-                    print('FACEBOOK SUCCESS');
-                    return;
-                  },
-                  onCancel: () {
-                    print('FACEBOOK CANCELLED');
-                    return;
-                  },
-                  onError: (error) {
-                    print('FACEBOOK ERROR $error');
-                    return;
-                  },
-                );
 
-                print(result);
-              },),
-            ),
-
-            Expanded(
-              child: IconButton(
-                  icon: Icon(
-                    Icons.border_color,
-                  ),
-                  iconSize: 30,
-                  color: Colors.grey,
-                  splashColor: Colors.purple,
-                  onPressed:(){ _launchURL(widget.struggle.petition);}
-              ),
-            ),
-
-            Expanded(
-              child: IconButton(
-                  icon: Icon(
-                    Icons.all_inclusive,
-                  ),
-                  iconSize: 30,
-                  color: Colors.grey,
-                  splashColor: Colors.purple,
-                  onPressed:(){ _launchURL(widget.struggle.donation);}
-              ),
-            ),
-
-          ],
-        ),
-      ),
     );
   }
 }

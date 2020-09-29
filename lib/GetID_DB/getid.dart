@@ -127,3 +127,19 @@ Future<String> GetHotMess(String text,String sender) async {
 
 
 }
+Future<String> GetStrugle(String name) async {
+
+  final QuerySnapshot result = await Firestore.instance
+      .collection('struggle')
+      .where('name', isEqualTo: name)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+
+
+
+}

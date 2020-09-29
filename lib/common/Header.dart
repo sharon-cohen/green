@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:greenpeace/home/home_menager.dart';
+import 'package:greenpeace/Footer/footer.dart';
 class MyHeader extends StatefulWidget {
   final String image;
   final String page;
@@ -50,11 +51,18 @@ class _MyHeaderState extends State<MyHeader> {
 
           ),
           child: Align(alignment: Alignment.topRight,
-              child: IconButton(onPressed: () {
-                Navigator.pop(context, true);
-              }, icon: Icon(Icons.clear,
-              color: Colors.white,
-              ),)),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor:Colors.grey,
+                child: IconButton(onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  BottomNavigationBarController(2,1)),
+                  );
+                }, icon: Icon(Icons.clear,
+                color: Colors.white,
+                ),),
+              )),
         ):Container(),
       ),
     );

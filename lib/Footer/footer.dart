@@ -61,12 +61,13 @@ class _BottomNavigationBarControllerState
   int _index_bifore;
   static ScreenArguments_m send;
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
+
     currentIndex: _selectedIndex,
     onTap: (int index) async {
       if(index == 0){
         await showMenu<String>(
           context: context,
-          position: RelativeRect.fromLTRB(1000.0, 500, 0.0, 0.0),
+          position: RelativeRect.fromLTRB(kBottomNavigationBarHeight, MediaQuery.of(context).size.height-240-kBottomNavigationBarHeight, 0.0, 0),
           items: <PopupMenuItem<String>>[
             new PopupMenuItem<String>(
               child: FlatButton(
@@ -166,6 +167,7 @@ class _BottomNavigationBarControllerState
       setState(() {
         if(index!=0)
           _selectedIndex = index;
+        print(kBottomNavigationBarHeight);
       }
       );
     },

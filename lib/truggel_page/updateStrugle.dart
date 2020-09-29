@@ -1,30 +1,32 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'globalfunc.dart';
+import 'package:greenpeace/globalfunc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:greenpeace/truggel_page/struggle_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:path/path.dart';
 import 'package:greenpeace/Footer/footer.dart';
 final _firestore = Firestore.instance;
-class create_struggle1 extends StatefulWidget {
-  create_struggle1({Key key, this.arguments}) : super(key: key);
+class updatestrugle extends StatefulWidget {
+  updatestrugle({Key key, this.arguments,this.strugle}) : super(key: key);
   static const String id = " create_struggle1";
+  final StruggleModel strugle;
   final ScreenArguments_m arguments;
 
   @override
-  create_struggle1State createState() => create_struggle1State();
+  updatestrugleState createState() => updatestrugleState();
 }
 
-class create_struggle1State extends State<create_struggle1> {
+class updatestrugleState extends State<updatestrugle> {
 
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
-  TextEditingController _location;
+  TextEditingController _share;
   TextEditingController _petition;
   TextEditingController _donation;
   String type_event;
@@ -44,11 +46,11 @@ class create_struggle1State extends State<create_struggle1> {
   void initState() {
     super.initState();
 
-    _title = TextEditingController(text: "");
-    _description = TextEditingController(text:  "");
-    _location = TextEditingController(text:  "");
-    _petition = TextEditingController(text:  "");
-    _donation=TextEditingController(text:  "");
+    _title = TextEditingController(text: widget.strugle.title);
+    _description = TextEditingController(text: widget.strugle.description);
+    _share = TextEditingController(text: widget.strugle.share);
+    _petition = TextEditingController(text: widget.strugle.petition);
+    _donation=TextEditingController(text:  widget.strugle.donation);
     _eventDate = DateTime.now();
     processing = false;
   }
@@ -82,9 +84,10 @@ class create_struggle1State extends State<create_struggle1> {
   }
 
   Future<String> uploadImageToFirebase(BuildContext context) async {
-      print("fsdfs");
-    if(_imageFile.path.isNotEmpty){
-      fileName = basename(_imageFile.path);
+    print("pth of image");
+    print(_imageFile.path.toString());
+    if(_imageFile.path.isEmpty){
+      throw GradeException();
     }
 
     StorageReference firebaseStorageRef =
@@ -149,7 +152,7 @@ class create_struggle1State extends State<create_struggle1> {
               ),
               SizedBox(height: 20),
               TextFormField(
-                controller: _location,
+                controller: _share,
                 validator: (value) =>
                 (value.isEmpty) ? "שדה קישור זה חובה" : null,
                 style: style,
@@ -228,58 +231,65 @@ class create_struggle1State extends State<create_struggle1> {
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Material(
-                    elevation: 5.0,
-                    borderRadius: BorderRadius.circular(30.0),
-                    color: Theme.of(context).primaryColor,
-                    child: MaterialButton(
-                      onPressed: () async {
-                        setState(() {
+                elevation: 5.0,
+                borderRadius: BorderRadius.circular(30.0),
+                color: Theme.of(context).primaryColor,
+                child: MaterialButton(
+                  onPressed: () async {
+                    setState(() {
 
-                          processing = true;
-                        });
-                        await uploadImageToFirebase(context);
+                      processing = true;
+                    });
+                    try {
+                      await uploadImageToFirebase(context);
+                    }
+                   catch( e){
+                     fileUrl=widget.strugle.image;
+                   }
+                    print(fileUrl);
+                    if (_formKey.currentState.validate()) {
 
-                        print(fileUrl);
-                        if (_formKey.currentState.validate()) {
+                     String  idevent = await GetStrugle(widget.strugle.title);
+                      Firestore.instance
+                          .collection('struggle')
+                          .document(idevent)
+                          .updateData({
+                        "info": _description.text,
+                        "name":  _title.text,
+                        "petition":_petition.text,
+                        "url_image": fileUrl,
+                        "url_share": _share.text,
+                        "donation":_donation.text,
+                      });
 
 
-                         await _firestore.collection("struggle").add({
-                            "info": _title.text,
-                            "name":  _description.text,
-                            "petition":_petition.text,
-                            "url_image": fileUrl,
-                            "url_share": _location.text,
-                            "donation":_donation.text,
-                          });
 
+                      setState(() {
 
+                        processing = false;
+                      });
+                      showAlertDialogStruggle(context);
+                    }
+                    else{
 
-                          setState(() {
+                      setState(() {
 
-                            processing = false;
-                          });
-                         showAlertDialogStruggle(context);
-                        }
-                        else{
+                        imageColorTitle=Colors.red;
+                      });
+                    }
 
-                          setState(() {
+                    //successshowAlertDialog(context);
 
-                            imageColorTitle=Colors.red;
-                          });
-                        }
+                  },
 
-                        //successshowAlertDialog(context);
-
-                      },
-
-                      child: Text(
-                        "Save",
-                        style: style.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                  child: Text(
+                    "Save",
+                    style: style.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
+                ),
+              ),
             ],
           ),
         ),
@@ -314,7 +324,7 @@ showAlertDialogStruggle(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("seccses"),
+    title: Text("seccses Edit"),
     content: Text("seccses"),
     actions: [
       okButton,
@@ -328,4 +338,9 @@ showAlertDialogStruggle(BuildContext context) {
       return alert;
     },
   );
+}
+class GradeException implements Exception {
+  String errorMessage() {
+    return 'Marks cannot be -ve values';
+  }
 }

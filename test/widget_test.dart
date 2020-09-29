@@ -1,173 +1,151 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:greenpeace/FadeAnimation.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
-void main() => runApp(
-  MaterialApp(
-    home: HomePage(),
-    debugShowCheckedModeBanner: false,
-  ),
-);
+void main() => runApp(MyApp());
 
-class HomePage extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
-  _HomePageState createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Firebase Storage Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: UploadingImageToFirebaseStorage(),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+final Color yellow = Color(0xfffbc31b);
+final Color orange = Color(0xfffb6900);
+String fileName = '';
+class UploadingImageToFirebaseStorage extends StatefulWidget {
+  @override
+  _UploadingImageToFirebaseStorageState createState() =>
+      _UploadingImageToFirebaseStorageState();
+}
+
+class _UploadingImageToFirebaseStorageState
+    extends State<UploadingImageToFirebaseStorage> {
+  File _imageFile;
+
+  final picker = ImagePicker();
+
+  Future pickImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = File(pickedFile.path);
+    });
+  }
+
+  Future uploadImageToFirebase(BuildContext context) async {
+
+    if(_imageFile.path.isNotEmpty){
+       fileName = basename(_imageFile.path);
+    }
+
+    StorageReference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('uploads/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    taskSnapshot.ref.getDownloadURL().then(
+          (value) => print("Done: $value"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xff21254A),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
         children: <Widget>[
           Container(
-            height: 200,
-            child: Stack(
-              children: <Widget>[
-                Positioned(
-                    child: FadeAnimation(
-                      1,
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage("image/1.png"),
-                          ),
-                        ),
-                      ),
-                    ))
-              ],
-            ),
+            height: 360,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(50.0),
+                    bottomRight: Radius.circular(50.0)),
+                gradient: LinearGradient(
+                    colors: [orange, yellow],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight)),
           ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+          Container(
+            margin: const EdgeInsets.only(top: 80),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                FadeAnimation(
-                  1,
-                  Text(
-                    "Hello there, \nwelcome back",
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      "Uploading Image to Firebase Storage",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontStyle: FontStyle.italic),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 40,
-                ),
-                FadeAnimation(
-                  1,
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.transparent,
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.grey[100],
-                              ),
+                SizedBox(height: 20.0),
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        height: double.infinity,
+                        margin: const EdgeInsets.only(
+                            left: 30.0, right: 30.0, top: 10.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30.0),
+                          child: _imageFile != null
+                              ? Image.file(_imageFile)
+                              : FlatButton(
+                            child: Icon(
+                              Icons.add_a_photo,
+                              size: 50,
                             ),
-                          ),
-                          child:  TextField(
-                            obscureText: true,
-                            textAlign: TextAlign.center,
-                            onChanged: (value) {
-                              password = value;
-                            },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Username",
-                              hintStyle: TextStyle(color: Colors.grey),
+                            onPressed: pickImage,
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.grey[100],
-                              ),
-                            ),
-                          ),
-                          child:   TextField(
-                            keyboardType: TextInputType.emailAddress,
-                            textAlign: TextAlign.center,
-                            onChanged: (value) {
-                              email = value;
-                            },
-                            decoration:
-                            kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Center(
-                  child: FadeAnimation(
-                    1,
-                    Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: Colors.pink[200],
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                FadeAnimation(
-                  1,
-                  Container(
-                    height: 50,
-                    margin: EdgeInsets.symmetric(horizontal: 60),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Color.fromRGBO(49, 39, 79, 1),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                FadeAnimation(
-                  1,
-                  Center(
-                    child: Text(
-                      "Create Account",
-                      style: TextStyle(
-                        color: Colors.pink[200],
-                      ),
-                    ),
-                  ),
-                ),
+                uploadImageButton(context),
               ],
             ),
-          )
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget uploadImageButton(BuildContext context) {
+    return Container(
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding:
+            const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+            margin: const EdgeInsets.only(
+                top: 30, left: 20.0, right: 20.0, bottom: 20.0),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [yellow, orange],
+                ),
+                borderRadius: BorderRadius.circular(30.0)),
+            child: FlatButton(
+              onPressed: () => uploadImageToFirebase(context),
+              child: Text(
+                "Upload Image",
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
         ],
       ),
     );
