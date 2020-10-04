@@ -19,8 +19,9 @@ dependencies:
   meta: ^1.1.7
   screenshot: ^0.2.0
 
-
+  html: ^0.14.0+3
   firebase_core: ^0.4.4+3
+  web_scraper: ^0.0.6
   firebase_helpers: ^0.1.8
   firebase_auth: ^0.16.0
   cupertino_icons: ^0.1.3

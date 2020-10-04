@@ -1,153 +1,93 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:web_scraper/web_scraper.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(WebScraperApp());
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class WebScraperApp extends StatefulWidget {
+  @override
+  _WebScraperAppState createState() => _WebScraperAppState();
+}
+
+class _WebScraperAppState extends State<WebScraperApp> {
+
+  // initialize WebScraper by passing base url of website
+  final webScraper = WebScraper('https://webscraper.io');
+
+  // Response of getElement is always List<Map<String, dynamic>>
+  List<Map<String, dynamic>> productNames;
+  List<Map<String, dynamic>> productDescriptions;
+
+  void fetchProducts() async {
+    // Loads web page and downloads into local state of library
+    if (await webScraper
+        .loadWebPage('/test-sites/e-commerce/allinone/computers/laptops')) {
+      setState(() {
+        // getElement takes the address of html tag/element and attributes you want to scrap from website
+        // it will return the attributes in the same order passed
+        productNames = webScraper.getElement(
+            'div.thumbnail > div.caption > h4 > a.title', ['href', 'title']);
+        productDescriptions = webScraper.getElement(
+            'div.thumbnail > div.caption > p.description', ['class']);
+      });
+
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Requesting to fetch before UI drawing starts
+    fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Firebase Storage Demo',
+      title: 'Fetch Data Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: UploadingImageToFirebaseStorage(),
-    );
-  }
-}
-
-final Color yellow = Color(0xfffbc31b);
-final Color orange = Color(0xfffb6900);
-String fileName = '';
-class UploadingImageToFirebaseStorage extends StatefulWidget {
-  @override
-  _UploadingImageToFirebaseStorageState createState() =>
-      _UploadingImageToFirebaseStorageState();
-}
-
-class _UploadingImageToFirebaseStorageState
-    extends State<UploadingImageToFirebaseStorage> {
-  File _imageFile;
-
-  final picker = ImagePicker();
-
-  Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      _imageFile = File(pickedFile.path);
-    });
-  }
-
-  Future uploadImageToFirebase(BuildContext context) async {
-
-    if(_imageFile.path.isNotEmpty){
-       fileName = basename(_imageFile.path);
-    }
-
-    StorageReference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('uploads/$fileName');
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => print("Done: $value"),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            height: 360,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50.0),
-                    bottomRight: Radius.circular(50.0)),
-                gradient: LinearGradient(
-                    colors: [orange, yellow],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight)),
+      home: Scaffold(
+          appBar: AppBar(
+            title: Text("Product Catalog"),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 80),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      "Uploading Image to Firebase Storage",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        height: double.infinity,
-                        margin: const EdgeInsets.only(
-                            left: 30.0, right: 30.0, top: 10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30.0),
-                          child: _imageFile != null
-                              ? Image.file(_imageFile)
-                              : FlatButton(
-                            child: Icon(
-                              Icons.add_a_photo,
-                              size: 50,
-                            ),
-                            onPressed: pickImage,
+          body: SafeArea(
+              child: productNames == null
+                  ? Center(
+                child: CircularProgressIndicator(), // Loads Circular Loading Animation
+              )
+                  : ListView.builder(
+                  itemCount: productNames.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    // Attributes are in the form of List<Map<String, dynamic>>.
+                    Map<String, dynamic> attributes =
+                    productNames[index]['attributes'];
+                    return ExpansionTile(
+                      title: Text(attributes['title']),
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: <Widget>[
+                              Container(child: Text(productDescriptions[index]['title']), margin: EdgeInsets.only(bottom: 10.0),),
+                              InkWell(
+                                onTap: () {
+                                  // uses UI Launcher to launch in web browser & minor tweaks to generate url
+                                  launch(webScraper.baseUrl +
+                                      attributes['href']);
+                                },
+                                child: Text(
+                                  "View Product",
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                uploadImageButton(context),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget uploadImageButton(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding:
-            const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-            margin: const EdgeInsets.only(
-                top: 30, left: 20.0, right: 20.0, bottom: 20.0),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [yellow, orange],
-                ),
-                borderRadius: BorderRadius.circular(30.0)),
-            child: FlatButton(
-              onPressed: () => uploadImageToFirebase(context),
-              child: Text(
-                "Upload Image",
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ),
-        ],
-      ),
+                        )
+                      ],
+                    );
+                  }))),
     );
   }
 }

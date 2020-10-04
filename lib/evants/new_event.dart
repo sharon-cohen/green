@@ -271,21 +271,7 @@ class _newEventPage extends State<newEventPage> {
 //             ),
 
               const SizedBox(height: 10.0),
-              ListTile(
-                title: Text("בחר תאריך",style: new TextStyle(fontSize: 30),),
-                subtitle: Text("${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
-                onTap: ()async{
-                  print(this.data.dropdownValue);
-                  DateTime picked = await showDatePicker(context: context, initialDate: _eventDate, firstDate: DateTime(_eventDate.year-5), lastDate: DateTime(_eventDate.year+5));
-                  if(picked != null) {
-                    setState(() {
-                      _eventDate = picked;
-                    });
-                  }
-                },
-              ),
 
-              SizedBox(height: 10.0),
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
