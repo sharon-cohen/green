@@ -6,9 +6,11 @@ import 'package:greenpeace/create_struggle1.dart';
 import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/evants/calender.dart';
 import 'package:greenpeace/evants/list_event.dart';
-import 'package:greenpeace/splash_page.dart';
+
 import 'package:greenpeace/ConnectUs/connect.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:greenpeace/welcom.dart';
 import 'package:greenpeace/HotReport/hotReport.dart';
 import 'package:greenpeace/global.dart' as globals;
 final _firestore = Firestore.instance;
@@ -40,7 +42,7 @@ class _BottomNavigationBarControllerState
         key: PageStorageKey(' All_truggle'),
         arguments: send
     ),
-    report(
+    Allmess(
         key: PageStorageKey('report'),
         arguments: send
     ),
@@ -153,8 +155,13 @@ class _BottomNavigationBarControllerState
 
                   ],
                 ),
-                onPressed: (){
-                Navigator.pushNamed(context, splash_page.id);
+                onPressed: ()async{
+                  await FirebaseAuth.instance.signOut();
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WelcomeScreen()));
                 },
               ),
             ),
@@ -171,7 +178,7 @@ class _BottomNavigationBarControllerState
       }
       );
     },
-    items: const <BottomNavigationBarItem>[
+    items:!globals.no_reg? const <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           // ignore: deprecated_member_use
           icon: Icon(Icons.add,color: Colors.black,), title: Text('אירועים')),
@@ -190,6 +197,21 @@ class _BottomNavigationBarControllerState
       BottomNavigationBarItem(
         // ignore: deprecated_member_use
           icon: Icon(Icons.chat,color: Colors.black,), title: Text('הודעות')),
+    ]:const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        // ignore: deprecated_member_use
+          icon: Icon(Icons.add,color: Colors.black,), title: Text('אירועים')),
+      BottomNavigationBarItem(
+        // ignore: deprecated_member_use
+          icon: Icon(Icons.all_inclusive,color: Colors.black,), title: Text('התחבר')),
+      BottomNavigationBarItem(
+        // ignore: deprecated_member_use
+          icon: Icon(Icons.home,color: Colors.black,), title: Text('עמוד הבית')),
+      BottomNavigationBarItem(
+        // ignore: deprecated_member_use
+          icon:ImageIcon(  AssetImage("image/icon_struggle.png"),color: Colors.black,), title: Text('מאבקים')),
+
+
     ],
 
   );

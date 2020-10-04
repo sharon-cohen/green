@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/HotReport/HotReportModel.dart';
 import 'package:greenpeace/HotReport/HotReportMass.dart';
+import 'package:greenpeace/globalfunc.dart';
 final _firestore = Firestore.instance;
 
 class HotStream extends StatelessWidget {
@@ -90,7 +91,7 @@ class HotContainer extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 10),
         ),
         // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-        subtitle: Text('דיווח חם', style: TextStyle(color: Colors.red,fontSize: 8),
+        subtitle: Text( cutTimeString(report.time.toString()),
             overflow: TextOverflow.ellipsis),
         trailing: FlatButton(
           padding: const EdgeInsets.all(0.0),

@@ -138,3 +138,17 @@ String getimageString(String type){
     return'image/green.jpeg';
   }
 }
+String cutTimeString(String time){
+  String res="";
+  for (int i=0;i<time.length;i++){
+    if(time[i]=='.'){
+      res=time.substring(0, i);
+        for(int j=i;j<time.length;j++){
+          if(time[j]==' '){
+            res=res+time.substring(j);
+          }
+        }
+    }
+  }
+return res;
+}

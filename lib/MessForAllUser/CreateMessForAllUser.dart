@@ -1,23 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:greenpeace/global.dart' as globals;
-import 'event_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final _firestore = Firestore.instance;
-class AddEventPage extends StatefulWidget {
+class SendMessForAllUser extends StatefulWidget {
 
-  final String sender;
-  final String senderId;
-  const AddEventPage({Key key,this.sender,this.senderId}) : super(key: key);
+
+  const SendMessForAllUser({Key key}) : super(key: key);
 
   @override
-  _AddEventPageState createState() => _AddEventPageState();
+  _SendMessForAllUser createState() => _SendMessForAllUser();
 }
 
-class _AddEventPageState extends State<AddEventPage> {
+class _SendMessForAllUser extends State<SendMessForAllUser> {
   final TextEditingController _controller = new TextEditingController();
   FirebaseUser currentUser;
 
@@ -100,19 +99,8 @@ class _AddEventPageState extends State<AddEventPage> {
                     splashColor: Colors.purple,
                     onPressed: () {
 
-                      if(globals.isMeneger==false) {
-                        _firestore.collection("messageMenager").add({
-                          "text": '$submitStr',
-                          "sender": globals.name,
-                          "time": DateTime.now(),
-                          "senderID": currentUser.uid,
-
-                        });
-                      }
-                      else{
-                        DocumentReference documentReference = Firestore.instance.collection("personalMess").document();
-                        documentReference.setData({
-
+                      
+                        _firestore.collection("MessForAll").add({
                           "text": '$submitStr',
                           "sender": globals.name,
                           "time": DateTime.now(),
@@ -120,11 +108,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
                         });
 
-                        print('widget.senderId');
-                        print(widget.senderId);
-                        Firestore.instance.collection("users").document(widget.senderId).updateData({"personalMessId": FieldValue.arrayUnion([documentReference.documentID])});
 
-                      }
 
                       showAlertDialog_mess_send(context);
 
@@ -133,38 +117,27 @@ class _AddEventPageState extends State<AddEventPage> {
                 ],
               ),
             ),
-           globals.isMeneger? Container(
+          Container(
               width: MediaQuery.of(context).size.width,
               child: Text(
-                widget.sender,
+                'אל all users ',
               ),
 
-            ):Container(
-             width: MediaQuery.of(context).size.width,
-             child: Text(
-               'אל המנהלים',
-             ),
-
-           ),
+            ),
             Divider(
                 thickness: 1,
                 color: Colors.black
             ),
-            globals.isMeneger?  Container(
+            Container(
               width: MediaQuery.of(context).size.width,
               child: Text(
                   'מאת: מנהלים'
 
               ),
 
-            ):Container(
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                'מאת: '+globals.name,
-
-              ),
-
             ),
+
+
             Divider(
                 thickness: 1,
                 color: Colors.black
@@ -178,7 +151,7 @@ class _AddEventPageState extends State<AddEventPage> {
       ),
     );
   }
-  }
+}
 
 
 showAlertDialog_mess_send(BuildContext context) {

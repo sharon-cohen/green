@@ -8,6 +8,7 @@ import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/common/Header.dart';
 import 'package:intl/intl.dart';
+import 'package:greenpeace/globalfunc.dart';
 final _firestore = Firestore.instance;
 
 class EventDetailsPage extends StatelessWidget {
@@ -35,7 +36,7 @@ class EventDetailsPage extends StatelessWidget {
               offset: offset,
             ),
 
-            Text('ב-'+" ${dateFormat.format(event.eventDate)}"),
+           Text( cutTimeString(event.eventDate.toString())),
             Text(event.title, style: Theme.of(context).textTheme.display1,),
             SizedBox(height: 20.0),
             Text(event.description),

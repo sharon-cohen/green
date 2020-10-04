@@ -5,8 +5,10 @@ import 'package:greenpeace/Component/Alret_Dealog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/evants/event_model.dart';
 import 'package:greenpeace/evants/event_container.dart';
+import 'package:intl/intl.dart';
 final _firestore = Firestore.instance;
 class event_stream extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -27,7 +29,8 @@ class event_stream extends StatelessWidget {
           if(event.data['approve']){
           final title = event.data['title'];
           final description = event.data['description'];
-          final eventDate = event.data['event_date'].toDate();
+          final eventDate =  DateTime.parse(event.data['event_date'].toDate().toString());
+          final createDateEvent= event.data['createEventDate'].toDate();
           final approve = event.data['approve'];
           final equipment = event.data['equipment'];
           final sender = event.data['sender'];
@@ -40,6 +43,7 @@ class event_stream extends StatelessWidget {
             Event: EventModel(
               title: title,
               description: description,
+              createDateEvent: createDateEvent,
               eventDate: eventDate,
               approve: approve,
               equipment: equipment,

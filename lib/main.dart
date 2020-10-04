@@ -8,7 +8,7 @@ import 'package:greenpeace/Footer/footer.dart';
 import 'package:greenpeace/home/Home.dart';
 import 'package:greenpeace/evants/new_event.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:greenpeace/splash_page.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -27,9 +27,9 @@ class MyApp extends StatelessWidget {
       ],
       locale: Locale("he", "IR"), // OR Locale('ar', 'AE') OR Other RTL locales,
 
-      initialRoute: splash_page.id,
+      initialRoute:  WelcomeScreen.id,
       routes: {
-        splash_page.id: (context) => splash_page(),
+
         "new_event": (_) => newEventPage(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),

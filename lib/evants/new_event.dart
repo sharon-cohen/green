@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:greenpeace/streem_firestore/StruggleStream.dart';
+import 'package:intl/intl.dart';
 import 'event_model.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
 import 'package:greenpeace/global.dart' as globals;
@@ -24,6 +26,12 @@ class _newEventPage extends State<newEventPage> {
   TextEditingController _description;
   TextEditingController _location;
   TextEditingController _whatapp;
+  final format = DateFormat("yyyy-MM-dd HH:mm");
+  final initialValue = DateTime.now();
+  final createDateEvent = DateTime.now();
+  DateTime value = DateTime.now();
+  int savedCount = 0;
+  int changedCount = 0;
   String type_event;
   Data data=Data(
     dropdownValue:'',
@@ -59,7 +67,7 @@ class _newEventPage extends State<newEventPage> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   bool processing;
-
+  bool autoValidate = false;
   @override
   void initState() {
     super.initState();
@@ -126,6 +134,7 @@ class _newEventPage extends State<newEventPage> {
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
@@ -151,6 +160,46 @@ class _newEventPage extends State<newEventPage> {
 
                       fillColor: Colors.white,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Text('Date'),
+                    DateTimeField(
+                      format: format,
+                      onShowPicker: (context, currentValue) async {
+                        final date = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                        if (date != null) {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime:
+                            TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                          );
+                          return DateTimeField.combine(date, time);
+                        } else {
+                          return currentValue;
+                        }
+                      },
+                      autovalidate: autoValidate,
+                      validator: (date) => date == null ? 'Invalid date' : null,
+                      initialValue: initialValue,
+                      onChanged: (date) => setState(() {
+                        value = date;
+                        changedCount++;
+                      }),
+                      onSaved: (date) => setState(() {
+                        value = date;
+
+                        savedCount++;
+                      }),
+                    ),
+                  ],
                 ),
               ),
               new Align(
@@ -269,7 +318,8 @@ class _newEventPage extends State<newEventPage> {
                           await eventDBS.createItem(EventModel(
                             title: _title.text,
                             description: _description.text,
-                            eventDate: _eventDate,
+                            eventDate: value,
+                            createDateEvent:createDateEvent,
                             approve: false,
                             equipment: getCheckboxItems(),
                             sender: globals.name,

@@ -11,19 +11,23 @@ import 'package:greenpeace/report/report_mass.dart';
 import 'package:greenpeace/personal_massage/personalMessModel.dart';
 import 'package:greenpeace/personal_massage/messMenager.dart';
 import 'package:greenpeace/HotReport/HotReportStream.dart';
+import 'package:greenpeace/MessForAllUser/CreateMessForAllUser.dart';
+import 'package:greenpeace/MessForAllUser/ListMessForAllStream.dart';
+import 'package:greenpeace/MessToOnePersonFromMenager/choosePerson.dart';
+
 final databaseReference = Firestore.instance;
 final _firestore = Firestore.instance;
 
-class report extends StatefulWidget {
-  report({Key key, this.arguments}) : super(key: key);
+class Allmess extends StatefulWidget {
+  Allmess({Key key, this.arguments}) : super(key: key);
   static const String id = " report";
   final ScreenArguments_m arguments;
 
   @override
-  reportState createState() => reportState();
+  AllmessState createState() =>  AllmessState();
 }
 
-class reportState extends State<report> {
+class  AllmessState extends State< Allmess> {
   var height_page;
   var width_page;
   final _auth = FirebaseAuth.instance;
@@ -65,8 +69,7 @@ class reportState extends State<report> {
                 alignment: FractionalOffset.topRight,
               ),
               messMenager(),
-
-
+              AllUserlMassStream(),
               new Align(
                 child: new Text(
                   "שונות",
@@ -97,7 +100,7 @@ class reportState extends State<report> {
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
-
+            AllUserlMassStream(),
               personalMassStream(
                 myMess: myMess,
               ),
@@ -121,7 +124,11 @@ class reportState extends State<report> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => AddEventPage()));
-          }):null,
+          }):FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showAlertDialogMessManeger(context);
+          }),
       body: new FutureBuilder<Widget>(
           future: listOfMass(),
           builder: (BuildContext context, AsyncSnapshot<Widget> text) {
@@ -283,7 +290,7 @@ class ReportsContainer extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 10),
         ),
         // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-        subtitle: thereport(),
+        subtitle:  Text( cutTimeString(report.time.toString())),
         trailing: FlatButton(
           padding: const EdgeInsets.all(0.0),
           child:
@@ -331,6 +338,7 @@ class eventStream extends StatelessWidget {
           final senderId=event.data["senderId"];
           final equipment=event.data["equipment"];
           final date=event.data["event_date"];
+          final dateCreateEvent=event.data["createEventDate"];
           final location=event.data["location"];
           final type_event=event.data["type_event"];
           final whatapp=event.data['whatapp'];
@@ -338,6 +346,7 @@ class eventStream extends StatelessWidget {
             final evenContainer = eventContainer(
               title: eventtitle,
               approve: eventapprove,
+              createEventDate: dateCreateEvent.toDate(),
               time: date.toDate(),
               dis: eventdis,
               id: event.documentID,
@@ -349,6 +358,7 @@ class eventStream extends StatelessWidget {
               location:  location,
               type_event: type_event,
                 whatapp: whatapp,
+
             );
             eventContainers.add(evenContainer);
           }
@@ -377,10 +387,12 @@ class eventContainer extends StatelessWidget {
   final String senderId;
   final String type_event;
   final String location;
-final String whatapp;
+  final DateTime createEventDate;
+  final String whatapp;
   eventContainer(
       {this.approve,
-     this.whatapp,
+     this.createEventDate,
+        this.whatapp,
       this.location,
         this.type_event,
         this.equipment,
@@ -413,7 +425,7 @@ final String whatapp;
 
         children: <Widget>[
           Flexible(
-              child: Text('אירוע חדש:'+this.title, style: TextStyle(color: Colors.black,fontSize: 8),)
+              child: Text( cutTimeString(this.createEventDate.toString())),
           ),
 
         ],
@@ -442,4 +454,44 @@ final String whatapp;
       ),
     );
   }
+}
+showAlertDialogMessManeger(BuildContext context) {
+
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text("evreyOne"),
+    onPressed:  () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>SendMessForAllUser()));
+    },
+  );
+  Widget continueButton = FlatButton(
+    child: Text("One person"),
+    onPressed:  () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>userStream()));
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Send Message to"),
+
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

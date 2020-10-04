@@ -17,17 +17,7 @@ class MessageBubble extends StatelessWidget {
   MessageBubble({this.sender, this.text, this.isMe, this.time, this.image_u});
   DateFormat dateFormat = DateFormat("yyyy-MM-dd");
   int report = 0;
-  void showMyDialog() {
-    showDialog(
-        context: navigatorKey.currentState.overlay.context, // Using overlay's context
-        builder: (context) => Center(
-          child: Material(
-            color: Colors.transparent,
-            child: Text('Hello'),
-          ),
-        )
-    );
-  }
+
   Widget nassege() {
     if (image_u == "") {
       return Material(
@@ -65,7 +55,7 @@ class MessageBubble extends StatelessWidget {
     } else
       return FlatButton(
         onPressed: () {
-          showAlertDialogImagemessage(image_u);
+
         },
           child: Container(
             height: 100,
@@ -78,6 +68,38 @@ class MessageBubble extends StatelessWidget {
                 )
             )),
       );
+  }
+  final today = DateTime.now();
+  String GetTime(DateTime time,bool isMy){
+    int difference = today.difference(time).inDays;
+    if(difference==0&& isMy==true){
+      return  globals.name+"\n"+"Today";
+    }
+    if(difference==0&& isMy==false){
+      return  sender+"\n"+"Today";
+    }
+    String TypeTime='';
+
+    if(difference~/7>0){
+      if(difference~/30>0){
+        TypeTime='Mo ';
+        difference=difference~/30;
+      }
+      else{
+        TypeTime='W ';
+        difference=difference~/7;
+      }
+    }
+    else{
+      TypeTime='d ';
+    }
+
+
+    if(isMy==true){
+      return globals.name+"\n"+difference.toString()+TypeTime;
+    }
+    else{ return sender+"\n"+difference.toString()+TypeTime;}
+
   }
 
   @override
@@ -95,7 +117,7 @@ class MessageBubble extends StatelessWidget {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                   globals.name+"\n${dateFormat.format(time.toDate())}",
+                    GetTime(time.toDate(),true),
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
@@ -103,7 +125,7 @@ class MessageBubble extends StatelessWidget {
                     textAlign: TextAlign.end,
                   ),
                 ),
-              ):Text(" ${dateFormat.format(time.toDate())}\n"+sender,
+              ):Text(GetTime(time.toDate(),false),
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize:12,

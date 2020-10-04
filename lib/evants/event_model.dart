@@ -5,6 +5,7 @@ class EventModel extends DatabaseItem{
   final String title;
   final String description;
   final DateTime eventDate;
+  final DateTime createDateEvent;
   final String equipment;
   final String sender;
   final String senderId;
@@ -13,7 +14,7 @@ class EventModel extends DatabaseItem{
   final String whatapp;
   bool approve;
   EventModel({this.id,this.title, this.description, this.eventDate,this.approve,
-    this.equipment,this.senderId,this.sender,this.location,this.type_event,this.whatapp
+    this.equipment,this.senderId,this.sender,this.location,this.type_event,this.whatapp,this.createDateEvent
   }):super(id);
 
   factory EventModel.fromMap(Map data) {
