@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 class MyHeader_svg extends StatefulWidget {
   final String image;
   final String textTop;
@@ -31,20 +32,16 @@ class _MyHeader_svgState extends State<MyHeader_svg> {
               Color(0xFF3382CC).withOpacity(.8),
             ],
           ),
-
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-
             SizedBox(height: 20),
             Expanded(
               child: Stack(
                 children: <Widget>[
                   Positioned(
-
                     child: Container(
-
                       child: SvgPicture.asset(
                         'image/Golf.svg',
                         height: 400,
@@ -64,7 +61,7 @@ class _MyHeader_svgState extends State<MyHeader_svg> {
                       ),
                     ),
                   ),
-                // I dont know why it can't work without container
+                  // I dont know why it can't work without container
                 ],
               ),
             ),
@@ -92,6 +89,7 @@ class MyClipper extends CustomClipper<Path> {
     return false;
   }
 }
+
 const kHeadingTextStyle = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.w600,

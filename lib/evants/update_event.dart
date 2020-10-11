@@ -6,6 +6,7 @@ import 'event_firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:greenpeace/Footer/footer.dart';
+
 class updateEventPage extends StatefulWidget {
   final EventModel note;
   final String sender;
@@ -18,36 +19,33 @@ class updateEventPage extends StatefulWidget {
   final String location;
   final String dataid;
   final String whatapp;
-  updateEventPage(
-      {this.sender,
-       this.whatapp,
-        this.text,
-        this.senderId,
-        this.topic,
-        this.equipment,
-        this.eventDate,
-        this.type_event,
-        this.location,
-        this.dataid,
-        this.note,
-      });
-
-
+  updateEventPage({
+    this.sender,
+    this.whatapp,
+    this.text,
+    this.senderId,
+    this.topic,
+    this.equipment,
+    this.eventDate,
+    this.type_event,
+    this.location,
+    this.dataid,
+    this.note,
+  });
 
   @override
   _updateEventPage createState() => _updateEventPage();
 }
 
 class _updateEventPage extends State<updateEventPage> {
-
   FirebaseUser currentUser;
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   TextEditingController _location;
   TextEditingController _whatapp;
-  Data data=Data(
-    dropdownValue:'',
+  Data data = Data(
+    dropdownValue: '',
   );
   Map<String, bool> values = {
     'שלטים': false,
@@ -61,40 +59,35 @@ class _updateEventPage extends State<updateEventPage> {
 
   var tmpArray = [];
 
-  String getCheckboxItems(){
+  String getCheckboxItems() {
     tmpArray.clear();
     values.forEach((key, value) {
-      if(value == true)
-      {
+      if (value == true) {
         tmpArray.add(key);
-
       }
     });
     return tmpArray.toString();
-
   }
-  DateTime _eventDate=DateTime.now();
+
+  DateTime _eventDate = DateTime.now();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
-  List<String> equipmentList=[];
+  List<String> equipmentList = [];
   bool processing;
-  String temp="";
-  void stringToList(){
-print(widget.equipment);
-    for(int i=1; i<widget.equipment.length; i++) {
-      if(widget.equipment[i]==','||widget.equipment[i]==']'){
-         equipmentList.add(temp);
-         temp="";
-      }
-      else {
+  String temp = "";
+  void stringToList() {
+    print(widget.equipment);
+    for (int i = 1; i < widget.equipment.length; i++) {
+      if (widget.equipment[i] == ',' || widget.equipment[i] == ']') {
+        equipmentList.add(temp);
+        temp = "";
+      } else {
         temp = temp + widget.equipment[i];
-
       }
     }
-for(int i=0; i<equipmentList.length; i++){
-  values[equipmentList[i]]=true;
-}
-
+    for (int i = 0; i < equipmentList.length; i++) {
+      values[equipmentList[i]] = true;
+    }
   }
 
   @override
@@ -102,21 +95,26 @@ for(int i=0; i<equipmentList.length; i++){
     super.initState();
     _loadCurrentUser();
     stringToList();
-    _title = TextEditingController(text: widget.note != null ? widget.note.title : "");
-    _description = TextEditingController(text:  widget.note != null ? widget.note.description : "");
-    _location = TextEditingController(text:  widget.note != null ? widget.note.location : "");
+    _title = TextEditingController(
+        text: widget.note != null ? widget.note.title : "");
+    _description = TextEditingController(
+        text: widget.note != null ? widget.note.description : "");
+    _location = TextEditingController(
+        text: widget.note != null ? widget.note.location : "");
     processing = false;
-    _whatapp = TextEditingController(text:  widget.note != null ? widget.note.location : "");
-    _title = TextEditingController(text:widget.topic);
-    _description = TextEditingController(text:widget.text );
+    _whatapp = TextEditingController(
+        text: widget.note != null ? widget.note.location : "");
+    _title = TextEditingController(text: widget.topic);
+    _description = TextEditingController(text: widget.text);
     _location = TextEditingController(text: widget.location);
-    _whatapp = TextEditingController(text:'https://chat.whatsapp.com/Eb12U02niq2EEhK290DoiL');
-
+    _whatapp = TextEditingController(
+        text: 'https://chat.whatsapp.com/Eb12U02niq2EEhK290DoiL');
   }
 
   void _loadCurrentUser() {
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() { // call setState to rebuild the view
+      setState(() {
+        // call setState to rebuild the view
         this.currentUser = user;
       });
     });
@@ -125,7 +123,10 @@ for(int i=0; i<equipmentList.length; i++){
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
+          automaticallyImplyLeading: false),
       key: _key,
       body: Form(
         key: _formKey,
@@ -133,115 +134,131 @@ for(int i=0; i<equipmentList.length; i++){
           alignment: Alignment.center,
           child: ListView(
             children: <Widget>[
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: new Align(
                   child: new Text(
                     "עריכת אירוע",
-                    style: new TextStyle(fontSize: 30),
+                    style: TextStyle(
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      // color: Colors.green,
+                    ),
                   ), //so big text
-                  alignment: FractionalOffset.topRight,
+                  alignment: FractionalOffset.center,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _title,
                   validator: (value) =>
-                  (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
+                      (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
-                      labelText: "נושא האירוע",
-
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    labelText: "נושא האירוע:",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                        //  borderRadius: BorderRadius.circular(10)
+                        ),
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _description,
                   minLines: 3,
                   maxLines: 5,
                   validator: (value) =>
-                  (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
+                      (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                       labelText: "תיאור הבעיה",
-
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                      border: OutlineInputBorder(
+                          //  borderRadius: BorderRadius.circular(10),
+                          )),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _whatapp,
                   style: style,
                   decoration: InputDecoration(
                       labelText: "קישור לקבוצת Whatapp",
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                      border: OutlineInputBorder(
+                          //   borderRadius: BorderRadius.circular(10)
+                          )),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _location,
                   validator: (value) =>
-                  (value.isEmpty) ? "שדה המיקום חובה" : null,
+                      (value.isEmpty) ? "שדה המיקום חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                       labelText: "מיקום",
-
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                      border: OutlineInputBorder(
+                          //      borderRadius: BorderRadius.circular(10)
+                          )),
                 ),
               ),
-              new Align(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: new Text(
                   "סוג האירוע",
                   style: new TextStyle(fontSize: 30),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
+                ),
               ),
               Flex(
                 direction: Axis.horizontal,
-
                 children: [
                   Expanded(
                     child: Container(
                       height: 400,
                       width: 300,
-                      child: Column (children: <Widget>[
+                      child: Column(children: <Widget>[
                         Expanded(
-                          child:  RadioButtonGroup(
+                          child: RadioButtonGroup(
                             labels: [
                               "הפגנה",
                               "ניקיון",
                               "הרצאה",
                             ],
                             disabled: [
-                             "${widget.type_event}",
+                              "${widget.type_event}",
                             ],
-                            onChange: (String label, int index) {print("label: $label index: $index");
-                            //type_event=label;
-                            } ,
+                            onChange: (String label, int index) {
+                              print("label: $label index: $index");
+                              //type_event=label;
+                            },
                             onSelected: (String label) => print(label),
                           ),
                         ),
-                        new Align(
-                          child: new Text(
-                            "רשימת ציוד",
-                            style: new TextStyle(fontSize: 30),
-                          ), //so big text
-                          alignment: FractionalOffset.topRight,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: new Align(
+                            child: new Text(
+                              "רשימת ציוד",
+                              style: new TextStyle(fontSize: 30),
+                            ), //so big text
+                            alignment: FractionalOffset.topRight,
+                          ),
                         ),
-
                         Expanded(
-                          child :
-                          ListView(
+                          child: ListView(
                             children: values.keys.map((String key) {
                               return new CheckboxListTile(
                                 title: new Text(key),
@@ -256,13 +273,12 @@ for(int i=0; i<equipmentList.length; i++){
                               );
                             }).toList(),
                           ),
-                        ),]),
+                        ),
+                      ]),
                     ),
                   ),
-
                 ],
               ),
-
 
 //           Padding(
 //                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -271,12 +287,23 @@ for(int i=0; i<equipmentList.length; i++){
 
               const SizedBox(height: 10.0),
               ListTile(
-                title: Text("בחר תאריך",style: new TextStyle(fontSize: 30),),
-                subtitle: Text("${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
-                onTap: ()async{
+                title: Text(
+                  "בחר תאריך",
+                  style: new TextStyle(fontSize: 30),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                  child: Text(
+                      "${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
+                ),
+                onTap: () async {
                   print(this.data.dropdownValue);
-                  DateTime picked = await showDatePicker(context: context, initialDate: _eventDate, firstDate: DateTime(_eventDate.year-5), lastDate: DateTime(_eventDate.year+5));
-                  if(picked != null) {
+                  DateTime picked = await showDatePicker(
+                      context: context,
+                      initialDate: _eventDate,
+                      firstDate: DateTime(_eventDate.year - 5),
+                      lastDate: DateTime(_eventDate.year + 5));
+                  if (picked != null) {
                     setState(() {
                       _eventDate = picked;
                     });
@@ -288,47 +315,60 @@ for(int i=0; i<equipmentList.length; i++){
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Material(
-                  elevation: 5.0,
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Theme.of(context).primaryColor,
-                  child: MaterialButton(
-                    onPressed: () async {
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Material(
+                        elevation: 5.0,
+                        //borderRadius: BorderRadius.circular(30.0),
+                        // Color(int.parse("0xff6ed000")),
+                        color: Color(int.parse("0xff6ed000")),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              setState(() {
+                                processing = true;
+                              });
 
-                      if (_formKey.currentState.validate()) {
-                        setState(() {
-                          processing = true;
-                        });
+                              await eventDBS.updateData(widget.dataid, {
+                                "title": _title.text,
+                                "description": _description.text,
+                                "event_date": _eventDate,
+                                "equipment": getCheckboxItems(),
+                                "location": _location.text,
+                                "type_event": widget.type_event,
+                                "whatapp": _whatapp.text,
+                              });
 
-                          await eventDBS.updateData(widget.dataid,{
-                            "title": _title.text,
-                            "description": _description.text,
-                            "event_date": _eventDate,
-                            "equipment":getCheckboxItems(),
-                            "location":_location.text,
-                            "type_event":widget.type_event,
-                            "whatapp":_whatapp.text,
-                          });
+                              setState(() {
+                                processing = false;
+                              });
+                            }
+                            successshowAlertDialog(context, currentUser.email,
+                                widget.senderId, widget.topic, widget.sender);
+                          },
+                          child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'שמור שינויים',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Assistant',
+                                    fontSize: 20),
+                              ),
+                              Spacer(),
 
-
-                        setState(() {
-                          processing = false;
-                        });
-                      }
-                      successshowAlertDialog(context,currentUser.email,widget.senderId,widget.topic,widget.sender);
-
-                    },
-
-                    child: Text(
-                      "Save",
-                      style: style.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                              //SizedBox(width: 270),
+                              Image.asset(
+                                'image/whitearrow.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -343,22 +383,22 @@ for(int i=0; i<equipmentList.length; i++){
     super.dispose();
   }
 }
-class Data{
+
+class Data {
   String dropdownValue;
   Data({this.dropdownValue});
 }
+
 successshowAlertDialog(BuildContext context, String email, String currentuserId,
     String name_event, String createby) {
-
   // set up the button
   Widget okButton = FlatButton(
     child: Text("אישור"),
     onPressed: () {
       DocumentReference documentReference =
-      Firestore.instance.collection("personalMess").document();
+          Firestore.instance.collection("personalMess").document();
       documentReference.setData({
-        "text":
-        'בוצע עדכון על ידי המנהל' + name_event + 'האירוע',
+        "text": 'בוצע עדכון על ידי המנהל' + name_event + 'האירוע',
         "sender": email,
         "time": DateTime.now(),
         "url": "",
@@ -372,9 +412,10 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BottomNavigationBarController(
-                    3, 3,)));
+              builder: (context) => BottomNavigationBarController(
+                    3,
+                    3,
+                  )));
     },
   );
 

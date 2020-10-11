@@ -88,17 +88,39 @@ class _mass_eventState extends State<mass_event> {
               },
             ),
             new Align(
-              child: new Text(
-                "מאת " + widget.sender,
-                style: new TextStyle(fontSize: 20),
+              child: Row(
+                children: [
+                  new Text(
+                    "מאת: ",
+                    style: new TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  new Text(
+                    widget.sender,
+                    style: new TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
             Divider(thickness: 1, color: Colors.black),
             new Align(
-              child: new Text(
-                "נושא " + widget.topic,
-                style: new TextStyle(fontSize: 20),
+              child: Row(
+                children: [
+                  new Text(
+                    "נושא: " + widget.topic,
+                    style: new TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  new Text(
+                    widget.topic,
+                    style: new TextStyle(fontSize: 20),
+                  ),
+                ],
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
@@ -210,16 +232,14 @@ class _mass_eventState extends State<mass_event> {
                   Expanded(
                     child: RaisedButton(
                       onPressed: () async {
-                        String idevent =
-                            await Getevent(widget.topic);
-                            await databaseReference
+                        String idevent = await Getevent(widget.topic);
+                        await databaseReference
                             .collection("events")
                             .document(idevent)
                             .delete();
                         Navigator.pop(context);
                       },
-                      child:
-                          const Text('הסר', style: TextStyle(fontSize: 20)),
+                      child: const Text('הסר', style: TextStyle(fontSize: 20)),
                       color: Colors.blue,
                       textColor: Colors.white,
                     ),
@@ -251,8 +271,8 @@ class _mass_eventState extends State<mass_event> {
                         successshowAlertDialog(context, _email(),
                             currentUser.uid, widget.topic, widget.senderId);
                       },
-                      child: const Text('אישור',
-                          style: TextStyle(fontSize: 20)),
+                      child:
+                          const Text('אישור', style: TextStyle(fontSize: 20)),
                       color: Colors.blue,
                       textColor: Colors.white,
                     ),
@@ -276,8 +296,8 @@ class _mass_eventState extends State<mass_event> {
                                       dataid: idevent,
                                     )));
                       },
-                      child: const Text('עריכה',
-                          style: TextStyle(fontSize: 20)),
+                      child:
+                          const Text('עריכה', style: TextStyle(fontSize: 20)),
                       color: Colors.blue,
                       textColor: Colors.white,
                     ),

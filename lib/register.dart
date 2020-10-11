@@ -1,15 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home/Home.dart';
 import 'globalfunc.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'global.dart' as globals;
+
 //final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 final databaseReference = Firestore.instance;
+
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
   @override
@@ -40,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   tag: 'logo',
                   child: Container(
                     height: 200.0,
-
+                    child: Image.asset('image/logo_greem.png'),
                   ),
                 ),
               ),
@@ -48,44 +50,73 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 48.0,
               ),
               TextField(
-                keyboardType: TextInputType.emailAddress,
+                style: TextStyle(fontSize: 20, fontFamily: 'Assistant'),
                 textAlign: TextAlign.center,
                 onChanged: (value) {
-                  email = value;
+                  name = value;
                 },
-                decoration:
-                kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'שם משתמש',
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.lightGreen)
+                      // borderRadius: BorderRadius.circular(25.7),
+                      ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    // borderRadius: BorderRadius.circular(25.7),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 8.0,
               ),
               TextField(
+                style: TextStyle(fontSize: 20, fontFamily: 'Assistant'),
+                keyboardType: TextInputType.emailAddress,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'דואר אלקטרוני',
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.lightGreen),
+                    // borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    // borderRadius: BorderRadius.circular(25.7),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              TextField(
+                style: TextStyle(fontSize: 20, fontFamily: 'Assistant'),
                 obscureText: true,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   password = value;
                 },
                 decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your password'),
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
-              TextField(
-
-                textAlign: TextAlign.center,
-                onChanged: (value) {
-                  name = value;
-                },
-                decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your name'),
+                  hintText: 'סיסמה',
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.lightGreen),
+                    // borderRadius: BorderRadius.circular(25.7),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    // borderRadius: BorderRadius.circular(25.7),
+                  ),
+                ),
               ),
               SizedBox(
                 height: 24.0,
               ),
               RoundedButton(
-                title: 'Register',
-                colour: Colors.blueAccent,
+                title: 'הירשם',
+                colour: Color(int.parse("0xff6ed000")),
                 onPressed: () async {
                   setState(() {
                     showSpinner = true;
@@ -94,32 +125,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email, password: password);
                     if (newUser != null) {
-                      FirebaseUser user=newUser.user;
-                      String t=user.uid;
+                      FirebaseUser user = newUser.user;
+                      String t = user.uid;
                       databaseReference
                           .collection('user')
                           .document(t)
                           .updateData({'name': name});
-                     globals.name=name;
-                      bool menag=await doesNameAlreadyExist(email);
+                      globals.name = name;
+                      bool menag = await doesNameAlreadyExist(email);
                       print(menag);
-                       if(menag==true){
-                         globals.isMeneger = true;
-                         print(globals.isMeneger);
-                         await databaseservice(uid: user.uid).updateUserData(name,'menager');
-                         Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments_m(
-                             t,name,'menager'
-                         ));
-                       }
-
-                       else{
-                         globals.isMeneger =false;
-                         await databaseservice(uid: user.uid).updateUserData(name,'regular');
-                         Navigator.pushNamed(context,BottomNavigationBarController.id,arguments:ScreenArguments(
-                           t,name,'regular'
-                       ));}
-
-
+                      if (menag == true) {
+                        globals.isMeneger = true;
+                        print(globals.isMeneger);
+                        await databaseservice(uid: user.uid)
+                            .updateUserData(name, 'menager');
+                        Navigator.pushNamed(
+                            context, BottomNavigationBarController.id,
+                            arguments: ScreenArguments_m(t, name, 'menager'));
+                      } else {
+                        globals.isMeneger = false;
+                        await databaseservice(uid: user.uid)
+                            .updateUserData(name, 'regular');
+                        Navigator.pushNamed(
+                            context, BottomNavigationBarController.id,
+                            arguments: ScreenArguments(t, name, 'regular'));
+                      }
 
 //                      var document = await Firestore.instance.collection('users').document('ENsyb4kmVkUbDvNS8ILNARKN49m1'
 //                      ).get();
@@ -127,8 +157,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       // Navigator.pushNamed(context, BasicGridView.id);
                     }
 
-                    setState(()async {
-
+                    setState(() async {
                       showSpinner = false;
                     });
                   } catch (e) {
@@ -144,24 +173,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 }
 
-
-
-class databaseservice{
+class databaseservice {
   final String uid;
   databaseservice({this.uid});
-  final CollectionReference userCollection=Firestore.instance.collection('users');
-  Future updateUserData(String name,String role)async{
-    return await  userCollection.document(uid).setData({
-      'name':name,
-      'role':role,
-
+  final CollectionReference userCollection =
+      Firestore.instance.collection('users');
+  Future updateUserData(String name, String role) async {
+    return await userCollection.document(uid).setData({
+      'name': name,
+      'role': role,
     });
-
   }
-
-
-
 }
+
 class RoundedButton extends StatelessWidget {
   RoundedButton({this.title, this.colour, @required this.onPressed});
 
@@ -175,23 +199,46 @@ class RoundedButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: Material(
         elevation: 5.0,
-        color: colour,
-        borderRadius: BorderRadius.circular(30.0),
+        color: Color(int.parse("0xff6ed000")),
+        //borderRadius: BorderRadius.circular(30.0),
         child: MaterialButton(
           onPressed: onPressed,
           minWidth: 200.0,
           height: 42.0,
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-            ),
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Spacer(),
+              Text(
+                title,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Assistant',
+                    fontSize: 20),
+              ),
+              Spacer(),
+
+              //SizedBox(width: 270),
+              Image.asset(
+                'image/whitearrow.png',
+                width: 30,
+                height: 30,
+              ),
+            ],
           ),
+          // child: Text(
+          //   title,
+          //   style: TextStyle(
+          //     color: Colors.white,
+          //   ),
+          // ),
         ),
       ),
     );
   }
 }
+
 Future<bool> doesNameAlreadyExist(String email) async {
   final QuerySnapshot result = await Firestore.instance
       .collection('manegar')

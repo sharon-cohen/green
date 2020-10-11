@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:greenpeace/globalfunc.dart';
+
 class DialogUtils {
   static DialogUtils _instance = new DialogUtils.internal();
 
@@ -40,15 +41,15 @@ class DialogUtils {
             .get()
             .then((DocumentSnapshot documentSnapshot) {
           if (documentSnapshot.exists) {
-            final image=documentSnapshot.data['url'];
-            final text=documentSnapshot.data['text'];
-            final sender= documentSnapshot.data['sender'].toString();
-            final time=documentSnapshot.data['time'];
+            final image = documentSnapshot.data['url'];
+            final text = documentSnapshot.data['text'];
+            final sender = documentSnapshot.data['sender'].toString();
+            final time = documentSnapshot.data['time'];
             _firestore.collection('report').add({
               "text": text,
-              "sender":sender,
-              "time":time,
-              "url":image,
+              "sender": sender,
+              "time": time,
+              "url": image,
             });
           }
         });
@@ -68,33 +69,59 @@ class DialogUtils {
             .get()
             .then((DocumentSnapshot documentSnapshot) {
           if (documentSnapshot.exists) {
-            final image=documentSnapshot.data['url'];
-            final text=documentSnapshot.data['text'];
-            final sender= documentSnapshot.data['sender'].toString();
-            final time=documentSnapshot.data['time'];
+            final image = documentSnapshot.data['url'];
+            final text = documentSnapshot.data['text'];
+            final sender = documentSnapshot.data['sender'].toString();
+            final time = documentSnapshot.data['time'];
             _firestore.collection('report').add({
               "text": text,
-              "sender":sender,
-              "time":time,
-              "url":image,
+              "sender": sender,
+              "time": time,
+              "url": image,
             });
           }
         });
         Navigator.pop(context);
       }
-
-
     }
 
     showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text(title),
-            content: Container(),
+            title: Row(
+              children: [
+                // Image.asset(
+                //   'alert.png',
+                //   width: 50,
+                //   height: 50,
+                //    fit: BoxFit.contain,
+                // ),
+                ImageIcon(
+                  AssetImage("image/alert.png"),
+                  color: Colors.black,
+                  // color: Colors.black,
+                ),
+                SizedBox(width: 30),
+                Text(title),
+              ],
+            ),
+            content:
+                //Text("אנא הרשם על מנת לבצע פעולה זו"),
+                Container(
+              height: 10,
+              width: 60,
+            ),
             actions: <Widget>[
               FlatButton(
-                child: Text(okBtnText),
+                child: Text(
+                  okBtnText,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold),
+                ),
+                color: Colors.white,
                 onPressed: () {
                   print(text);
                   if (text == null) {
@@ -105,7 +132,13 @@ class DialogUtils {
                 },
               ),
               FlatButton(
-                  child: Text(cancelBtnText),
+                  child: Text(
+                    cancelBtnText,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Assistant',
+                        fontWeight: FontWeight.bold),
+                  ),
                   onPressed: () => Navigator.pop(context))
             ],
           );

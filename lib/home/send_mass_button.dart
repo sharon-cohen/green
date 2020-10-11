@@ -9,27 +9,31 @@ import '../register.dart';
 import 'package:greenpeace/global.dart' as globals;
 
 final _firestore = Firestore.instance;
+
 class button_send extends StatefulWidget {
   button_send({this.no_reg});
   final bool no_reg;
   @override
   _button_sendState createState() => _button_sendState();
 }
+
 class _button_sendState extends State<button_send> {
   FirebaseUser currentUser;
-  List<Widget> mass=[];
+  List<Widget> mass = [];
   final messageTextContoller = TextEditingController();
   String fileUrl = "";
   String messageText;
-  bool try_send=false;
+  bool try_send = false;
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
   }
+
   void _loadCurrentUser() {
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() { // call setState to rebuild the view
+      setState(() {
+        // call setState to rebuild the view
         this.currentUser = user;
       });
     });
@@ -48,7 +52,7 @@ class _button_sendState extends State<button_send> {
           messageTextContoller.clear();
           _firestore.collection("messages").add({
             "text": "",
-            "sender": globals.name ,
+            "sender": globals.name,
             "time": DateTime.now(),
             "url": fileUrl,
           });
@@ -74,118 +78,129 @@ class _button_sendState extends State<button_send> {
       },
     );
   }
-  List<Widget> send_botton(){
+
+  List<Widget> send_botton() {
     print('wiget.reg');
     mass.clear();
-    if(try_send==false){
-      mass.add(  Align(
-        alignment: Alignment.centerLeft,
-        child: FlatButton(
-          onPressed: (){
-            setState(() {
-              try_send=true;
-              if(widget.no_reg==true){ DialogUtils.showCustomDialog(
-                context,
-                title: "לא ניתן לעלות הודעה ללא הרשמה רוצה להירשם?",
-                okBtnText: "הירשם",
-                cancelBtnText: "חזור",
-                sender: "",
-              );}
-            });
 
-          },
-          child: Container(
-            child: Text('שלח הודעה',textAlign: TextAlign.center,),
+    print(widget.no_reg);
+    print(globals.no_reg);
+    if (try_send == false) {
+      //todo check if ok
+      mass.add(
+        Align(
+          alignment: Alignment.centerLeft,
+          child: FlatButton(
+            onPressed: () {
+              setState(() {
+                try_send = true;
+                // if (widget.no_reg == true) {
+                if (globals.no_reg == true) {
+                  //globals
+                  DialogUtils.showCustomDialog(
+                    context,
+                    title: "יש צורך בהרשמה",
+                    okBtnText: "הירשם",
+                    cancelBtnText: "חזור",
+                    sender: "",
+                  );
+                }
+              });
+            },
+            child: Container(
+              child: Text(
+                'שלח הודעה',
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ),
-      ),);
+      );
       return mass;
-    }
-    else{
-
-      if(widget.no_reg==true){
-        mass.add(FlatButton(
-            onPressed: (){
-              Navigator.pushNamed(context, RegistrationScreen.id);
-
-            },
-            child: Text('הירשם')),) ;
+    } else {
+      // if (widget.no_reg == true) {
+      if (globals.no_reg == true) {
+        mass.add(
+          FlatButton(
+              onPressed: () {
+                Navigator.pushNamed(context, RegistrationScreen.id);
+              },
+              child: Text('הירשם')),
+        );
         return mass;
-      }
-
-      else{
-        mass.add(Expanded(
-          child: TextField(
-            controller: messageTextContoller,
-            onChanged: (value) {
-              messageText = value;
+      } else {
+        mass.add(
+          Expanded(
+            child: TextField(
+              controller: messageTextContoller,
+              onChanged: (value) {
+                messageText = value;
+              },
+              decoration: kMessageTextFieldDecoration,
+            ),
+          ),
+        );
+        mass.add(
+          FlatButton(
+            onPressed: () {
+              messageTextContoller.clear();
+              _firestore.collection("messages").add({
+                "text": messageText,
+                "sender": globals.name,
+                "time": DateTime.now(),
+                "url": fileUrl,
+              });
             },
-            decoration: kMessageTextFieldDecoration,
-          ),
-        ),);
-        mass.add( FlatButton(
-          onPressed: () {
-            messageTextContoller.clear();
-            _firestore.collection("messages").add({
-              "text": messageText,
-              "sender":  globals.name,
-              "time": DateTime.now(),
-              "url": fileUrl,
-            });
-          },
-          child: Text(
-            'Send',
-            style: kSendButtonTextStyle,
-          ),
-        ),);
-        mass.add( new Container(
-          margin: new EdgeInsets.symmetric(horizontal: 4.0),
-          child: new IconButton(
-              icon: new Icon(
-                Icons.photo_camera,
-                color: Theme.of(context).accentColor,
+            child: Text(
+              'שלח',
+              //style: kSendButtonTextStyle,
+              style: TextStyle(
+                fontFamily: 'Assistant',
+                color: Colors.grey[700],
+                fontSize: 15,
               ),
-              onPressed: () async {
+            ),
+          ),
+        );
+        mass.add(
+          new Container(
+            margin: new EdgeInsets.symmetric(horizontal: 4.0),
+            child: new IconButton(
+                icon: new Icon(
+                  Icons.photo_camera,
+                  color: Colors.lightGreen,
+                ),
+                onPressed: () async {
+                  var image =
+                      await ImagePicker.pickImage(source: ImageSource.gallery);
+                  int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                  StorageReference storageReference = FirebaseStorage.instance
+                      .ref()
+                      .child('chats/img_' + timestamp.toString() + '.jpg');
+                  StorageUploadTask uploadTask =
+                      storageReference.putFile(image);
 
-                var image = await ImagePicker.pickImage(
-                    source: ImageSource.gallery);
-                int timestamp = new DateTime.now()
-                    .millisecondsSinceEpoch;
-                StorageReference storageReference =
-                FirebaseStorage.instance.ref().child(
-                    'chats/img_' +
-                        timestamp.toString() +
-                        '.jpg');
-                StorageUploadTask uploadTask =
-                storageReference.putFile(image);
+                  await uploadTask.onComplete;
 
-                await uploadTask.onComplete;
-
-                try {
-                  fileUrl = await storageReference
-                      .getDownloadURL();
-                  image_sent_pro(context, fileUrl);
-
-                } catch (e) {
-                  print('errordfd');
-                }
-              }),
-        ),);
+                  try {
+                    fileUrl = await storageReference.getDownloadURL();
+                    image_sent_pro(context, fileUrl);
+                  } catch (e) {
+                    print('errordfd');
+                  }
+                }),
+          ),
+        );
         return mass;
       }
-
     }
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children:
-      send_botton(),
-
+      children: send_botton(),
     );
   }
 }

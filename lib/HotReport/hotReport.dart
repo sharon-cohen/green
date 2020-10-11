@@ -7,11 +7,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+
 final _firestore = Firestore.instance;
 
 class HotReport extends StatefulWidget {
-
-
   const HotReport({Key key}) : super(key: key);
 
   @override
@@ -22,34 +21,33 @@ class _HotReport extends State<HotReport> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   File _image;
   var imageFile;
-  String  fileUrl="";
+  String fileUrl = "";
   Position _currentPosition;
-  String _currentAddress="";
+  String _currentAddress = "";
   TextEditingController _description;
   TextEditingController _location;
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-
+  TextStyle style = TextStyle(fontFamily: 'Assistant', fontSize: 20.0);
 
   bool processing;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
-
 
   @override
   void initState() {
     super.initState();
 
     processing = false;
-    _description = TextEditingController(text:"");
-    _location = TextEditingController(text:  "");
-
+    _description = TextEditingController(text: "");
+    _location = TextEditingController(text: "");
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
+          automaticallyImplyLeading: false),
       key: _key,
       body: Form(
         key: _formKey,
@@ -57,194 +55,268 @@ class _HotReport extends State<HotReport> {
           alignment: Alignment.center,
           child: ListView(
             children: <Widget>[
-              Align(
-                child: IconButton(
-                  icon: Icon(
-                      Icons.clear
-                  ),
-                  iconSize: 30,
-                  color: Colors.grey,
-                  splashColor: Colors.purple,
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
+              // Align(
+              //   child: IconButton(
+              //     icon: Icon(Icons.clear),
+              //     iconSize: 30,
+              //     color: Colors.grey,
+              //     splashColor: Colors.purple,
+              //     onPressed: () {
+              //       Navigator.pop(context, true);
+              //     },
+              //   ),
+              //   alignment: FractionalOffset.topRight,
+              // ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
+                child: Row(
+                  children: [
+                    Align(
+                      child: IconButton(
+                        icon: Icon(Icons.clear),
+                        iconSize: 30,
+                        color: Colors.grey,
+                        splashColor: Colors.purple,
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                      ),
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    SizedBox(width: 60),
+                    new Text(
+                      "דיווח סביבתי",
+                      style: new TextStyle(
+                          fontFamily: 'Assistant',
+                          fontSize: 35,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                alignment: FractionalOffset.topRight,
+                // child: new Align(
+                //   child: new Text(
+                //     "דיווח חם",
+                //     style: new TextStyle(fontSize: 35, color: Colors.red),
+                //   ), //so big text
+                //   alignment: FractionalOffset.topRight,
+                // ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-                child: new Align(
-                  child: new Text(
-                    "דיווח חם",
-                    style: new TextStyle(fontSize: 35, color: Colors.red),
-                  ), //so big text
-                  alignment: FractionalOffset.topRight,
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _description,
                   minLines: 3,
                   maxLines: 5,
                   validator: (value) =>
-                  (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
-
+                      (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
                   decoration: InputDecoration(
-                      labelText: "תיאור הבעיה",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    labelText: "תיאור הבעיה",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                        // borderRadius: BorderRadius.circular(10),
+                        ),
+                  ),
                 ),
               ),
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
                 child: new Align(
                   child: new Text(
                     "מיקום",
-                    style: new TextStyle(fontSize: 35, color: Colors.black),
+                    style: new TextStyle(
+                        fontSize: 35,
+                        color: Colors.black,
+                        fontFamily: 'Assistant'),
                   ), //so big text
                   alignment: FractionalOffset.topRight,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 8.0),
                 child: Align(
                   child: FlatButton(
-                    child: Text("קבל מיקום הנוכחי שלך",style: new TextStyle(fontSize: 25, color: Colors.black),),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'image/google-maps.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                        SizedBox(width: 7),
+                        Text(
+                          "קבל מיקום הנוכחי שלך",
+                          style: new TextStyle(
+                              fontFamily: 'Assistant',
+                              fontSize: 25,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
                     onPressed: () {
                       _getCurrentLocation();
-
                     },
                   ),
                   alignment: FractionalOffset.topRight,
                 ),
               ),
-              if (_currentPosition != "") Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text(_currentAddress),
-              ),
+              if (_currentPosition != "")
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Text(_currentAddress),
+                ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                 child: new Align(
                   child: new Text(
                     "או הקלד כתובת",
-                    style: new TextStyle(fontSize: 25, color: Colors.black),
+                    style: new TextStyle(
+                        fontFamily: 'Assistant',
+                        fontSize: 25,
+                        color: Colors.black),
                   ), //so big text
                   alignment: FractionalOffset.topRight,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _location,
                   validator: (value) =>
-                  (_location.text=="") ? "שדה המיקום חובה" : null,
-
+                      (_location.text == "") ? "שדה המיקום חובה" : null,
                   decoration: InputDecoration(
-                      labelText: "הקלד כתובת",
-
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                    labelText: "הקלד כתובת",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                        //borderRadius: BorderRadius.circular(10),
+                        ),
+                  ),
                 ),
               ),
-
               ListTile(
-                  title: Text("בחר בתמונה",style: new TextStyle(fontSize: 30),),
-
-                  onTap: () async{
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        'image/addimage.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      SizedBox(width: 7),
+                      Text(
+                        "בחר בתמונה",
+                        style: new TextStyle(
+                            fontSize: 25, fontFamily: 'Assistant'),
+                      ),
+                    ],
+                  ),
+                  onTap: () async {
                     imageFile = await ImagePicker.pickImage(
                         source: ImageSource.gallery);
 
                     int timestamp = new DateTime.now().microsecondsSinceEpoch;
-                    StorageReference storageReference = FirebaseStorage
-                        .instance
+                    StorageReference storageReference = FirebaseStorage.instance
                         .ref()
                         .child('chats/img_' + timestamp.toString() + '.jpg');
                     StorageUploadTask uploadTask =
-                    storageReference.putFile(imageFile);
+                        storageReference.putFile(imageFile);
                     await uploadTask.onComplete;
-                    fileUrl =
-                    await storageReference.getDownloadURL();
+                    fileUrl = await storageReference.getDownloadURL();
 
                     setState(() {
                       _image = File(imageFile.path);
                     });
-                  }
-
-              ),
-
-              SizedBox(height: 10.0),
+                  }),
+              // SizedBox(height: 10.0),
+              // SizedBox(
+              //   height: 20.0,
+              // ),
+              if (fileUrl != "")
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
+                  child: _image == null
+                      ? Text('No image selected.')
+                      : Image.file(_image),
+                ),
               SizedBox(
-                height: 20.0,
+                height: 50.0,
               ),
-
-              if (fileUrl != "") Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-                child: _image == null
-                    ? Text('No image selected.')
-                    : Image.file(_image),
-
-
-              ),
-
-              SizedBox(
-                height: 20.0,
-              ),
-
               SizedBox(height: 10.0),
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Material(
-                  elevation: 5.0,
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Theme.of(context).primaryColor,
-                  child: MaterialButton(
-                    onPressed: () async {
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Material(
+                        color: Color(int.parse("0xff6ed000")),
+                        elevation: 5.0,
+                        //borderRadius: BorderRadius.circular(30.0),
+                        //color: Theme.of(context).primaryColor,
+                        child: MaterialButton(
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              setState(() {
+                                processing = true;
+                              });
 
-                      if (_formKey.currentState.validate()) {
-                        setState(() {
-                          processing = true;
-                        });
+                              _firestore.collection("hotReport").add({
+                                "text": _description.text,
+                                "sender": globals.name,
+                                "time": DateTime.now(),
+                                "location": _location.text,
+                                "url_image": fileUrl,
+                                "senderId": globals.UserId,
+                              });
 
-
-                        _firestore.collection("hotReport").add({
-                          "text": _description.text,
-                          "sender": globals.name,
-                          "time": DateTime.now(),
-                           "location":_location.text,
-                          "url_image": fileUrl,
-                          "senderId":globals.UserId,
-                        });
-
-
-                        setState(() {
-                          processing = false;
-                        });
-                      }
-                     if(_description.text!=""&& _location.text!="")
-                      successshowAlertDialog(context);
-
-                    },
-
-                    child: Text(
-                      "שלח",
-                      style: style.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                              setState(() {
+                                processing = false;
+                              });
+                            }
+                            if (_description.text != "" && _location.text != "")
+                              successshowAlertDialog(context);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "שלח דיווח",
+                                style: style.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              //SizedBox(width: 270),
+                              Image.asset(
+                                'image/whitearrow.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                          // child: Text(
+                          //   "שלח",
+                          //   style: style.copyWith(
+                          //       color: Colors.white,
+                          //       fontWeight: FontWeight.bold),
+                          // ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
   }
-  _getCurrentLocation() async{
+
+  _getCurrentLocation() async {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -267,22 +339,21 @@ class _HotReport extends State<HotReport> {
 
       setState(() {
         _currentAddress =
-        "${place.locality}, ${place.postalCode}, ${place.country}";
-          _location.text=_currentAddress;
+            "${place.locality}, ${place.postalCode}, ${place.country}";
+        _location.text = _currentAddress;
       });
     } catch (e) {
       print(e);
     }
   }
-
-
 }
-class Data{
+
+class Data {
   String dropdownValue;
   Data({this.dropdownValue});
 }
-successshowAlertDialog(BuildContext context) {
 
+successshowAlertDialog(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
     child: Text("אישור"),
@@ -290,9 +361,10 @@ successshowAlertDialog(BuildContext context) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BottomNavigationBarController(
-                    3, 3,)));
+              builder: (context) => BottomNavigationBarController(
+                    3,
+                    3,
+                  )));
     },
   );
 

@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:greenpeace/home/home_menager.dart';
 import 'package:greenpeace/Footer/footer.dart';
+
 class MyHeader extends StatefulWidget {
   final String image;
   final String page;
   final double offset;
-  const MyHeader({Key key, this.image, this.offset,this.page}) : super(key: key);
+  const MyHeader({Key key, this.image, this.offset, this.page})
+      : super(key: key);
 
   @override
   _MyHeaderState createState() => _MyHeaderState();
 }
 
 class _MyHeaderState extends State<MyHeader> {
-  bool check_page(){
-    if(widget.page=="event"||widget.page=="struggle"){
+  bool check_page() {
+    if (widget.page == "event" || widget.page == "struggle") {
       return true;
-    }
-  else
-    return false;
+    } else
+      return false;
   }
+
   bool check_image() {
     if (widget.image.contains("image/")) {
       return true;
@@ -31,7 +33,7 @@ class _MyHeaderState extends State<MyHeader> {
     return ClipPath(
       clipper: MyClipper(),
       child: Container(
-        height: MediaQuery.of(context).size.height/(2.3),
+        height: MediaQuery.of(context).size.height / (2.3),
         width: double.infinity,
         decoration: BoxDecoration(
           image: check_image()
@@ -40,30 +42,38 @@ class _MyHeaderState extends State<MyHeader> {
                   fit: BoxFit.cover,
                 )
               : new DecorationImage(
-                  image:NetworkImage(widget.image),
+                  image: NetworkImage(widget.image),
                   fit: BoxFit.cover,
                 ),
         ),
-       child: check_page()?Padding(
-          padding: const EdgeInsets.only(
-            left: 10,
-            top: 30,
-
-          ),
-          child: Align(alignment: Alignment.topRight,
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor:Colors.grey,
-                child: IconButton(onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>  BottomNavigationBarController(2,1)),
-                  );
-                }, icon: Icon(Icons.clear,
-                color: Colors.white,
-                ),),
-              )),
-        ):Container(),
+        child: check_page()
+            ? Padding(
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  top: 30,
+                ),
+                child: Align(
+                    alignment: Alignment.topRight,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.grey,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BottomNavigationBarController(2, 1)),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )),
+              )
+            : Container(),
       ),
     );
   }

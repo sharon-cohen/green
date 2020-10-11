@@ -65,17 +65,16 @@ class TruggleStream extends StatelessWidget {
             final info = truggl.data["info"];
             final url_money = truggl.data["petition"];
             final share = truggl.data["url_share"];
-            final donation=truggl.data["donation"];
+            final donation = truggl.data["donation"];
             final All_TtuggleContainer_new = All_TtuggleContainer(
                 struggle: StruggleModel(
-                  title: trugglNmae,
-                  image: imag_url,
-                  description: info,
-                  share: share,
-                  petition: url_money,
-                  donation: donation,
-                )
-            );
+              title: trugglNmae,
+              image: imag_url,
+              description: info,
+              share: share,
+              petition: url_money,
+              donation: donation,
+            ));
             final TtuggleContainer_new = TtuggleContainer(
                 struggle: StruggleModel(
               title: trugglNmae,
@@ -121,7 +120,7 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(5, 10, 0, 0),
+      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
       height: MediaQuery.of(context).size.height / (3.5),
       width: MediaQuery.of(context).size.width / (3),
       child: Column(
@@ -129,13 +128,25 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
           new Expanded(
               flex: 6,
               child: FlatButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => one_struggle(struggle: widget.struggle,)));
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => one_struggle(
+                                struggle: widget.struggle,
+                              )));
                 },
                 child: Container(
                   decoration: new BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.8),
+                        spreadRadius: 2,
+                        blurRadius: 15,
+                        offset: Offset(7, 0), // changes position of shadow
+                      ),
+                    ],
                     borderRadius: BorderRadius.all(const Radius.circular(20)),
                     image: DecorationImage(
                       image: widget.struggle.image != null
@@ -150,7 +161,7 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
               flex: 1,
               child: Container(
                 width: MediaQuery.of(context).size.width / (1),
-                child: Text(widget.struggle.title),
+                child: Center(child: Text(widget.struggle.title)),
               )),
         ],
       ),
@@ -160,43 +171,48 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
 
 class All_TtuggleContainer extends StatelessWidget {
   final StruggleModel struggle;
-  All_TtuggleContainer(
-      {this.struggle});
+  All_TtuggleContainer({this.struggle});
   final _foldingCellKey = GlobalKey<SimpleFoldingCellState>();
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      onPressed: (){
+      onPressed: () {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => one_struggle(struggle: struggle)));
       },
       child: Container(
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.fromLTRB(10, 4, 10, 4),
         constraints: new BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height/(5),
-          maxHeight: MediaQuery.of(context).size.height/(5),
-
+          minHeight: MediaQuery.of(context).size.height / (5),
+          maxHeight: MediaQuery.of(context).size.height / (5),
         ),
         alignment: Alignment.center,
         padding: new EdgeInsets.only(left: 16.0, bottom: 8.0),
         decoration: new BoxDecoration(
-          borderRadius: BorderRadius.all(const Radius.circular(20)),
+          //borderRadius: BorderRadius.all(const Radius.circular(20)),
           image: new DecorationImage(
-            colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
-
-            image:NetworkImage(struggle.image),
+            colorFilter: new ColorFilter.mode(
+                Colors.black.withOpacity(0.7), BlendMode.dstATop),
+            image: NetworkImage(struggle.image),
             fit: BoxFit.cover,
           ),
         ),
         child: new Text(struggle.title,
             style: new TextStyle(
+              shadows: [
+                Shadow(
+                  blurRadius: 10.0,
+                  color: Colors.grey[800],
+                  offset: Offset(5.0, 5.0),
+                ),
+              ],
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 30,
-            )
-        ),
+              fontFamily: 'Assistant',
+            )),
       ),
     );
   }
@@ -207,7 +223,7 @@ class All_TtuggleContainer extends StatelessWidget {
         child: Text(struggle.title,
             style: TextStyle(
                 color: Color(0xFF2e282a),
-                fontFamily: 'OpenSans',
+                fontFamily: 'Assistant',
                 fontSize: 20.0,
                 fontWeight: FontWeight.w800)));
   }
@@ -261,7 +277,7 @@ class All_TtuggleContainer extends StatelessWidget {
                     Text(struggle.title,
                         style: TextStyle(
                             color: Color(0xFF2e282a),
-                            fontFamily: 'OpenSans',
+                            fontFamily: 'Assistant',
                             fontSize: 20.0,
                             fontWeight: FontWeight.w800)),
                     Align(

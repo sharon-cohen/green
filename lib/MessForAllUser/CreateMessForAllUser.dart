@@ -7,9 +7,8 @@ import 'package:greenpeace/Footer/footer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final _firestore = Firestore.instance;
+
 class SendMessForAllUser extends StatefulWidget {
-
-
   const SendMessForAllUser({Key key}) : super(key: key);
 
   @override
@@ -27,16 +26,17 @@ class _SendMessForAllUser extends State<SendMessForAllUser> {
     super.initState();
     _loadCurrentUser();
   }
+
   void _loadCurrentUser() {
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      setState(() { // call setState to rebuild the view
+      setState(() {
+        // call setState to rebuild the view
         this.currentUser = user;
       });
     });
   }
 
-
-  Widget text_field(){
+  Widget text_field() {
     return TextField(
       textAlign: TextAlign.right,
       decoration: new InputDecoration(
@@ -44,118 +44,153 @@ class _SendMessForAllUser extends State<SendMessForAllUser> {
         hintText: "תוכן ההודעה",
       ),
       onChanged: (String value) {
-        submitStr=value;
-
+        submitStr = value;
       },
       controller: _controller,
       onSubmitted: (String submittedStr) {
-
         _controller.text = "";
       },
     );
-
-
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
+          automaticallyImplyLeading: false),
+      backgroundColor: Colors.grey[200],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.white,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 16,
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        iconSize: 30,
+                        color: Colors.grey,
+                        splashColor: Colors.purple,
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                      ),
+                      Spacer(),
+                      Text(
+                        'הודעה למשתמשים',
+                        style: TextStyle(
+                            fontFamily: 'Assistant',
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30),
+                      ),
 
-      body: new Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.all(30),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+                      Spacer(), // use Spacer
+                      IconButton(
+                        icon: Icon(
+                          Icons.send,
+                        ),
+                        iconSize: 30,
+                        color: Colors.grey,
+                        splashColor: Colors.purple,
+                        onPressed: () {
+                          _firestore.collection("MessForAll").add({
+                            "text": '$submitStr',
+                            "sender": globals.name,
+                            "time": DateTime.now(),
+                            "senderID": currentUser.uid,
+                          });
 
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                        Icons.clear
-                    ),
-                    iconSize: 30,
-                    color: Colors.grey,
-                    splashColor: Colors.purple,
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
+                          showAlertDialog_mess_send(context);
+                        },
+                      ),
+                    ],
                   ),
-
-                  Spacer(), // use Spacer
-                  IconButton(
-                    icon: Icon(
-                      Icons.send,
-                    ),
-                    iconSize: 30,
-                    color: Colors.grey,
-                    splashColor: Colors.purple,
-                    onPressed: () {
-
-                      
-                        _firestore.collection("MessForAll").add({
-                          "text": '$submitStr',
-                          "sender": globals.name,
-                          "time": DateTime.now(),
-                          "senderID": currentUser.uid,
-
-                        });
-
-
-
-                      showAlertDialog_mess_send(context);
-
-                    },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.white,
+                  // width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height / 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Text('אל: ',
+                                  style: new TextStyle(
+                                      fontFamily: 'Assistant',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              Text(' all users ',
+                                  style: new TextStyle(
+                                      fontSize: 20, fontFamily: 'Assistant')),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Divider(thickness: 1, color: Colors.grey[400]),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Text('מאת: ',
+                                  style: new TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Assistant')),
+                              Text('מנהלים',
+                                  style: new TextStyle(
+                                      fontSize: 20, fontFamily: 'Assistant')),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          Container(
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                'אל all users ',
+                ),
               ),
 
-            ),
-            Divider(
-                thickness: 1,
-                color: Colors.black
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                  'מאת: מנהלים'
-
+              // Divider(thickness: 1, color: Colors.black),
+              Padding(
+                //padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.fromLTRB(8, 1, 8, 8),
+                child: Container(
+                  color: Colors.white,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 1.87,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
+                    child: text_field(),
+                  ),
+                ),
               ),
-
-            ),
-
-
-            Divider(
-                thickness: 1,
-                color: Colors.black
-            ),
-            text_field(),
-
-
-
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-
 showAlertDialog_mess_send(BuildContext context) {
-
   // set up the button
   Widget okButton = FlatButton(
     child: Text("OK"),
@@ -163,9 +198,10 @@ showAlertDialog_mess_send(BuildContext context) {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  BottomNavigationBarController(
-                    2, 2,)));
+              builder: (context) => BottomNavigationBarController(
+                    2,
+                    2,
+                  )));
     },
   );
 

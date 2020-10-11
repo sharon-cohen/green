@@ -64,6 +64,11 @@ dev_dependencies:
     sdk: flutter
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Assistant
+      fonts:
+        - asset: fonts/Assistant-Regular.ttf
+        - asset: fonts/Assistant-Bold.ttf
 
   assets:
     - image/

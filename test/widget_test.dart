@@ -10,7 +10,6 @@ class WebScraperApp extends StatefulWidget {
 }
 
 class _WebScraperAppState extends State<WebScraperApp> {
-
   // initialize WebScraper by passing base url of website
   final webScraper = WebScraper('https://webscraper.io');
 
@@ -30,7 +29,6 @@ class _WebScraperAppState extends State<WebScraperApp> {
         productDescriptions = webScraper.getElement(
             'div.thumbnail > div.caption > p.description', ['class']);
       });
-
     }
   }
 
@@ -46,7 +44,12 @@ class _WebScraperAppState extends State<WebScraperApp> {
     return MaterialApp(
       title: 'Fetch Data Example',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
+        fontFamily: 'Assistant',
+        // textTheme: Theme.of(context).textTheme.apply(
+        //     fontFamily: 'Assistant',
+        //     bodyColor: Colors.white,
+        //     displayColor: Colors.white),
       ),
       home: Scaffold(
           appBar: AppBar(
@@ -55,39 +58,44 @@ class _WebScraperAppState extends State<WebScraperApp> {
           body: SafeArea(
               child: productNames == null
                   ? Center(
-                child: CircularProgressIndicator(), // Loads Circular Loading Animation
-              )
+                      child:
+                          CircularProgressIndicator(), // Loads Circular Loading Animation
+                    )
                   : ListView.builder(
-                  itemCount: productNames.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    // Attributes are in the form of List<Map<String, dynamic>>.
-                    Map<String, dynamic> attributes =
-                    productNames[index]['attributes'];
-                    return ExpansionTile(
-                      title: Text(attributes['title']),
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            children: <Widget>[
-                              Container(child: Text(productDescriptions[index]['title']), margin: EdgeInsets.only(bottom: 10.0),),
-                              InkWell(
-                                onTap: () {
-                                  // uses UI Launcher to launch in web browser & minor tweaks to generate url
-                                  launch(webScraper.baseUrl +
-                                      attributes['href']);
-                                },
-                                child: Text(
-                                  "View Product",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
+                      itemCount: productNames.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // Attributes are in the form of List<Map<String, dynamic>>.
+                        Map<String, dynamic> attributes =
+                            productNames[index]['attributes'];
+                        return ExpansionTile(
+                          title: Text(attributes['title']),
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: Text(
+                                        productDescriptions[index]['title']),
+                                    margin: EdgeInsets.only(bottom: 10.0),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      // uses UI Launcher to launch in web browser & minor tweaks to generate url
+                                      launch(webScraper.baseUrl +
+                                          attributes['href']);
+                                    },
+                                    child: Text(
+                                      "View Product",
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  }))),
+                            )
+                          ],
+                        );
+                      }))),
     );
   }
 }
