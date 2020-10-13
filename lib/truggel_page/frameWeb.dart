@@ -1,37 +1,20 @@
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class FrameWeb extends StatefulWidget {
+  FrameWeb ({Key key, this.title,this.Url}) : super(key: key);
 
   final String title;
-
+  final String Url;
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _FrameWeb  createState() => _FrameWeb ();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _FrameWeb  extends State<FrameWeb > {
   WebViewController controller;
 
   final Completer<WebViewController> _controllerCompleter =
@@ -42,8 +25,8 @@ class _MyHomePageState extends State<MyHomePage> {
     if (await controller.canGoBack()) {
       controller.goBack();
     } else {
-      exit(0);
-      return Future.value(false);
+      controller.clearCache();
+
     }
   }
 
@@ -57,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.red,
         ),
         body: WebView(
-          initialUrl: 'das',
+          initialUrl: widget.Url,
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController c) {
             _controllerCompleter.future.then((value) => controller = value);

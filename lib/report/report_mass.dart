@@ -12,7 +12,7 @@ class reportMass extends StatelessWidget {
 
   const reportMass({Key key, this.report}) : super(key: key);
   Widget mass() {
-    if (report.image == null) {
+    if (report.text.toString() !="") {
       return Align(
         child: new Text(
           report.text,
@@ -24,6 +24,8 @@ class reportMass extends StatelessWidget {
         alignment: FractionalOffset.topRight,
       );
     } else {
+      print("image");
+      print(report.image.toString());
       return Image(
         image: NetworkImage(report.image),
       );

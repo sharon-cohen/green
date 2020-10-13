@@ -143,3 +143,28 @@ Future<String> GetStrugle(String name) async {
 
 
 }
+
+Future<bool> CheckNameUserExist(String name) async {
+  final QuerySnapshot result = await Firestore.instance
+      .collection('users')
+      .where('name', isEqualTo: name)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return true;
+  else
+    return false;
+  }
+Future<String>Getuser(String name)async{
+  final QuerySnapshot result = await Firestore.instance
+      .collection('users')
+      .where('name', isEqualTo: name)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+}

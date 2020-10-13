@@ -19,6 +19,22 @@ class _All_truggleState extends State<All_truggle> {
             backgroundColor: Colors.white,
             title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
             automaticallyImplyLeading: false),
-        body: Container(child: TruggleStream(page_call: 'all_struggle')));
+        body: ListView(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            Container(child: TruggleStream(page_call: 'all_struggle')),
+          ],
+        ));
   }
 }

@@ -323,13 +323,17 @@ class create_struggle1State extends State<create_struggle1> {
                       color: Color(int.parse("0xff6ed000")),
                       child: MaterialButton(
                         onPressed: () async {
-                          setState(() {
-                            processing = true;
-                          });
-                          await uploadImageToFirebase(context);
+
+                         // await uploadImageToFirebase(context);
 
                           print(fileUrl);
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState.validate()&&fileUrl!="") {
+
+
+                            setState(() {
+                              processing = true;
+                            });
+                            await uploadImageToFirebase(context);
                             await _firestore.collection("struggle").add({
                               "info": _title.text,
                               "name": _description.text,

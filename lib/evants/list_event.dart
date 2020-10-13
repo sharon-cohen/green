@@ -4,6 +4,8 @@ import 'package:greenpeace/streem_firestore/event_stream.dart';
 import 'package:greenpeace/Footer/footer.dart';
 
 class List_event extends StatefulWidget {
+  List_event({Key key}) : super(key: key);
+  static const String id = "All_event";
   @override
   _List_event createState() => _List_event();
 }
@@ -24,18 +26,7 @@ class _List_event extends State<List_event> {
               children: [
                 Row(
                   children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
-                        icon: Icon(
-                          Icons.clear,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+
                     SizedBox(width: 100),
                     Text(
                       'אירועים',

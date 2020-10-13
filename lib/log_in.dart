@@ -6,7 +6,7 @@ import 'package:greenpeace/Footer/footer.dart';
 import 'globalfunc.dart';
 import 'global.dart' as globals;
 import 'package:greenpeace/register.dart';
-
+import 'package:greenpeace/forgetPassword.dart';
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
   @override
@@ -19,8 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
   String email;
   String password;
   String name;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   FirebaseUser currentUser;
   @override
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -91,6 +95,16 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(
                 height: 24.0,
+              ),
+              RoundedButton(
+                title: 'שכחת סיסמא',
+                colour: Color(int.parse("0xff6ed000")),
+                onPressed: ()  {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgetPassword()));
+                },
               ),
               RoundedButton(
                 title: 'הכנס',

@@ -7,7 +7,7 @@ import 'home/Home.dart';
 import 'globalfunc.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'global.dart' as globals;
-
+import 'package:greenpeace/GetID_DB/getid.dart';
 //final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 final databaseReference = Firestore.instance;
@@ -122,47 +122,58 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     showSpinner = true;
                   });
                   try {
-                    final newUser = await _auth.createUserWithEmailAndPassword(
-                        email: email, password: password);
-                    if (newUser != null) {
-                      FirebaseUser user = newUser.user;
-                      String t = user.uid;
-                      databaseReference
-                          .collection('user')
-                          .document(t)
-                          .updateData({'name': name});
-                      globals.name = name;
-                      bool menag = await doesNameAlreadyExist(email);
-                      print(menag);
-                      if (menag == true) {
-                        globals.isMeneger = true;
-                        print(globals.isMeneger);
-                        await databaseservice(uid: user.uid)
-                            .updateUserData(name, 'menager');
-                        Navigator.pushNamed(
-                            context, BottomNavigationBarController.id,
-                            arguments: ScreenArguments_m(t, name, 'menager'));
-                      } else {
-                        globals.isMeneger = false;
-                        await databaseservice(uid: user.uid)
-                            .updateUserData(name, 'regular');
-                        Navigator.pushNamed(
-                            context, BottomNavigationBarController.id,
-                            arguments: ScreenArguments(t, name, 'regular'));
-                      }
+                    bool existName =await CheckNameUserExist(name);
+                    if(existName==false) {
+                      final newUser = await _auth
+                          .createUserWithEmailAndPassword(
+                          email: email, password: password);
+                      if (newUser != null) {
+                        FirebaseUser user = newUser.user;
+                        String t = user.uid;
+                        databaseReference
+                            .collection('user')
+                            .document(t)
+                            .updateData({'name': name});
+                        globals.name = name;
+                        bool menag = await doesNameAlreadyExist(email);
+                        print(menag);
+                        if (menag == true) {
+                          globals.isMeneger = true;
+                          print(globals.isMeneger);
+                          await databaseservice(uid: user.uid)
+                              .updateUserData(name, 'menager');
+                          Navigator.pushNamed(
+                              context, BottomNavigationBarController.id,
+                              arguments: ScreenArguments_m(t, name, 'menager'));
+                        } else {
+                          globals.isMeneger = false;
+                          await databaseservice(uid: user.uid)
+                              .updateUserData(name, 'regular');
+                          Navigator.pushNamed(
+                              context, BottomNavigationBarController.id,
+                              arguments: ScreenArguments(t, name, 'regular'));
+                        }
 
 //                      var document = await Firestore.instance.collection('users').document('ENsyb4kmVkUbDvNS8ILNARKN49m1'
 //                      ).get();
 //                          print(document.data['name']);
-                      // Navigator.pushNamed(context, BasicGridView.id);
-                    }
+                        // Navigator.pushNamed(context, BasicGridView.id);
+                      }
 
-                    setState(() async {
-                      showSpinner = false;
-                    });
+                      setState(() async {
+                        showSpinner = false;
+                      });
+                    }
+                    else{
+                      showAlertDialogRegisterName(context);
+                      setState(() {
+                        showSpinner = false;
+                      });
+                    }
                   } catch (e) {
                     print('error');
                   }
+
                 },
               ),
             ],
@@ -247,4 +258,30 @@ Future<bool> doesNameAlreadyExist(String email) async {
       .getDocuments();
   final List<DocumentSnapshot> documents = result.documents;
   return documents.length == 1;
+}
+showAlertDialogRegisterName(BuildContext context) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.pop(context, true);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("שם משתמש זה קיים אנא בחר בשם אחר"),
+
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

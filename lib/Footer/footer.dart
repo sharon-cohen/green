@@ -13,7 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/welcom.dart';
 import 'package:greenpeace/HotReport/hotReport.dart';
 import 'package:greenpeace/global.dart' as globals;
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 final _firestore = Firestore.instance;
 
 class BottomNavigationBarController extends StatefulWidget {
@@ -37,7 +37,7 @@ class _BottomNavigationBarControllerState
   final List<Widget> pages = [
     connect(key: PageStorageKey('connect')),
     Home_menager(key: PageStorageKey('home'), arguments: send),
-    All_truggle(key: PageStorageKey(' All_truggle'), arguments: send),
+    List_event(key: PageStorageKey(' All_truggle')),
     Allmess(key: PageStorageKey('report'), arguments: send),
     create_struggle1(key: PageStorageKey('create_struggle1'), arguments: send),
     Calender(
@@ -67,16 +67,30 @@ class _BottomNavigationBarControllerState
         //backgroundColor: Color(int.parse("0xff6ed000")),
         onTap: (int index) async {
           if (index == 0) {
+            FirebaseAnalytics().logEvent(name: 'name',parameters:null);
             await showMenu<String>(
               context: context,
               position: RelativeRect.fromLTRB(
                   kBottomNavigationBarHeight,
-                  MediaQuery.of(context).size.height -
-                      240 -
-                      kBottomNavigationBarHeight,
+                  MediaQuery.of(context).size.height,
                   0.0,
                   0),
               items: <PopupMenuItem<String>>[
+                new PopupMenuItem<String>(
+                  child: FlatButton(
+                    child: Row(
+                      children: [
+                        const Icon(Icons.arrow_downward),
+                        const Text('הסתר',
+                            style: TextStyle(
+                                fontFamily: 'Assistant', fontSize: 14)),
+                      ],
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
                 new PopupMenuItem<String>(
                   child: FlatButton(
                     child: Row(
@@ -98,7 +112,7 @@ class _BottomNavigationBarControllerState
                     child: Row(
                       children: [
                         const Icon(Icons.contact_phone),
-                        const Text('   אירועים',
+                        const Text(' מאבקים',
                             style: TextStyle(
                                 fontFamily: 'Assistant', fontSize: 14)),
                       ],
@@ -107,7 +121,7 @@ class _BottomNavigationBarControllerState
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => List_event()));
+                              builder: (context) => All_truggle()));
                     },
                   ),
                 ),
@@ -227,7 +241,7 @@ class _BottomNavigationBarControllerState
                       // color: Colors.black,
                       // color: Colors.black,
                     ),
-                    title: Text('מאבקים',
+                    title: Text('אירועים',
                         style: TextStyle(
                           //color: Colors.black,
                           fontFamily: 'Assistant',

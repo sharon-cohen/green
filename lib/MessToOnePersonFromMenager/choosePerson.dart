@@ -3,131 +3,128 @@ import 'package:flutter/cupertino.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:greenpeace/evants/add_event.dart';
 import 'package:flutter/material.dart';
-import 'package:greenpeace/Footer/footer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:greenpeace/MessToOnePersonFromMenager/SendMessFromMenager.dart';
-
+import 'package:greenpeace/GetID_DB/getid.dart';
 final _firestore = Firestore.instance;
 
-class userStream extends StatelessWidget {
-  userStream({this.width_page, this.height_page});
-  final height_page;
-  final width_page;
+class userStream extends StatefulWidget {
+  userStream({Key key, this.title}) : super(key: key);
+  final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection("users").snapshots(),
-      // ignore: missing_return
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
-            ),
-          );
-        }
-        final users = snapshot.data.documents;
-
-        List<userContainer> usersContainers = [];
-        for (var user in users) {
-          if (user.data['role'] != "menager") {
-            final name = user.data['name'];
-            final role = user.data['role'];
-            final Id = user.documentID;
-
-            //print( reportModel.getReportfromMess(messId).text.toString());
-            final userContainerVar = userContainer(
-              User: globals.user(
-                name: name,
-                role: role,
-                id: Id,
-              ),
-              height_page: height_page,
-              width_page: width_page,
-            );
-            usersContainers.add(userContainerVar);
-            //  reports.sort((a, b) => b.time.compareTo(a.time));
-          }
-        }
-        return Scaffold(
-          appBar: AppBar(
-              backgroundColor: Colors.white,
-              title:
-                  Center(child: Image.asset('image/logo_greem.png', scale: 2)),
-              automaticallyImplyLeading: false),
-          backgroundColor: Colors.grey[400],
-          body: Material(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: usersContainers,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+  _userStream createState() => new _userStream();
 }
 
-class userContainer extends StatelessWidget {
-  final globals.user User;
-  var height_page;
-  var width_page;
-  userContainer({
-    this.User,
-    this.height_page,
-    this.width_page,
-  });
+class _userStream extends State<userStream> {
+  TextEditingController editingController = TextEditingController();
+
+   var duplicateItems =List<String> ();
+  var items = List<String>();
+  Future getDocs() async {
+    QuerySnapshot querySnapshot = await Firestore.instance.collection("users").getDocuments();
+    for (int i = 0; i < querySnapshot.documents.length; i++) {
+      var a = querySnapshot.documents[i].data["name"];
+      duplicateItems.add(a.toString());
+
+      print(a);
+    }
+    items.addAll(duplicateItems);
+  }
+  bool isLoading=false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getDocs().then((value) {
+
+        setState(() {
+          isLoading=true;
+        });
+      });
+
+    });
+  }
+
+  void filterSearchResults(String query) {
+    List<String> dummySearchList = List<String>();
+    dummySearchList.addAll(duplicateItems);
+    if(query.isNotEmpty) {
+      List<String> dummyListData = List<String>();
+      dummySearchList.forEach((item) {
+        if(item.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        items.clear();
+        items.addAll(dummyListData);
+      });
+      return;
+    } else {
+      setState(() {
+        items.clear();
+        items.addAll(duplicateItems);
+      });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(6.0),
-      child: Container(
-        color: Colors.white,
-        child: ListTile(
-          leading: Container(
-            decoration: new BoxDecoration(
-                border: new Border(
-                    right: new BorderSide(width: 1.0, color: Colors.white))),
-            child: ImageIcon(
-              AssetImage("image/feed2.png"),
-              color: Colors.black,
-            ),
-          ),
-          title: Text(
-            User.name,
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                fontFamily: 'Assistant'),
-          ),
-          // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
-          subtitle: Row(
-            children: <Widget>[
-              Flexible(
-                child: Text(User.role),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("למי תרצה לשלוח"),
+      ),
+      body: !isLoading? Center(child: CircularProgressIndicator()):Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
+                controller: editingController,
+                decoration: InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
               ),
-            ],
-          ),
-          trailing: FlatButton(
-            child: Container(
-                width: 1,
-                child: Icon(Icons.keyboard_arrow_left,
-                    color: Colors.black, size: 30.0)),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SendOneUser(
-                            User: User,
-                          )));
-            },
-          ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('${items[index]}'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+
+                        IconButton(
+                          icon: Icon(
+                            Icons.send,
+                            size: 20.0,
+                            color: Colors.brown[900],
+                          ),
+                          onPressed: () async{
+                              String id=await Getuser(items[index]);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AddEventPage (senderId: id,sender: items[index],)));
+                          },
+                        ),
+                      ],
+                    ),
+
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

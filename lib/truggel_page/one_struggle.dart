@@ -8,12 +8,8 @@ import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:social_share/social_share.dart';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:async';
-import 'package:screenshot/screenshot.dart';
-import 'package:social_share/social_share.dart';
-import 'dart:async';
+import 'package:greenpeace/truggel_page/frameWeb.dart';
 import 'package:greenpeace/truggel_page/updateStrugle.dart';
 import 'package:greenpeace/global.dart' as globals;
 final databaseReference = Firestore.instance;
@@ -132,8 +128,24 @@ class _one_struggle extends State<one_struggle> {
                     child: Text("Share On Facebook Story"),
                   ),
 
-
-
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.donation,)));
+                    },
+                    child: Text("הצטרף אלינו למאבק"),
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.petition,)));
+                    },
+                    child: Text("חתימה על עצומה"),
+                  ),
                   RaisedButton(
                     onPressed: () async {
                       await screenshotController.capture().then((image) async {

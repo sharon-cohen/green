@@ -42,8 +42,11 @@ class DialogUtils {
             .then((DocumentSnapshot documentSnapshot) {
           if (documentSnapshot.exists) {
             final image = documentSnapshot.data['url'];
+            print(image.toString());
             final text = documentSnapshot.data['text'];
+
             final sender = documentSnapshot.data['sender'].toString();
+            print(sender.toString());
             final time = documentSnapshot.data['time'];
             _firestore.collection('report').add({
               "text": text,
@@ -53,7 +56,7 @@ class DialogUtils {
             });
           }
         });
-        print(documents[0].documentID.toString());
+
 
         Navigator.pop(context);
       } else {
@@ -124,7 +127,7 @@ class DialogUtils {
                 color: Colors.white,
                 onPressed: () {
                   print(text);
-                  if (text == null) {
+                  if (text == "") {
                     doesNameAlreadyExist(image_u, true);
                   } else {
                     doesNameAlreadyExist(text, false);

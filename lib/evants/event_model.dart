@@ -4,17 +4,17 @@ class EventModel extends DatabaseItem{
   final String id;
   final String title;
   final String description;
-  final DateTime eventDate;
+     DateTime eventDate;
   final DateTime createDateEvent;
-  final String equipment;
+  final DateTime time;
   final String sender;
   final String senderId;
   final String location;
   final String type_event;
   final String whatapp;
   bool approve;
-  EventModel({this.id,this.title, this.description, this.eventDate,this.approve,
-    this.equipment,this.senderId,this.sender,this.location,this.type_event,this.whatapp,this.createDateEvent
+  EventModel({this.id,this.title, this.description, this.eventDate,this.approve,this.time,
+    this.senderId,this.sender,this.location,this.type_event,this.whatapp,this.createDateEvent
   }):super(id);
 
   factory EventModel.fromMap(Map data) {
@@ -24,7 +24,7 @@ class EventModel extends DatabaseItem{
       description: data['description'],
       eventDate: data['event_date'].toDate(),
       approve: data['approve'],
-      equipment: data['equipment'],
+      time:data['time'],
       sender: data['sender'],
       senderId: data['senderId'],
       location: data['location'],
@@ -40,7 +40,7 @@ class EventModel extends DatabaseItem{
       description: data['description'],
       eventDate: data['event_date'].toDate(),
       approve: data['approve'],
-      equipment: data['equipment'],
+      time:data['time'].toDate(),
       sender: data['sender'],
       senderId: data['senderId'],
       location: data['location'],
@@ -58,8 +58,8 @@ class EventModel extends DatabaseItem{
       "event_date":eventDate,
       "id":id,
       "approve":approve,
-        "equipment":equipment,
-        "sender":sender,
+        "time":time,
+      "sender":sender,
       "senderId":senderId,
       "type_event":type_event,
       "location":location,
@@ -67,6 +67,4 @@ class EventModel extends DatabaseItem{
     };
   }
 }
-
-
 

@@ -14,7 +14,7 @@ import 'package:greenpeace/HotReport/HotReportStream.dart';
 import 'package:greenpeace/MessForAllUser/CreateMessForAllUser.dart';
 import 'package:greenpeace/MessForAllUser/ListMessForAllStream.dart';
 import 'package:greenpeace/MessToOnePersonFromMenager/choosePerson.dart';
-
+import 'package:greenpeace/evants/event_model.dart';
 final databaseReference = Firestore.instance;
 final _firestore = Firestore.instance;
 
@@ -52,18 +52,7 @@ class AllmessState extends State<Allmess> {
               // ),
               Row(
                 children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+
                   Spacer(),
                   Text(
                     'הודעות',
@@ -318,7 +307,8 @@ class reportStream extends StatelessWidget {
           final sender = report.data['sender'];
           final text = report.data['text'];
           final time = report.data['time'];
-          final image = report.data['image'];
+          final image = report.data['url'];
+
 
           //print( reportModel.getReportfromMess(messId).text.toString());
           final reportsContainer = ReportsContainer(
@@ -351,25 +341,11 @@ class ReportsContainer extends StatelessWidget {
     this.height_page,
     this.width_page,
   });
-  Widget thereport() {
-    if (report.image != null) {
-      return Container(
-          height: 100,
-          width: 100,
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-            image: new NetworkImage(report.image),
-            fit: BoxFit.fill,
-          )));
-    } else {
-      return Text('דיווח חדש',
-          style: TextStyle(color: Colors.black, fontSize: 8),
-          overflow: TextOverflow.ellipsis);
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: Container(
@@ -407,6 +383,7 @@ class ReportsContainer extends StatelessWidget {
                 child: Icon(Icons.keyboard_arrow_left,
                     color: Colors.black, size: 30.0)),
             onPressed: () {
+
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -447,28 +424,28 @@ class eventStream extends StatelessWidget {
           final eventapprove = event.data["approve"];
           final sender = event.data["sender"];
           final senderId = event.data["senderId"];
-          final equipment = event.data["equipment"];
           final date = event.data["event_date"];
-          final dateCreateEvent = event.data["createEventDate"];
+          final dateCreateEvent = event.data["time"];
           final location = event.data["location"];
           final type_event = event.data["type_event"];
           final whatapp = event.data['whatapp'];
           if (eventapprove == false) {
             final evenContainer = eventContainer(
+              event:EventModel(
               title: eventtitle,
               approve: eventapprove,
-              createEventDate: dateCreateEvent.toDate(),
+              eventDate: dateCreateEvent.toDate(),
               time: date.toDate(),
-              dis: eventdis,
-              id: event.documentID,
-              height_page: height_page,
-              width_page: width_page,
+
+              description: eventdis,
+
+
               sender: sender,
-              equipment: equipment,
               senderId: senderId,
               location: location,
               type_event: type_event,
               whatapp: whatapp,
+              ),
             );
             eventContainers.add(evenContainer);
           }
@@ -484,35 +461,9 @@ class eventStream extends StatelessWidget {
 }
 
 class eventContainer extends StatelessWidget {
-  final String title;
-  final String dis;
-  final DateTime time;
-  final bool approve;
-  final String equipment;
-  var id;
-  var height_page;
-  var width_page;
-  final String sender;
-  final String senderId;
-  final String type_event;
-  final String location;
-  final DateTime createEventDate;
-  final String whatapp;
+  EventModel event;
   eventContainer(
-      {this.approve,
-      this.createEventDate,
-      this.whatapp,
-      this.location,
-      this.type_event,
-      this.equipment,
-      this.sender,
-      this.senderId,
-      this.title,
-      this.time,
-      this.dis,
-      this.height_page,
-      this.width_page,
-      this.id});
+      {this.event});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -530,7 +481,7 @@ class eventContainer extends StatelessWidget {
             ),
           ),
           title: Text(
-            this.sender,
+            this.event.sender,
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 10),
           ),
@@ -539,7 +490,7 @@ class eventContainer extends StatelessWidget {
           subtitle: Row(
             children: <Widget>[
               Flexible(
-                child: Text(cutTimeString(this.createEventDate.toString())),
+                child: Text(cutTimeString(this.event.eventDate.toString())),
               ),
             ],
           ),
@@ -547,20 +498,12 @@ class eventContainer extends StatelessWidget {
             child: Icon(Icons.keyboard_arrow_left,
                 color: Colors.black, size: 30.0),
             onPressed: () {
-              print(this.equipment.runtimeType);
+
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => mass_event(
-                            sender: this.sender,
-                            topic: this.title,
-                            text: this.dis,
-                            equipment: this.equipment,
-                            eventDate: this.time,
-                            senderId: this.senderId,
-                            location: this.location,
-                            type_event: this.type_event,
-                            whatapp: this.whatapp,
+                           event:this.event,
                           )));
             },
           ),

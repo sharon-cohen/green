@@ -26,9 +26,11 @@ class HotMass extends StatelessWidget {
         alignment: FractionalOffset.bottomRight,
       );
     } else {
-      return Image(
-        image: NetworkImage(report.image),
-      );
+
+      return Container(
+          height: 300,
+          width: 300,
+          child: Image.network(report.image, fit: BoxFit.fitWidth));
     }
   }
 

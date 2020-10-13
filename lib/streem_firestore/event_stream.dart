@@ -30,9 +30,9 @@ class event_stream extends StatelessWidget {
           final title = event.data['title'];
           final description = event.data['description'];
           final eventDate =  DateTime.parse(event.data['event_date'].toDate().toString());
-          final createDateEvent= event.data['createEventDate'].toDate();
+          final createDateEvent= event.data['time'].toDate();
           final approve = event.data['approve'];
-          final equipment = event.data['equipment'];
+
           final sender = event.data['sender'];
           final senderId = event.data['senderId'];
           final location = event.data['location'];
@@ -46,7 +46,7 @@ class event_stream extends StatelessWidget {
               createDateEvent: createDateEvent,
               eventDate: eventDate,
               approve: approve,
-              equipment: equipment,
+
               sender: sender,
               senderId: senderId,
               location: location,

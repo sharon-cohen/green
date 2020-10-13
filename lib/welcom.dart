@@ -7,12 +7,16 @@ import 'globalfunc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'global.dart' as globals;
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 FirebaseUser loggedInUser;
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
-
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+  WelcomeScreen({this.analytics, this.observer});
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -27,7 +31,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Animation animation;
 
   bool isLoading = false;
-
+  Future<Null> _sendAnalytics() async {
+    await widget.analytics
+        .logEvent(name: 'Welcom', parameters: <String, dynamic>{});
+  }
+  Future<Null> _currentScreen() async {
+    await widget.analytics.setCurrentScreen(
+        screenName: 'Welcom', screenClassOverride: 'WelcomeScreen');
+  }
   @override
   void initState() {
     super.initState();
@@ -37,6 +48,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         isLoading = true;
       });
     });
+    _currentScreen();
   }
 
   _loadCurrentUser() async {
@@ -64,6 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: 'הרשם',
               colour: Colors.white,
               onPressed: () {
+
                 Navigator.pushNamed(context, RegistrationScreen.id);
               }),
         );
@@ -72,6 +85,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: 'היכנס מבלי להירשם',
               colour: Colors.white,
               onPressed: () {
+                _sendAnalytics();
                 globals.no_reg = true;
                 Navigator.pushNamed(context, BottomNavigationBarController.id,
                     arguments:

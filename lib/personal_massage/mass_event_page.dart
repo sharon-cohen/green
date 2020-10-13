@@ -5,29 +5,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/evants/update_event.dart';
-
+import 'package:greenpeace/evants/event_model.dart';
 final databaseReference = Firestore.instance;
 
 class mass_event extends StatefulWidget {
-  final String sender;
-  final String text;
-  final String senderId;
-  final String topic;
-  final DateTime eventDate;
-  final String equipment;
-  final String type_event;
-  final String location;
-  final String whatapp;
+  EventModel event;
   mass_event(
-      {this.sender,
-      this.text,
-      this.whatapp,
-      this.senderId,
-      this.topic,
-      this.equipment,
-      this.eventDate,
-      this.type_event,
-      this.location});
+      {this.event});
   @override
   _mass_eventState createState() => _mass_eventState();
 }
@@ -98,7 +82,7 @@ class _mass_eventState extends State<mass_event> {
                     ),
                   ),
                   new Text(
-                    widget.sender,
+                    widget.event.sender,
                     style: new TextStyle(
                       fontSize: 20,
                     ),
@@ -112,12 +96,12 @@ class _mass_eventState extends State<mass_event> {
               child: Row(
                 children: [
                   new Text(
-                    "נושא: " + widget.topic,
+                    "נושא: " + widget.event.type_event,
                     style: new TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   new Text(
-                    widget.topic,
+                   widget.event.type_event,
                     style: new TextStyle(fontSize: 20),
                   ),
                 ],
@@ -127,32 +111,20 @@ class _mass_eventState extends State<mass_event> {
             Divider(thickness: 1, color: Colors.black),
             new Align(
               child: new Text(
-                widget.topic,
+                  widget.event.type_event,
                 style: new TextStyle(fontSize: 30),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
             new Align(
               child: new Text(
-                widget.text,
+                widget.event.description,
                 style: new TextStyle(fontSize: 15),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
-            new Align(
-              child: new Text(
-                "רשימת ציוד",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                widget.equipment.toString(),
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
+
+
             new Align(
               child: new Text(
                 "תאריך",
@@ -162,7 +134,7 @@ class _mass_eventState extends State<mass_event> {
             ),
             new Align(
               child: new Text(
-                widget.eventDate.toString(),
+                widget.event.eventDate.toString(),
                 style: new TextStyle(fontSize: 15),
               ), //so big text
               alignment: FractionalOffset.topRight,
@@ -174,17 +146,17 @@ class _mass_eventState extends State<mass_event> {
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
-            new Align(
-              child: new Text(
-                widget.type_event,
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
+//            new Align(
+//              child: new Text(
+//                widget.type_event,
+//                style: new TextStyle(fontSize: 15),
+//              ), //so big text
+//              alignment: FractionalOffset.topRight,
+//            ),
             new Align(
               child: FlatButton(
                 onPressed: () {
-                  _launchURL(widget.whatapp);
+                  _launchURL(widget.event.whatapp);
                 },
                 child: new Text(
                   "הצרפות לקבוצת whatapp",
@@ -195,7 +167,7 @@ class _mass_eventState extends State<mass_event> {
             ),
             new Align(
               child: new Text(
-                widget.whatapp,
+                widget.event.whatapp,
                 style: new TextStyle(fontSize: 15),
               ), //so big text
               alignment: FractionalOffset.topRight,
@@ -216,10 +188,10 @@ class _mass_eventState extends State<mass_event> {
                 padding: EdgeInsets.all(8.0),
                 splashColor: Colors.blueAccent,
                 onPressed: () {
-                  launchMap(widget.location);
+                  launchMap(widget.event.location);
                 },
                 child: Text(
-                  widget.location,
+                         widget.event.location,
                   style: TextStyle(fontSize: 20.0),
                 ),
               ), //so big text
@@ -232,7 +204,7 @@ class _mass_eventState extends State<mass_event> {
                   Expanded(
                     child: RaisedButton(
                       onPressed: () async {
-                        String idevent = await Getevent(widget.topic);
+                        String idevent = await Getevent(widget.event.title);
                         await databaseReference
                             .collection("events")
                             .document(idevent)
@@ -251,8 +223,8 @@ class _mass_eventState extends State<mass_event> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AddEventPage(
-                                      sender: widget.sender,
-                                      senderId: widget.senderId,
+                                      sender: widget.event.sender,
+                                      senderId: widget.event.senderId,
                                     )));
                       },
                       child: const Text('השב', style: TextStyle(fontSize: 20)),
@@ -263,13 +235,13 @@ class _mass_eventState extends State<mass_event> {
                   Expanded(
                     child: RaisedButton(
                       onPressed: () async {
-                        idevent = await Getevent(widget.topic);
+                        idevent = await Getevent(widget.event.title);
                         databaseReference
                             .collection('events')
                             .document(idevent)
                             .updateData({'approve': true});
                         successshowAlertDialog(context, _email(),
-                            currentUser.uid, widget.topic, widget.senderId);
+                            currentUser.uid, widget.event.title, widget.event.senderId);
                       },
                       child:
                           const Text('אישור', style: TextStyle(fontSize: 20)),
@@ -280,20 +252,12 @@ class _mass_eventState extends State<mass_event> {
                   Expanded(
                     child: RaisedButton(
                       onPressed: () async {
-                        idevent = await Getevent(widget.topic);
+                        idevent = await Getevent(widget.event.title);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => updateEventPage(
-                                      sender: widget.sender,
-                                      topic: widget.topic,
-                                      text: widget.text,
-                                      equipment: widget.equipment,
-                                      eventDate: widget.eventDate,
-                                      senderId: widget.senderId,
-                                      location: widget.location,
-                                      type_event: widget.type_event,
-                                      dataid: idevent,
+                                      event: widget.event,
                                     )));
                       },
                       child:

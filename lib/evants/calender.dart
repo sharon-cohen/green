@@ -19,6 +19,7 @@ class CalenderState extends State<Calender> {
   Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> events) {
     Map<DateTime, List<dynamic>> data = {};
     events.forEach((event) {
+      print(event.title.toString());
       if (event.approve == true) {
         DateTime date = DateTime(event.eventDate.year, event.eventDate.month,
             event.eventDate.day, 12);
@@ -50,10 +51,13 @@ class CalenderState extends State<Calender> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<EventModel> allEvents = snapshot.data;
+                print("nameeee");
+                print(allEvents[0].title.toString());
                 if (allEvents.isNotEmpty) {
                   _events = _groupEvents(allEvents);
                 }
               }
+
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

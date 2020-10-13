@@ -3,6 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'package:intl/intl.dart';
 import 'event_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:greenpeace/streem_firestore/StruggleStream.dart';
+import 'package:intl/intl.dart';
+import 'event_model.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
@@ -38,31 +48,10 @@ class _newEventPage extends State<newEventPage> {
   Data data = Data(
     dropdownValue: '',
   );
-  Map<String, bool> values = {
-    'שלטים': false,
-    'מגפון': false,
-    'אישור משטרה': false,
-    'פרסום ברשתות חברתיות': false,
-    'חולצות': false,
-    'שקיות אשפה': false,
-    'כפפות': false,
-    'אחר': false,
-  };
-  Map<String, bool> values_type = {
-    'foo': true,
-    'bar': false,
-  };
+
   var tmpArray = [];
 
-  String getCheckboxItems() {
-    tmpArray.clear();
-    values.forEach((key, value) {
-      if (value == true) {
-        tmpArray.add(key);
-      }
-    });
-    return tmpArray.toString();
-  }
+
 
   DateTime _eventDate;
   final _formKey = GlobalKey<FormState>();
@@ -82,6 +71,7 @@ class _newEventPage extends State<newEventPage> {
     _whatapp = TextEditingController(
         text: widget.note != null ? widget.note.location : "");
     _eventDate = DateTime.now();
+
     processing = false;
   }
 
@@ -144,19 +134,19 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   cursorColor: Colors.black,
                   controller: _title,
                   validator: (value) =>
-                      (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
+                  (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                     labelText: "נושא האירוע",
                     filled: true,
                     fillColor: Colors.white,
                     labelStyle:
-                        TextStyle(fontFamily: 'Assistant', color: Colors.black),
+                    TextStyle(fontFamily: 'Assistant', color: Colors.black),
                     focusColor: Colors.lightGreen,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -169,23 +159,23 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _description,
                   minLines: 3,
                   maxLines: 5,
                   validator: (value) =>
-                      (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
+                  (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                     labelText: "תיאור האירוע",
                     labelStyle:
-                        TextStyle(fontFamily: 'Assistant', color: Colors.black),
+                    TextStyle(fontFamily: 'Assistant', color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
-                        //  borderRadius: BorderRadius.circular(10)
-                        ),
+                      //  borderRadius: BorderRadius.circular(10)
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.lightGreen),
                       //borderRadius: BorderRadius.circular(10),
@@ -195,21 +185,21 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _location,
                   validator: (value) =>
-                      (value.isEmpty) ? "שדה המיקום חובה" : null,
+                  (value.isEmpty) ? "שדה המיקום חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                     labelText: "מיקום - כתובת מדויקת",
                     labelStyle:
-                        TextStyle(fontFamily: 'Assistant', color: Colors.black),
+                    TextStyle(fontFamily: 'Assistant', color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
-                        //  borderRadius: BorderRadius.circular(10),
-                        ),
+                      //  borderRadius: BorderRadius.circular(10),
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.lightGreen),
                       //borderRadius: BorderRadius.circular(10),
@@ -219,7 +209,7 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _whatapp,
                   minLines: 3,
@@ -234,8 +224,8 @@ class _newEventPage extends State<newEventPage> {
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
-                        //  borderRadius: BorderRadius.circular(10),
-                        ),
+                      //  borderRadius: BorderRadius.circular(10),
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.lightGreen),
                       //borderRadius: BorderRadius.circular(10),
@@ -294,7 +284,7 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: new Align(
                   child: new Text(
                     "סוג האירוע",
@@ -330,40 +320,8 @@ class _newEventPage extends State<newEventPage> {
                             onSelected: (String label) => print(label),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 8.0),
-                          child: new Align(
-                            child: new Text(
-                              "רשימת ציוד",
-                              style: new TextStyle(
-                                fontFamily: 'Assistant',
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ), //so big text
-                            alignment: FractionalOffset.topRight,
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView(
-                            children: values.keys.map((String key) {
-                              return new CheckboxListTile(
-                                title: new Text(key),
-                                controlAffinity:
-                                    ListTileControlAffinity.leading,
-                                value: values[key],
-                                activeColor: Colors.lightGreen,
-                                checkColor: Colors.white,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    values[key] = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ),
+
+
                       ]),
                     ),
                   ),
@@ -380,77 +338,80 @@ class _newEventPage extends State<newEventPage> {
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Material(
-                        color: Color(int.parse("0xff6ed000")),
-                        elevation: 5.0,
-                        //borderRadius: BorderRadius.circular(30.0),
-                        child: MaterialButton(
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              setState(() {
-                                processing = true;
-                              });
-                              if (widget.note != null) {
-                                await eventDBS.updateData(widget.note.id, {
-                                  "title": _title.text,
-                                  "description": _description.text,
-                                  "event_date": widget.note.eventDate,
-                                  "equipment": tmpArray.toString(),
-                                  "sender": globals.name,
-                                  "senderId": currentUser.uid,
-                                  "location": _location.text,
-                                  "type_event": type_event,
-                                  "whatapp": _whatapp.text,
-                                });
-                              } else {
-                                await eventDBS.createItem(EventModel(
-                                  title: _title.text,
-                                  description: _description.text,
-                                  eventDate: value,
-                                  createDateEvent: createDateEvent,
-                                  approve: false,
-                                  equipment: getCheckboxItems(),
-                                  sender: globals.name,
-                                  senderId: currentUser.uid,
-                                  type_event: type_event,
-                                  location: _location.text,
-                                  whatapp: _whatapp.text,
-                                ));
-                              }
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                child: Material(
+                  color: Color(int.parse("0xff6ed000")),
+                  elevation: 5.0,
+                  //borderRadius: BorderRadius.circular(30.0),
+                  child: MaterialButton(
+                    onPressed: () async {
+                      if (_location.text!=""&&_description.text!=""&&_title.text!=""&&_whatapp.text!="") {
+                        setState(() {
+                          processing = true;
+                        });
+                        if (widget.note != null) {
+                          await eventDBS.updateData(widget.note.id, {
+                            "title": _title.text,
+                            "description": _description.text,
+                            "event_date": widget.note.eventDate,
+                            "time" :widget.note.time,
+                            "sender": globals.name,
+                            "senderId": currentUser.uid,
+                            "location": _location.text,
+                            "type_event": type_event,
+                            "whatapp": _whatapp.text,
+                          });
+                        } else {
+                          await eventDBS.createItem(EventModel(
+                            title: _title.text,
+                            description: _description.text,
+                            eventDate: value,
+                            createDateEvent: createDateEvent,
+                            approve: false,
+                            time:initialValue,
+                            sender: globals.name,
+                            senderId: currentUser.uid,
+                            type_event: type_event,
+                            location: _location.text,
+                            whatapp: _whatapp.text,
+                          ));
+                        }
 
-                              setState(() {
-                                processing = false;
-                              });
-                            }
-                            successshowAlertDialog(context);
-                          },
-                          child: Row(
-                            //crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "צור אירוע",
-                                style: style.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              // SizedBox(width: 270),
-                              Image.asset(
-                                'image/whitearrow.png',
-                                width: 30,
-                                height: 30,
-                              ),
-                              // Icon(
-                              //   Icons.play_circle_outline,
-                              //   color: Colors.white,
-                              //   size: 36.0,
-                              // ),
-                            ],
-                          ),
+                        setState(() {
+                          processing = false;
+                        });
+                        successshowAlertDialog(context);
+                      }
+                        else{
+                          errorhowAlertDialog(context);
+                      }
+                    },
+                    child: Row(
+                      //crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "צור אירוע",
+                          style: style.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
+                        // SizedBox(width: 270),
+                        Image.asset(
+                          'image/whitearrow.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                        // Icon(
+                        //   Icons.play_circle_outline,
+                        //   color: Colors.white,
+                        //   size: 36.0,
+                        // ),
+                      ],
                     ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -480,9 +441,9 @@ successshowAlertDialog(BuildContext context) {
           context,
           MaterialPageRoute(
               builder: (context) => BottomNavigationBarController(
-                    3,
-                    3,
-                  )));
+                3,
+                3,
+              )));
     },
   );
 
@@ -490,6 +451,32 @@ successshowAlertDialog(BuildContext context) {
   AlertDialog alert = AlertDialog(
     title: Text("האירוע נוצר בהצלחה"),
     content: Text("נשלח למנהלים לאישור תקבל עדכון בקרוב"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+errorhowAlertDialog(BuildContext context) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("אישור"),
+    onPressed: () {
+      Navigator.pop(context, true);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("חובה למלא את כל השדות"),
+
     actions: [
       okButton,
     ],

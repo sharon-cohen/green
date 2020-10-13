@@ -6,31 +6,13 @@ import 'event_firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:greenpeace/Footer/footer.dart';
-
+import 'package:greenpeace/evants/event_model.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
 class updateEventPage extends StatefulWidget {
-  final EventModel note;
-  final String sender;
-  final String text;
-  final String senderId;
-  final String topic;
-  final DateTime eventDate;
-  final String equipment;
-  final String type_event;
-  final String location;
-  final String dataid;
-  final String whatapp;
+  EventModel event;
+
   updateEventPage({
-    this.sender,
-    this.whatapp,
-    this.text,
-    this.senderId,
-    this.topic,
-    this.equipment,
-    this.eventDate,
-    this.type_event,
-    this.location,
-    this.dataid,
-    this.note,
+   this.event
   });
 
   @override
@@ -47,27 +29,11 @@ class _updateEventPage extends State<updateEventPage> {
   Data data = Data(
     dropdownValue: '',
   );
-  Map<String, bool> values = {
-    'שלטים': false,
-    'מגפון': false,
-    'אישור משטרה': false,
-    'פרסום ברשתות חברתיות': false,
-    'חולצות': false,
-    'שקיות אשפה': false,
-    'כפפות': false,
-  };
+
 
   var tmpArray = [];
 
-  String getCheckboxItems() {
-    tmpArray.clear();
-    values.forEach((key, value) {
-      if (value == true) {
-        tmpArray.add(key);
-      }
-    });
-    return tmpArray.toString();
-  }
+
 
   DateTime _eventDate = DateTime.now();
   final _formKey = GlobalKey<FormState>();
@@ -75,38 +41,25 @@ class _updateEventPage extends State<updateEventPage> {
   List<String> equipmentList = [];
   bool processing;
   String temp = "";
-  void stringToList() {
-    print(widget.equipment);
-    for (int i = 1; i < widget.equipment.length; i++) {
-      if (widget.equipment[i] == ',' || widget.equipment[i] == ']') {
-        equipmentList.add(temp);
-        temp = "";
-      } else {
-        temp = temp + widget.equipment[i];
-      }
-    }
-    for (int i = 0; i < equipmentList.length; i++) {
-      values[equipmentList[i]] = true;
-    }
-  }
+
 
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
-    stringToList();
+
     _title = TextEditingController(
-        text: widget.note != null ? widget.note.title : "");
+        text: widget.event != null ? widget.event.title : "");
     _description = TextEditingController(
-        text: widget.note != null ? widget.note.description : "");
+        text: widget.event != null ? widget.event.description : "");
     _location = TextEditingController(
-        text: widget.note != null ? widget.note.location : "");
+        text: widget.event != null ? widget.event.location : "");
     processing = false;
     _whatapp = TextEditingController(
-        text: widget.note != null ? widget.note.location : "");
-    _title = TextEditingController(text: widget.topic);
-    _description = TextEditingController(text: widget.text);
-    _location = TextEditingController(text: widget.location);
+        text: widget.event != null ? widget.event.location : "");
+    _title = TextEditingController(text: widget.event.title);
+    _description = TextEditingController(text: widget.event.description);
+    _location = TextEditingController(text: widget.event.location);
     _whatapp = TextEditingController(
         text: 'https://chat.whatsapp.com/Eb12U02niq2EEhK290DoiL');
   }
@@ -227,7 +180,7 @@ class _updateEventPage extends State<updateEventPage> {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 400,
+                      height: 300,
                       width: 300,
                       child: Column(children: <Widget>[
                         Expanded(
@@ -238,7 +191,7 @@ class _updateEventPage extends State<updateEventPage> {
                               "הרצאה",
                             ],
                             disabled: [
-                              "${widget.type_event}",
+                              "${widget.event.type_event}",
                             ],
                             onChange: (String label, int index) {
                               print("label: $label index: $index");
@@ -247,45 +200,16 @@ class _updateEventPage extends State<updateEventPage> {
                             onSelected: (String label) => print(label),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                          child: new Align(
-                            child: new Text(
-                              "רשימת ציוד",
-                              style: new TextStyle(fontSize: 30),
-                            ), //so big text
-                            alignment: FractionalOffset.topRight,
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView(
-                            children: values.keys.map((String key) {
-                              return new CheckboxListTile(
-                                title: new Text(key),
-                                value: values[key],
-                                activeColor: Colors.pink,
-                                checkColor: Colors.white,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    values[key] = value;
-                                  });
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        ),
+
                       ]),
                     ),
                   ),
                 ],
               ),
 
-//           Padding(
-//                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//                child: TruggleStream(page_call:'new_event'),
-//             ),
 
-              const SizedBox(height: 10.0),
+
+
               ListTile(
                 title: Text(
                   "בחר תאריך",
@@ -293,19 +217,21 @@ class _updateEventPage extends State<updateEventPage> {
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: Text(
+                  child: widget.event.title!=""?Text(
+                      "${widget.event.eventDate.year} - ${widget.event.eventDate.month} - ${widget.event.eventDate.day}"):Text(
                       "${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
                 ),
+
                 onTap: () async {
                   print(this.data.dropdownValue);
                   DateTime picked = await showDatePicker(
                       context: context,
-                      initialDate: _eventDate,
+                      initialDate: widget.event.title==""? _eventDate:widget.event.eventDate,
                       firstDate: DateTime(_eventDate.year - 5),
                       lastDate: DateTime(_eventDate.year + 5));
                   if (picked != null) {
                     setState(() {
-                      _eventDate = picked;
+                   widget.event.eventDate = picked;
                     });
                   }
                 },
@@ -327,14 +253,13 @@ class _updateEventPage extends State<updateEventPage> {
                               setState(() {
                                 processing = true;
                               });
-
-                              await eventDBS.updateData(widget.dataid, {
+                              String IdEvent=await Getevent(widget.event.title);
+                              await eventDBS.updateData(IdEvent, {
                                 "title": _title.text,
                                 "description": _description.text,
-                                "event_date": _eventDate,
-                                "equipment": getCheckboxItems(),
+                                "event_date":  widget.event.eventDate,
                                 "location": _location.text,
-                                "type_event": widget.type_event,
+                                "type_event": widget.event.type_event,
                                 "whatapp": _whatapp.text,
                               });
 
@@ -343,7 +268,7 @@ class _updateEventPage extends State<updateEventPage> {
                               });
                             }
                             successshowAlertDialog(context, currentUser.email,
-                                widget.senderId, widget.topic, widget.sender);
+                                widget.event.senderId, widget.event.title, widget.event.sender);
                           },
                           child: Row(
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,

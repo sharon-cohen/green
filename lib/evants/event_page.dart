@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -39,15 +40,7 @@ class EventDetailsPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => updateEventPage(
-                                  sender: event.sender,
-                                  topic: event.title,
-                                  text: event.description,
-                                  equipment: event.equipment,
-                                  eventDate: event.eventDate,
-                                  senderId: event.senderId,
-                                  location: event.location,
-                                  type_event: event.type_event,
-                                  dataid: idevent,
+                                 event: this.event,
                                 )));
                   },
                   child: Column(
