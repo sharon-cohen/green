@@ -6,6 +6,7 @@ import 'package:greenpeace/create_struggle1.dart';
 import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/evants/calender.dart';
 import 'package:greenpeace/evants/list_event.dart';
+import 'package:greenpeace/Component/Alret_Dealog.dart';
 
 import 'package:greenpeace/ConnectUs/connect.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -125,8 +126,8 @@ class _BottomNavigationBarControllerState
                     },
                   ),
                 ),
-                if (globals.isMeneger == true)
-                  new PopupMenuItem<String>(
+
+                 globals.isMeneger? new PopupMenuItem<String>(
                     child: FlatButton(
                       child: Row(
                         children: [
@@ -166,7 +167,7 @@ class _BottomNavigationBarControllerState
                             context: context);
                       },
                     ),
-                  ),
+                  ):null,
                 new PopupMenuItem<String>(
                   child: FlatButton(
                     child: Row(
@@ -222,7 +223,6 @@ class _BottomNavigationBarControllerState
                           fontFamily: 'Assistant',
                         ))),
                 BottomNavigationBarItem(
-
                     // ignore: deprecated_member_use
                     icon: ImageIcon(
                       AssetImage("image/home.png"),
@@ -304,30 +304,18 @@ class _BottomNavigationBarControllerState
                           //fontSize: 6
                         ))),
                 BottomNavigationBarItem(
-                    // ignore: deprecated_member_use
-                    icon: ImageIcon(
-                      AssetImage("image/Struggle1.png"),
-                      // color: Colors.black,
-                    ),
-                    title: Text('מאבקים',
-                        style: TextStyle(
-                          //   color: Colors.black,
-                          fontFamily: 'Assistant',
-                          // fontSize: 6
-                        ))),
-                BottomNavigationBarItem(
-                  // ignore: deprecated_member_use
-                  icon: ImageIcon(
-                    AssetImage("image/feed2.png"),
-                    // color: Colors.black,
-                  ),
-                  title: Text('צור קשר',
-                      style: TextStyle(
-                        //    color: Colors.black,
-                        fontFamily: 'Assistant',
-                        //  fontSize: 6
-                      )),
-                ),
+            // ignore: deprecated_member_use
+              icon: ImageIcon(
+                AssetImage("image/Struggle1.png"),
+                // color: Colors.black,
+                // color: Colors.black,
+              ),
+              title: Text('אירועים',
+                  style: TextStyle(
+                    //color: Colors.black,
+                    fontFamily: 'Assistant',
+                  ))),
+
               ],
       );
 
@@ -353,9 +341,15 @@ class _BottomNavigationBarControllerState
                 heroTag: 2,
                 backgroundColor: Colors.red,
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HotReport()));
-                },
+                 if(globals.no_reg==true){
+                   GoregisterAlertDialog(context);
+
+                 }
+                  else {
+                   Navigator.push(context,
+                       MaterialPageRoute(builder: (context) => HotReport()));
+                 }
+                  },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

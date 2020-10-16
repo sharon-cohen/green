@@ -56,204 +56,191 @@ class Home_menagerState extends State<Home_menager> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: <Widget>[
-            ListView(
-              scrollDirection: Axis.vertical,
-              children: ListTile.divideTiles(context: context, tiles: [
-                MyHeader(
-                  image: "image/green.jpeg",
-                  offset: offset,
-                ),
-                Card(
-                  margin: new EdgeInsets.only(
-                      left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
-                  //margin: new EdgeInsets.only(top: 8.0, bottom: 5.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 2.3,
-                      child: Stack(
-                        alignment: Alignment.topRight,
+      body: ListView(
+        scrollDirection: Axis.vertical,
+        children: ListTile.divideTiles(context: context, tiles: [
+          MyHeader(
+            image: "image/green.jpeg",
+            offset: offset,
+          ),
+          Card(
+            margin: new EdgeInsets.only(
+                left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
+            //margin: new EdgeInsets.only(top: 8.0, bottom: 5.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  textDirection: TextDirection.rtl,
+                  children: <Widget>[
+
+                    Container(
+
+                      child: Row(
+
                         children: <Widget>[
-                          Positioned(
-                            top: 30,
-                            //bottom: 20,
-                            // left: 150,
-                            child: Text(
-                              'בואו נשנה את העולם',
-                              style: TextStyle(
-                                fontFamily: 'Assistant',
+                          FlatButton(
+
+                            child: Container(
+
+                              child: Text(
+                                "המאבקים שלנו",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Assistant',
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BottomNavigationBarController(
+                                            3,
+                                            0,
+                                          )));
+                            },
                           ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 18,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              textDirection: TextDirection.rtl,
-                              children: <Widget>[
-                                FlatButton(
-                                  padding: EdgeInsets.zero,
-                                  child: Text(
-                                    "המאבקים שלנו",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Assistant',
-                                      fontSize: 20,
-                                    ),
-                                  ),
+                          Spacer(),
+                          globals.isMeneger
+                              ? FlatButton(
+                                  child: Icon(Icons.add),
+                                  // child: Text("מאבק חדש",
+                                  //     style: TextStyle(
+                                  //         fontSize: 20,
+                                  //         color: Colors.green.shade900)),
                                   onPressed: () {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                BottomNavigationBarController(
-                                                  3,
-                                                  0,
-                                                )));
+                                                create_struggle1()));
                                   },
-                                ),
-                                Spacer(),
-                                globals.isMeneger
-                                    ? FlatButton(
-                                        materialTapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 0, 210, 0),
-                                        child: Icon(Icons.add),
-                                        // child: Text("מאבק חדש",
-                                        //     style: TextStyle(
-                                        //         fontSize: 20,
-                                        //         color: Colors.green.shade900)),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      create_struggle1()));
-                                        },
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 40,
-                            child: new FutureBuilder<Widget>(
-                                future: listOfMass(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<Widget> text) {
-                                  return new SingleChildScrollView(
-                                    padding:
-                                        new EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: text.data,
-                                  );
-                                }),
-                          ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
-                  ),
-                ),
-                Card(
-                  margin: new EdgeInsets.only(
-                      left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 2.3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        textDirection: TextDirection.rtl,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        // textDirection: TextDirection.rtl,
-                        children: <Widget>[
-                          Container(
-                            //  height: MediaQuery.of(context).size.height / 18,
-                            child: Row(
-                              children: [
-                                Text(
-                                  "עדכונים",
-                                  style: TextStyle(
-                                      fontFamily: 'Assistant',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                Spacer(),
-                                ImageIcon(
-                                  AssetImage("image/feed1.png"),
-                                  color: Colors.black,
-                                  // color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            'דואגים שתהיו מעודכנים',
-                            style: TextStyle(
-                              fontFamily: 'Assistant',
-                            ),
-                          ),
-                          SizedBox(height: 15),
-                          Container(child: MessagesStream()),
-                          Container(
-                            decoration: kMessageContainerDecoration,
-                            child: button_send(
-                              no_reg: no_reg,
-                            ),
-                          ),
-                        ],
+                    Container(
+
+                      child: Text(
+                        'בואו נשנה את העולם',
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                        ),
                       ),
                     ),
-                  ),
+                    new FutureBuilder<Widget>(
+                        future: listOfMass(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Widget> text) {
+                          return new SingleChildScrollView(
+                            padding:
+                                new EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: text.data,
+                          );
+                        }),
+                  ],
                 ),
-                Card(
-                  margin: new EdgeInsets.only(
-                      left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 2.3,
-                      child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+            ),
+          ),
+          Card(
+            margin: new EdgeInsets.only(
+                left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  textDirection: TextDirection.rtl,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  // textDirection: TextDirection.rtl,
+                  children: <Widget>[
+                    Container(
+                      //  height: MediaQuery.of(context).size.height / 18,
+                      child: Row(
                         children: [
                           Text(
-                            'אודות גירנפיס',
+                            "עדכונים",
                             style: TextStyle(
-                                fontSize: 20,
                                 fontFamily: 'Assistant',
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
                           ),
                           Spacer(),
                           ImageIcon(
-                            AssetImage("image/petition1.png"),
+                            AssetImage("image/feed1.png"),
                             color: Colors.black,
-                            size: 50,
                             // color: Colors.black,
                           ),
                         ],
                       ),
                     ),
-                  ),
+                    Text(
+                      'דואגים שתהיו מעודכנים',
+                      style: TextStyle(
+                        fontFamily: 'Assistant',
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Container(child: MessagesStream()),
+                    Container(
+                      decoration: kMessageContainerDecoration,
+                      child: button_send(
+                        no_reg: no_reg,
+                      ),
+                    ),
+                  ],
                 ),
-              ]).toList(),
+              ),
             ),
-          ],
-        ),
+          ),
+          Card(
+            margin: new EdgeInsets.only(
+                left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2.3,
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'אודות גירנפיס',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(),
+                    ImageIcon(
+                      AssetImage("image/petition1.png"),
+                      color: Colors.black,
+                      size: 50,
+                      // color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ]).toList(),
       ),
     );
   }

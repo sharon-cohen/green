@@ -6,6 +6,7 @@ import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/evants/update_event.dart';
 import 'package:greenpeace/evants/event_model.dart';
+import 'package:greenpeace/globalfunc.dart';
 final databaseReference = Firestore.instance;
 
 class mass_event extends StatefulWidget {
@@ -96,82 +97,83 @@ class _mass_eventState extends State<mass_event> {
               child: Row(
                 children: [
                   new Text(
-                    "נושא: " + widget.event.type_event,
+                    "נושא: " + "אירוע חדש",
                     style: new TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  new Text(
-                   widget.event.type_event,
-                    style: new TextStyle(fontSize: 20),
-                  ),
+
                 ],
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
             Divider(thickness: 1, color: Colors.black),
             new Align(
-              child: new Text(
-                  widget.event.type_event,
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                widget.event.description,
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-
-
-            new Align(
-              child: new Text(
-                "תאריך",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                widget.event.eventDate.toString(),
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: new Text(
-                "סוג האירוע",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-//            new Align(
-//              child: new Text(
-//                widget.type_event,
-//                style: new TextStyle(fontSize: 15),
-//              ), //so big text
-//              alignment: FractionalOffset.topRight,
-//            ),
-            new Align(
-              child: FlatButton(
-                onPressed: () {
-                  _launchURL(widget.event.whatapp);
-                },
+              child: FittedBox(
                 child: new Text(
-                  "הצרפות לקבוצת whatapp",
-                  style: new TextStyle(fontSize: 30),
+                    widget.event.title,
+
                 ),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
             new Align(
-              child: new Text(
-                widget.event.whatapp,
+              child: FittedBox(
+                child: new Text(
+                  widget.event.description,
+
+                ),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: FittedBox(
+                child: new Text(
+                  "תאריך",
+                  style: new TextStyle(color: Colors.green),
+                ),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: Text(DayConvert(widget.event.eventDate.weekday.toString())+" "+widget.event.eventDate.day.toString()+monthConvert(widget.event.eventDate.month.toString()),
                 style: new TextStyle(fontSize: 15),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
+            new Align(
+              child: FittedBox(
+                child: new Text(
+                  "סוג האירוע",
+                  style: new TextStyle(color: Colors.green),
+                ),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: FittedBox(
+                child: new Text(
+                  widget.event.type_event,
+
+                ),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            new Align(
+              child: FlatButton(
+
+                onPressed: () {
+                  _launchURL(widget.event.whatapp);
+                },
+                child: FittedBox(
+                  child: new Text(
+                    "הצרפות לקבוצת whatapp",
+                    style: new TextStyle(color: Colors.green),
+                  ),
+                ),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+
             new Align(
               child: new Text(
                 "מיקום",
@@ -321,9 +323,10 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
 }
 
 _launchURL(String url) async {
-  url = '$url';
-  if (await canLaunch(url)) {
-    await launch(url);
+  String wazeUrl="https://waze.com/ul?q=";
+  wazeUrl=wazeUrl+url;
+  if (await canLaunch(wazeUrl)) {
+    await launch(wazeUrl);
   } else {
     throw 'Could not launch $url';
   }

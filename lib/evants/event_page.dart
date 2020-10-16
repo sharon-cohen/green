@@ -50,7 +50,7 @@ class EventDetailsPage extends StatelessWidget {
                     ],
                   ),
                 )
-              : null,
+              : Container(),
           SizedBox(height: 10),
           isMeneger
               ? FloatingActionButton(
@@ -139,7 +139,7 @@ class EventDetailsPage extends StatelessWidget {
                     ],
                   ),
                 )
-              : null,
+              : Container(),
         ],
       ),
       body: SingleChildScrollView(
@@ -155,8 +155,7 @@ class EventDetailsPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: [
                   Text(
                     event.title,
@@ -168,13 +167,21 @@ class EventDetailsPage extends StatelessWidget {
                       // color: Colors.green,
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Text('ב- ' + cutTimeString(event.eventDate.toString()),
-                      style: TextStyle(
-                        fontFamily: 'Assistant',
-                        fontWeight: FontWeight.bold,
-                      )),
-                  SizedBox(height: 20),
+
+                FittedBox(
+                  child: Text(DayConvert(event.eventDate.weekday.toString())+" "+event.eventDate.day.toString()+monthConvert(event.eventDate.month.toString()),
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                        )),
+                ),
+                  FittedBox(
+                    child: Text(event.eventDate.hour.toString()+":"+event.eventDate.minute.toString(),
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
                   //SizedBox(height: 20.0),
                   FlatButton(
                       padding: EdgeInsets.all(0),
@@ -182,77 +189,33 @@ class EventDetailsPage extends StatelessWidget {
                         _launchURL(event.whatapp);
                       },
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Image.asset(
                             'image/whatsapp.png',
                             scale: 2,
                           ),
-                          Text('    הצטרף לקבוצת הwhatsapp שלנו',
-                              style: new TextStyle(
-                                  fontFamily: 'Assistant', fontSize: 20)),
+                          FittedBox(
+
+                            child: Text('    הצטרף לקבוצת הwhatsapp שלנו',
+                                style: new TextStyle(
+                                    fontFamily: 'Assistant', )),
+                          ),
                         ],
                       )),
                   SizedBox(height: 20),
-                  Text(
-                    event.description,
-                    style: TextStyle(
-                      fontFamily: 'Assistant',
-                      fontSize: 20,
-                      // color: Colors.green,
+                  FittedBox(
+                    child: Text(
+                      event.description,
+                      style: TextStyle(
+                        fontFamily: 'Assistant',
+
+                        // color: Colors.green,
+                      ),
                     ),
                   ),
 
-                  // isMeneger
-                  //     ? Row(
-                  //         mainAxisAlignment: MainAxisAlignment
-                  //             .center, //Center Row contents horizontally,
-                  //         crossAxisAlignment: CrossAxisAlignment.center,
-                  //         children: [
-                  //           RaisedButton(
-                  //             onPressed: () async {
-                  //               String idevent = await Getevent(event.title);
-                  //               Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                       builder: (context) => updateEventPage(
-                  //                             sender: event.sender,
-                  //                             topic: event.title,
-                  //                             text: event.description,
-                  //                             equipment: event.equipment,
-                  //                             eventDate: event.eventDate,
-                  //                             senderId: event.senderId,
-                  //                             location: event.location,
-                  //                             type_event: event.type_event,
-                  //                             dataid: idevent,
-                  //                           )));
-                  //             },
-                  //             child: const Text('עריכת אירוע',
-                  //                 style: TextStyle(
-                  //                     fontFamily: 'Assistant', fontSize: 20)),
-                  //             color: Colors.lightGreen,
-                  //             textColor: Colors.white,
-                  //           ),
-                  //           SizedBox(
-                  //             width: 40,
-                  //           ),
-                  //           RaisedButton(
-                  //             onPressed: () async {
-                  //               String idevent = await Getevent(event.title);
-                  //               _firestore
-                  //                   .collection("events")
-                  //                   .document(idevent)
-                  //                   .delete();
-                  //               Navigator.pop(context, true);
-                  //             },
-                  //             child: const Text('מחיקת אירוע',
-                  //                 style: TextStyle(
-                  //                     fontFamily: 'Assistant', fontSize: 20)),
-                  //             color: Colors.lightGreen,
-                  //             textColor: Colors.white,
-                  //           ),
-                  //         ],
-                  //       )
-                  //     : Container(),
+
                 ],
               ),
             ),

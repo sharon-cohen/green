@@ -28,8 +28,7 @@ class HotMass extends StatelessWidget {
     } else {
 
       return Container(
-          height: 300,
-          width: 300,
+         
           child: Image.network(report.image, fit: BoxFit.fitWidth));
     }
   }
@@ -142,193 +141,205 @@ class HotMass extends StatelessWidget {
                 child: Container(
                   color: Colors.white,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 1.87,
+                  height: MediaQuery.of(context).size.height / 2,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        new Text(
-                          report.text,
-                          style: new TextStyle(
-                              fontSize: 20, fontFamily: 'Assistant'),
+                        Expanded(
+                         
+                          child: new Text(
+                            report.text,
+                            style: new TextStyle(
+                                fontSize: 20, fontFamily: 'Assistant'),
+                          ),
                         ),
-                        mass(),
+                        Expanded(child: mass()),
                       ],
                     ),
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.white,
+//                  width: MediaQuery.of(context).size.width,
+//                  height: MediaQuery.of(context).size.height / 20,
+                 child:  Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                   children: [
 
-              Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(width: 50),
-                  Container(
-                    //color: Color(int.parse("0xff6ed000")),
-                    width: 100,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Color(int.parse("0xff6ed000")),
-                      //border: Border.all(color: Colors.grey[600])
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FlatButton(
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'image/reply.png',
-                                color: Colors.white,
-                                width: 30,
-                                height: 30,
-                              ),
-                              Text('השב ',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    fontFamily: 'Assistant',
-                                  )),
-                            ],
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddEventPage(
-                                          sender: report.sender,
-                                          senderId: report.senderId,
-                                        )));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 100),
-                  Container(
-                    width: 100,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      //border: Border.all(color: Colors.grey[600]),
-                      color: Colors.black87,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FlatButton(
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'image/delete.png',
-                                color: Colors.white,
-                                width: 30,
-                                height: 30,
-                              ),
-                              Text('מחק',
-                                  style: TextStyle(
-                                    fontFamily: 'Assistant',
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  )),
-                            ],
-                          ),
+                     Container(
+                       //color: Color(int.parse("0xff6ed000")),
 
-                          onPressed: () {
-                            showDialog(
-                                child: new Dialog(
-                                  child: Container(
-                                    width: 100,
-                                    height: 100,
-                                    child: new Column(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        5, 0, 5, 0),
-                                                child:
-                                                    Icon(Icons.delete_forever),
+                       decoration: BoxDecoration(
+                         color: Color(int.parse("0xff6ed000")),
+                         //border: Border.all(color: Colors.grey[600])
+                       ),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                         children: [
+                           FlatButton(
+                             child: Column(
+                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                               children: [
+                                 Container(
+                                   child: Image.asset(
+                                     'image/reply.png',
+                                     color: Colors.white,
+                                     width: 30,
+                                     height: 30,
+                                   ),
+                                 ),
+                                 Text('השב ',
+                                     style: TextStyle(
+                                       fontSize: 20,
+                                       color: Colors.white,
+                                       fontFamily: 'Assistant',
+                                     )),
+                               ],
+                             ),
+                             onPressed: () {
+                               Navigator.push(
+                                   context,
+                                   MaterialPageRoute(
+                                       builder: (context) => AddEventPage(
+                                         sender: report.sender,
+                                         senderId: report.senderId,
+                                       )));
+                             },
+                           ),
+                         ],
+                       ),
+                     ),
 
-                                                // ImageIcon(
-                                                //
-                                                //   AssetImage("image/alert.png"),
-                                                //   color: Colors.black,
-                                                //   // color: Colors.black,
-                                                // ),
-                                              ),
-                                              Text('האם למחוק הודעה זו?',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Assistant',
-                                                    fontSize: 20,
-                                                    color: Colors.black,
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Row(
-                                          children: [
-                                            Spacer(),
-                                            new FlatButton(
-                                              child: new Text("מחק",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Assistant',
-                                                    fontSize: 20,
-                                                    color: Colors.black,
-                                                  )),
-                                              onPressed: () async {
-                                                String idevent =
-                                                    await GetHotMess(
-                                                        report.text,
-                                                        report.sender);
-                                                await _firestore
-                                                    .collection("hotReport")
-                                                    .document(idevent)
-                                                    .delete();
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            new FlatButton(
-                                              child: new Text("בטל",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Assistant',
-                                                    fontSize: 20,
-                                                    color: Colors.black,
-                                                  )),
-                                              onPressed: () {
-                                                Navigator.pop(context, true);
-                                              },
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                context: context);
-                          },
+                     Container(
 
-                          // onPressed: () async {
-                          //   String idevent =
-                          //       await GetHotMess(report.text, report.sender);
-                          //   await _firestore
-                          //       .collection("hotReport")
-                          //       .document(idevent)
-                          //       .delete();
-                          //   Navigator.pop(context);
-                          // },
-                        ),
-                        // SizedBox(width: 200),
-                      ],
-                    ),
-                  ),
-                ],
+                       decoration: BoxDecoration(
+                         //border: Border.all(color: Colors.grey[600]),
+                         color: Colors.black87,
+                       ),
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                         children: [
+                           FlatButton(
+                             child: Column(
+                               children: [
+                                 Image.asset(
+                                   'image/delete.png',
+                                   color: Colors.white,
+                                   width: 30,
+                                   height: 30,
+                                 ),
+                                 Text('מחק',
+                                     style: TextStyle(
+                                       fontFamily: 'Assistant',
+                                       fontSize: 20,
+                                       color: Colors.white,
+                                     )),
+                               ],
+                             ),
+
+                             onPressed: () {
+                               showDialog(
+                                   child: new Dialog(
+                                     child: Container(
+                                       width: 100,
+                                       height: 100,
+                                       child: new Column(
+                                         children: <Widget>[
+                                           Padding(
+                                             padding: const EdgeInsets.all(8.0),
+                                             child: Row(
+                                               children: [
+                                                 Padding(
+                                                   padding:
+                                                   const EdgeInsets.fromLTRB(
+                                                       5, 0, 5, 0),
+                                                   child:
+                                                   Icon(Icons.delete_forever),
+
+                                                   // ImageIcon(
+                                                   //
+                                                   //   AssetImage("image/alert.png"),
+                                                   //   color: Colors.black,
+                                                   //   // color: Colors.black,
+                                                   // ),
+                                                 ),
+                                                 Text('האם למחוק הודעה זו?',
+                                                     style: TextStyle(
+                                                       fontFamily: 'Assistant',
+                                                       fontSize: 20,
+                                                       color: Colors.black,
+                                                     )),
+                                               ],
+                                             ),
+                                           ),
+                                           Spacer(),
+                                           Row(
+                                             children: [
+                                               Spacer(),
+                                               new FlatButton(
+                                                 child: new Text("מחק",
+                                                     style: TextStyle(
+                                                       fontFamily: 'Assistant',
+                                                       fontSize: 20,
+                                                       color: Colors.black,
+                                                     )),
+                                                 onPressed: () async {
+                                                   String idevent =
+                                                   await GetHotMess(
+                                                       report.text,
+                                                       report.sender);
+                                                   await _firestore
+                                                       .collection("hotReport")
+                                                       .document(idevent)
+                                                       .delete();
+                                                   Navigator.pop(context);
+                                                 },
+                                               ),
+                                               new FlatButton(
+                                                 child: new Text("בטל",
+                                                     style: TextStyle(
+                                                       fontFamily: 'Assistant',
+                                                       fontSize: 20,
+                                                       color: Colors.black,
+                                                     )),
+                                                 onPressed: () {
+                                                   Navigator.pop(context, true);
+                                                 },
+                                               ),
+                                             ],
+                                           )
+                                         ],
+                                       ),
+                                     ),
+                                   ),
+                                   context: context);
+                             },
+
+                             // onPressed: () async {
+                             //   String idevent =
+                             //       await GetHotMess(report.text, report.sender);
+                             //   await _firestore
+                             //       .collection("hotReport")
+                             //       .document(idevent)
+                             //       .delete();
+                             //   Navigator.pop(context);
+                             // },
+                           ),
+                           // SizedBox(width: 200),
+                         ],
+                       ),
+                     ),
+                   ],
+                 ),
+                ),
               ),
+
             ],
           ),
         ),

@@ -4,11 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'home/Home.dart';
+import'dart:io' show Platform;
 import 'globalfunc.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'global.dart' as globals;
 import 'package:greenpeace/GetID_DB/getid.dart';
 //final _firestore = Firestore.instance;
+enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 FirebaseUser loggedInUser;
 final databaseReference = Firestore.instance;
 
@@ -123,15 +125,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   });
                   try {
                     bool existName =await CheckNameUserExist(name);
-                    if(existName==false) {
+                    print("sdfsd");
+
+
                       final newUser = await _auth
                           .createUserWithEmailAndPassword(
                           email: email, password: password);
+                    print("sdfsd");
                       if (newUser != null) {
                         FirebaseUser user = newUser.user;
                         String t = user.uid;
                         databaseReference
-                            .collection('user')
+                            .collection('users')
                             .document(t)
                             .updateData({'name': name});
                         globals.name = name;
@@ -142,17 +147,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           print(globals.isMeneger);
                           await databaseservice(uid: user.uid)
                               .updateUserData(name, 'menager');
+                          globals.no_reg = false;
                           Navigator.pushNamed(
                               context, BottomNavigationBarController.id,
                               arguments: ScreenArguments_m(t, name, 'menager'));
                         } else {
+                          globals.no_reg = false;
                           globals.isMeneger = false;
                           await databaseservice(uid: user.uid)
                               .updateUserData(name, 'regular');
                           Navigator.pushNamed(
                               context, BottomNavigationBarController.id,
                               arguments: ScreenArguments(t, name, 'regular'));
-                        }
 
 //                      var document = await Firestore.instance.collection('users').document('ENsyb4kmVkUbDvNS8ILNARKN49m1'
 //                      ).get();
@@ -171,7 +177,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       });
                     }
                   } catch (e) {
-                    print('error');
+
+//                    setState(() {
+//                      showSpinner = false;
+//                    });
+//                    ExsistMailhowAlertDialog(context);
+                    authProblems errorType;
+                    if (Platform.isAndroid) {
+                      switch (e.message) {
+                        case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+                          errorType = authProblems.UserNotFound;
+                          break;
+                        case 'The password is invalid or the user does not have a password.':
+                          errorType = authProblems.PasswordNotValid;
+                          break;
+                        case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
+                          errorType = authProblems.NetworkError;
+                          break;
+                      // ...
+                        default:
+
+                      }
+                    } else if (Platform.isIOS) {
+                      switch (e.code) {
+                        case 'Error 17011':
+                          errorType = authProblems.UserNotFound;
+                          break;
+                        case 'Error 17009':
+                          errorType = authProblems.PasswordNotValid;
+                          break;
+                        case 'Error 17020':
+                          errorType = authProblems.NetworkError;
+                          break;
+                      // ...
+                        default:
+                          print('Case ${e.message} is not yet implemented');
+                      }
+                    }
+                    setState(() {
+                      showSpinner = false;
+                    });
+                    errorMailhowAlertDialog(context,errorType.toString());
                   }
 
                 },
@@ -271,6 +317,33 @@ showAlertDialogRegisterName(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("שם משתמש זה קיים אנא בחר בשם אחר"),
+
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+errorMailhowAlertDialog(BuildContext context,String error) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("חזור"),
+    onPressed: () {
+      Navigator.pop(context, true);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text(error+"שגיאה "),
 
     actions: [
       okButton,

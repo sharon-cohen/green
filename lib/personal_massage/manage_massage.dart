@@ -39,99 +39,92 @@ class AllmessState extends State<Allmess> {
 
   Future<Widget> listOfMass() async {
     if (globals.isMeneger == true) {
-      return Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              // new Align(
-              //   child: new Text(
-              //     "דיווחים סביבתיים",
-              //     style: new TextStyle(fontSize: 25, color: Colors.redAccent),
-              //   ), //so big text
-              //   alignment: FractionalOffset.topRight,
-              // ),
-              Row(
-                children: [
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
 
-                  Spacer(),
-                  Text(
-                    'הודעות',
-                    style: TextStyle(
-                        fontFamily: 'Assistant',
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),
-                  ),
-                  Spacer(),
-                ],
-              ),
-              new Align(
-                child: new Text(
-                  "דיווחים סביבתיים",
-                  style: new TextStyle(
-                      fontFamily: 'Assistant',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.redAccent),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              HotStream(),
-              // new Align(
-              //   child: new Text(
-              //     "דיווחים סביבתיים",
-              //     style: new TextStyle(
-              //         fontFamily: 'Assistant',
-              //         fontWeight: FontWeight.bold,
-              //         fontSize: 25,
-              //         color: Colors.redAccent),
-              //   ), //so big text
-              //   alignment: FractionalOffset.topRight,
-              // ),
-              //todo check if good
+            Row(
+              children: [
 
-              new Align(
-                child: new Text(
-                  "הודעות",
-                  style: new TextStyle(
+                Spacer(),
+                Text(
+                  'הודעות',
+                  style: TextStyle(
                       fontFamily: 'Assistant',
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.black),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              messMenager(),
-              AllUserlMassStream(),
-              new Align(
-                child: new Text(
-                  "דיווחי צ'אט",
-                  style: new TextStyle(
-                      fontFamily: 'Assistant',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.black),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              reportStream(),
+                      fontSize: 30),
+                ),
+                Spacer(),
+              ],
+            ),
+            new Align(
+              child: new Text(
+                "דיווחים סביבתיים",
+                style: new TextStyle(
+                    fontFamily: 'Assistant',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.redAccent),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            HotStream(),
+            // new Align(
+            //   child: new Text(
+            //     "דיווחים סביבתיים",
+            //     style: new TextStyle(
+            //         fontFamily: 'Assistant',
+            //         fontWeight: FontWeight.bold,
+            //         fontSize: 25,
+            //         color: Colors.redAccent),
+            //   ), //so big text
+            //   alignment: FractionalOffset.topRight,
+            // ),
+            //todo check if good
 
-              SizedBox(height: 10),
-              new Align(
-                child: new Text(
-                  "אירועים חדשים לאישור",
-                  style: new TextStyle(
-                      fontFamily: 'Assistant',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Colors.black),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
-              ),
-              eventStream(),
-              SizedBox(height: 10),
-            ],
-          ),
+            new Align(
+              child: new Text(
+                "הודעות",
+                style: new TextStyle(
+                    fontFamily: 'Assistant',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.black),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            messMenager(),
+            AllUserlMassStream(),
+            new Align(
+              child: new Text(
+                "דיווחי צ'אט",
+                style: new TextStyle(
+                    fontFamily: 'Assistant',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.black),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            reportStream(),
+
+            SizedBox(height: 10),
+            new Align(
+              child: new Text(
+                "אירועים חדשים לאישור",
+                style: new TextStyle(
+                    fontFamily: 'Assistant',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.black),
+              ), //so big text
+              alignment: FractionalOffset.topRight,
+            ),
+            eventStream(),
+            SizedBox(height: 10),
+          ],
         ),
       );
     } else {
@@ -213,19 +206,10 @@ class AllmessState extends State<Allmess> {
           future: listOfMass(),
           builder: (BuildContext context, AsyncSnapshot<Widget> text) {
             return globals.isMeneger
-                ? SingleChildScrollView(
-                    //todo check if ok
-                    padding: new EdgeInsets.fromLTRB(8, 0, 8, 8),
-                    child: text.data,
-                  )
-                : SingleChildScrollView(
-                    //padding: new EdgeInsets.all(8.0),
-                    //todo check if ok
-                    padding: new EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: text.data,
-                  );
+                ? Container(child: text.data)
+                : Container(child: text.data);
 
-            ;
+
           }),
     );
   }
@@ -375,7 +359,7 @@ class ReportsContainer extends StatelessWidget {
           ),
 
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-          subtitle: Text(cutTimeString(report.time.toString())),
+          subtitle: Text(DayConvert(report.time.weekday.toString())+" "+report.time.day.toString()+monthConvert(report.time.month.toString())),
           trailing: FlatButton(
             padding: const EdgeInsets.all(0.0),
             child: Container(
@@ -490,7 +474,8 @@ class eventContainer extends StatelessWidget {
           subtitle: Row(
             children: <Widget>[
               Flexible(
-                child: Text(cutTimeString(this.event.eventDate.toString())),
+          child: Text(DayConvert(event.time.weekday.toString())+" "+event.time.day.toString()+monthConvert(event.time.month.toString()),
+              ),
               ),
             ],
           ),

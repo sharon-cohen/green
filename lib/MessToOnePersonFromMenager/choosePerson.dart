@@ -73,6 +73,17 @@ class _userStream extends State<userStream> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("למי תרצה לשלוח"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.arrow_back_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          )
+        ],
       ),
       body: !isLoading? Center(child: CircularProgressIndicator()):Container(
         child: Column(

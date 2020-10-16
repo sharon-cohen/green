@@ -3,7 +3,8 @@ import 'package:greenpeace/evants/event_firestore_service.dart';
 import 'event_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:greenpeace/evants/event_page.dart';
-
+import 'package:greenpeace/Component/Alret_Dealog.dart';
+import 'package:greenpeace/global.dart' as globals;
 class Calender extends StatefulWidget {
   Calender({Key key}) : super(key: key);
   static const String id = 'Calender';
@@ -43,6 +44,17 @@ class CalenderState extends State<Calender> {
       appBar: AppBar(
           backgroundColor: Colors.white,
           title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back_outlined,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            )
+          ],
           automaticallyImplyLeading: false),
       body: Container(
         margin: const EdgeInsets.all(30),
@@ -132,7 +144,14 @@ class CalenderState extends State<Calender> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(int.parse("0xff6ed000")),
         child: Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, 'new_event'),
+        onPressed: (){
+          if (globals.no_reg == true) {
+            GoregisterAlertDialog(context);
+          }
+          else {
+            Navigator.pushNamed(context, 'new_event');
+          }
+        }
       ),
     );
   }

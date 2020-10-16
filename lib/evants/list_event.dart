@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:greenpeace/streem_firestore/event_stream.dart';
 import 'package:greenpeace/Footer/footer.dart';
-
+import 'package:greenpeace/global.dart' as globals;
+import 'package:greenpeace/Component/Alret_Dealog.dart';
 class List_event extends StatefulWidget {
   List_event({Key key}) : super(key: key);
   static const String id = "All_event";
@@ -45,8 +46,15 @@ class _List_event extends State<List_event> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(int.parse("0xff6ed000")),
         child: Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, 'new_event'),
-      ),
+        onPressed: () {
+          if (globals.no_reg == true) {
+            GoregisterAlertDialog(context);
+          }
+          else {
+            Navigator.pushNamed(context, 'new_event');
+          }
+        }
+          ),
     );
   }
 }

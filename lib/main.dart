@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'welcom.dart';
@@ -39,12 +38,11 @@ class MyApp extends StatelessWidget {
         WelcomeScreen.id: (context) => WelcomeScreen(analytics: analytics, observer: observer),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
-       Home.id: (context) => Home((ModalRoute.of(context).settings.arguments),),
-     BottomNavigationBarController.id :(context)=> BottomNavigationBarController(2,1),
+        Home.id: (context) => Home((ModalRoute.of(context).settings.arguments),),
+        BottomNavigationBarController.id :(context)=> BottomNavigationBarController(2,1),
 
       },
     );
   }
 
 }
-

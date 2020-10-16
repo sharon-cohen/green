@@ -67,8 +67,17 @@ class MessageBubble extends StatelessWidget {
                         ),
                       ),
                 SizedBox(height: 3),
-                Text(
-                  text,
+                text!=null?Text(
+                  text.toString(),
+                  style: TextStyle(
+                    fontFamily: 'Assistant',
+                    // fontSize: 15,
+                    // color: Colors.black,
+                    color: Colors.black,
+                    fontSize: 14,
+                  ),
+                ):Text(
+                  "",
                   style: TextStyle(
                     fontFamily: 'Assistant',
                     // fontSize: 15,

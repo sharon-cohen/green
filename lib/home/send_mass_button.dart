@@ -83,8 +83,7 @@ class _button_sendState extends State<button_send> {
     print('wiget.reg');
     mass.clear();
 
-    print(widget.no_reg);
-    print(globals.no_reg);
+
     if (try_send == false) {
       //todo check if ok
       mass.add(

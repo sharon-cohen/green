@@ -89,7 +89,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 globals.no_reg = true;
                 Navigator.pushNamed(context, BottomNavigationBarController.id,
                     arguments:
-                        ScreenArguments_m('d', 'no_register', 'no_register'));
+                    ScreenArguments_m('d', 'no_register', 'no_register'));
               }),
         );
         button_in.add(
@@ -147,7 +147,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   globals.no_reg = true;
                   Navigator.pushNamed(context, BottomNavigationBarController.id,
                       arguments:
-                          ScreenArguments_m('d', 'no_register', 'no_register'));
+                      ScreenArguments_m('d', 'no_register', 'no_register'));
                 }),
           );
           button_in.add(
@@ -171,13 +171,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             !isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: button_in,
-                    ),
-                  ),
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: button_in,
+              ),
+            ),
           ],
         ),
       ),

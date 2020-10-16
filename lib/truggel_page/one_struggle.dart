@@ -113,7 +113,7 @@ class _one_struggle extends State<one_struggle> {
 
                         SocialShare.shareFacebookStory(image.path,
                             "#ffffff", "#000000", "https://google.com",
-                            appId: "9753591s76210597")
+                            appId: "975359176210597")
                             .then((data) {
                           print(data);
 

@@ -82,7 +82,7 @@ class create_struggle1State extends State<create_struggle1> {
   }
 
   Future<String> uploadImageToFirebase(BuildContext context) async {
-    print("fsdfs");
+   
     if (_imageFile.path.isNotEmpty) {
       fileName = basename(_imageFile.path);
     }
@@ -131,14 +131,18 @@ class create_struggle1State extends State<create_struggle1> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 30),
-                    Text(
-                      'יצירת מאבק חדש',
-                      style: TextStyle(
-                          fontFamily: 'Assistant',
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30),
+
+                    FittedBox(
+                      fit:BoxFit.fitWidth,
+                      child: Text(
+                        'יצירת מאבק חדש',
+                        style: TextStyle(
+                            fontFamily: 'Assistant',
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                      ),
                     ),
                   ],
                 ),

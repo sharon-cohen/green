@@ -98,7 +98,7 @@ class HotContainer extends StatelessWidget {
                 fontFamily: 'Assistant'),
           ),
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-          subtitle: Text(cutTimeString(report.time.toString()),
+          subtitle:  Text(DayConvert(report.time.weekday.toString())+" "+report.time.day.toString()+monthConvert(report.time.month.toString()),
               overflow: TextOverflow.ellipsis),
           trailing: FlatButton(
             padding: const EdgeInsets.all(0.0),

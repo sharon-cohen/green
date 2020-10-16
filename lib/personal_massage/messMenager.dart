@@ -96,8 +96,11 @@ class personalMessContainer extends StatelessWidget {
                     fontSize: 15),
               ),
               // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-              subtitle: Text(cutTimeString(mess.time.toString()),
-                  overflow: TextOverflow.ellipsis),
+              subtitle: FittedBox(
+
+                child: Text(DayConvert(mess.time.weekday.toString())+" "+mess.time.day.toString()+monthConvert(mess.time.month.toString()),
+                    overflow: TextOverflow.ellipsis),
+              ),
               trailing: FlatButton(
                 padding: const EdgeInsets.all(0.0),
                 child: Container(

@@ -36,7 +36,17 @@ class _FrameWeb  extends State<FrameWeb > {
       onWillPop: () => _onWillPop(context),
       child: Scaffold(
         appBar: AppBar(
-
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.clear,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            )
+          ],
           backgroundColor: Colors.red,
         ),
         body: WebView(

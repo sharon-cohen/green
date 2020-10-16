@@ -42,7 +42,7 @@ class _massState extends State<mass> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      SizedBox(width: 130),
+
                       Text(
                         "פניות",
                         style: new TextStyle(
@@ -51,7 +51,7 @@ class _massState extends State<mass> {
                           fontFamily: 'Assistant',
                         ),
                       ),
-                      SizedBox(width: 100),
+                      Spacer(),
                       IconButton(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -121,8 +121,6 @@ class _massState extends State<mass> {
                   ),
                 ),
               ),
-
-              // Divider(thickness: 1, color: Colors.black),
               Padding(
                 //padding: const EdgeInsets.all(8.0),
                 padding: EdgeInsets.fromLTRB(8, 1, 8, 8),
@@ -142,190 +140,200 @@ class _massState extends State<mass> {
                   ),
                 ),
               ),
-
-              Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(width: 50),
-                  Container(
-                    //color: Color(int.parse("0xff6ed000")),
-                    width: 100,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Color(int.parse("0xff6ed000")),
-                      //border: Border.all(color: Colors.grey[600])
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FlatButton(
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'image/reply.png',
-                                color: Colors.white,
-                                width: 30,
-                                height: 30,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                        child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              //color: Color(int.parse("0xff6ed000")),
+                              decoration: BoxDecoration(
+                                color: Color(int.parse("0xff6ed000")),
+                                //border: Border.all(color: Colors.grey[600])
                               ),
-                              Text('השב ',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    fontFamily: 'Assistant',
-                                  )),
-                            ],
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddEventPage(
-                                          sender: widget.sender,
-                                          senderId: widget.senderId,
-                                        )));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 100),
-                  Container(
-                    width: 100,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      //border: Border.all(color: Colors.grey[600]),
-                      color: Colors.black87,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FlatButton(
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'image/delete.png',
-                                color: Colors.white,
-                                width: 30,
-                                height: 30,
-                              ),
-                              Text('מחק',
-                                  style: TextStyle(
-                                    fontFamily: 'Assistant',
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  )),
-                            ],
-                          ),
-                          onPressed: () {
-                            showDialog(
-                                child: new Dialog(
-                                  child: Container(
-                                    width: 100,
-                                    height: 100,
-                                    child: new Column(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        5, 0, 5, 0),
-                                                child:
-                                                    Icon(Icons.delete_forever),
-                                              ),
-                                              Text('האם למחוק הודעה זו?',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Assistant',
-                                                    fontSize: 20,
-                                                    color: Colors.black,
-                                                  )),
-                                            ],
-                                          ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FlatButton(
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'image/reply.png',
+                                          color: Colors.white,
+                                          width: 30,
+                                          height: 30,
                                         ),
-                                        Spacer(),
-                                        Row(
-                                          children: [
-                                            Spacer(),
-                                            new FlatButton(
-                                              child: new Text("מחק",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Assistant',
-                                                    fontSize: 20,
-                                                    color: Colors.black,
-                                                  )),
-                                              onPressed: () async {
-                                                if (globals.isMeneger) {
-                                                  String idevent =
-                                                      await GetMenagerMess(
-                                                          widget.text,
-                                                          widget.sender);
-                                                  await _firestore
-                                                      .collection(
-                                                          "messageMenager")
-                                                      .document(idevent)
-                                                      .delete();
-                                                  Navigator.pop(context);
-                                                } else {
-                                                  String idevent =
-                                                      await GetPersonalMess(
-                                                          widget.text,
-                                                          widget.sender);
-                                                  await _firestore
-                                                      .collection(
-                                                          "personalMess")
-                                                      .document(idevent)
-                                                      .delete();
-                                                  Navigator.pop(context);
-                                                }
-                                              },
-                                            ),
-                                            new FlatButton(
-                                              child: new Text("בטל",
-                                                  style: TextStyle(
-                                                    fontFamily: 'Assistant',
-                                                    fontSize: 20,
-                                                    color: Colors.black,
-                                                  )),
-                                              onPressed: () {
-                                                Navigator.pop(context, true);
-                                              },
-                                            ),
-                                          ],
-                                        )
+                                        Text('השב ',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                              fontFamily: 'Assistant',
+                                            )),
                                       ],
                                     ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => AddEventPage(
+                                                sender: widget.sender,
+                                                senderId: widget.senderId,
+                                              )));
+                                    },
                                   ),
-                                ),
-                                context: context);
-                          },
-                          // onPressed: () async {
-                          //   if (globals.isMeneger) {
-                          //     String idevent = await GetMenagerMess(
-                          //         widget.text, widget.sender);
-                          //     await _firestore
-                          //         .collection("messageMenager")
-                          //         .document(idevent)
-                          //         .delete();
-                          //     Navigator.pop(context);
-                          //   } else {
-                          //     String idevent = await GetPersonalMess(
-                          //         widget.text, widget.sender);
-                          //     await _firestore
-                          //         .collection("personalMess")
-                          //         .document(idevent)
-                          //         .delete();
-                          //     Navigator.pop(context);
-                          //   }
-                          // },
+                                ],
+                              ),
+                            ),
+                            Container(
+
+                              decoration: BoxDecoration(
+                                //border: Border.all(color: Colors.grey[600]),
+                                color: Colors.black87,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FlatButton(
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          'image/delete.png',
+                                          color: Colors.white,
+                                          width: 30,
+                                          height: 30,
+                                        ),
+                                        Text('מחק',
+                                            style: TextStyle(
+                                              fontFamily: 'Assistant',
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                            )),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      showDialog(
+                                          child: new Dialog(
+                                            child: Container(
+                                              width: 100,
+                                              height: 100,
+                                              child: new Column(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                          const EdgeInsets.fromLTRB(
+                                                              5, 0, 5, 0),
+                                                          child:
+                                                          Icon(Icons.delete_forever),
+                                                        ),
+                                                        Text('האם למחוק הודעה זו?',
+                                                            style: TextStyle(
+                                                              fontFamily: 'Assistant',
+                                                              fontSize: 20,
+                                                              color: Colors.black,
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  Row(
+                                                    children: [
+                                                      Spacer(),
+                                                      new FlatButton(
+                                                        child: new Text("מחק",
+                                                            style: TextStyle(
+                                                              fontFamily: 'Assistant',
+                                                              fontSize: 20,
+                                                              color: Colors.black,
+                                                            )),
+                                                        onPressed: () async {
+                                                          if (globals.isMeneger) {
+                                                            String idevent =
+                                                            await GetMenagerMess(
+                                                                widget.text,
+                                                                widget.sender);
+                                                            await _firestore
+                                                                .collection(
+                                                                "messageMenager")
+                                                                .document(idevent)
+                                                                .delete();
+                                                            Navigator.pop(context);
+                                                          } else {
+                                                            String idevent =
+                                                            await GetPersonalMess(
+                                                                widget.text,
+                                                                widget.sender);
+                                                            await _firestore
+                                                                .collection(
+                                                                "personalMess")
+                                                                .document(idevent)
+                                                                .delete();
+                                                            Navigator.pop(context);
+                                                          }
+                                                        },
+                                                      ),
+                                                      new FlatButton(
+                                                        child: new Text("בטל",
+                                                            style: TextStyle(
+                                                              fontFamily: 'Assistant',
+                                                              fontSize: 20,
+                                                              color: Colors.black,
+                                                            )),
+                                                        onPressed: () {
+                                                          Navigator.pop(context, true);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          context: context);
+                                    },
+                                    // onPressed: () async {
+                                    //   if (globals.isMeneger) {
+                                    //     String idevent = await GetMenagerMess(
+                                    //         widget.text, widget.sender);
+                                    //     await _firestore
+                                    //         .collection("messageMenager")
+                                    //         .document(idevent)
+                                    //         .delete();
+                                    //     Navigator.pop(context);
+                                    //   } else {
+                                    //     String idevent = await GetPersonalMess(
+                                    //         widget.text, widget.sender);
+                                    //     await _firestore
+                                    //         .collection("personalMess")
+                                    //         .document(idevent)
+                                    //         .delete();
+                                    //     Navigator.pop(context);
+                                    //   }
+                                    // },
+                                  ),
+                                  // SizedBox(width: 200),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        // SizedBox(width: 200),
-                      ],
-                    ),
+                      ),
+
+                    ],
                   ),
-                ],
+                ),
               ),
+
             ],
           ),
         ),

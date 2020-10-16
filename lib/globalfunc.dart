@@ -137,17 +137,68 @@ String getimageString(String type) {
   }
 }
 
-String cutTimeString(String time) {
-  String res = "";
-  for (int i = 0; i < time.length; i++) {
-    if (time[i] == '.') {
-      res = time.substring(0, i);
-      for (int j = i; j < time.length; j++) {
-        if (time[j] == ' ') {
-          res = res + time.substring(j);
-        }
-      }
-    }
+
+String DayConvert(String day){
+  String res="";
+  if(day=="1"){
+    res="יום א,";
   }
+  if(day=="2"){
+    res="יום ב,";
+  }
+  if(day=="3"){
+    res="יום ג,";
+  }
+  if(day=="4"){
+    res="יום ד,";
+  }
+  if(day=="5"){
+    res="יום ה,";
+  }
+  if(day=="6"){
+    res="יום ו,";
+  }if(day=="7"){
+    res="יום שבת,";
+  }
+return res;
+}
+String monthConvert(String val){
+  String res="";
+  if(val=="1"){
+    res="-ינואר";
+  }
+  if(val=="2"){
+    res="-פבואר";
+  }
+  if(val=="3"){
+    res="-מרץ";
+  }
+  if(val=="4"){
+    res="-אפריל";
+  }
+  if(val=="5"){
+    res="-מאי";
+  }
+  if(val=="6"){
+    res="-יוני";
+  }if(val=="7"){
+    res="-יולי";
+  }
+  if(val=="8"){
+    res="-אוגוסט";
+  }
+  if(val=="9"){
+    res="-ספטמבר";
+  }
+  if(val=="10"){
+    res="-אוקטובר";
+  }
+  if(val=="11"){
+    res="-נובמבר";
+  }
+  if(val=="12"){
+    res="-דצמבר";
+  }
+
   return res;
 }

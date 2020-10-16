@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:greenpeace/register.dart';
 import 'package:greenpeace/globalfunc.dart';
 
 class DialogUtils {
@@ -147,4 +147,40 @@ class DialogUtils {
           );
         });
   }
+}
+GoregisterAlertDialog(BuildContext context) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("לך להירשם"),
+    onPressed: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => RegistrationScreen ()));
+    },
+  );
+  Widget Later = FlatButton(
+    child: Text("אחר כך"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: FittedBox(child:
+    Text("בשביל לבצע פעולה זאת עלייך להירשם")),
+
+    actions: [
+      okButton,
+      Later,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
