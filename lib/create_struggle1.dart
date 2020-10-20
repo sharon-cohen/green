@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:greenpeace/Footer/footer.dart';
 
 final _firestore = Firestore.instance;
@@ -83,9 +84,9 @@ class create_struggle1State extends State<create_struggle1> {
 
   Future<String> uploadImageToFirebase(BuildContext context) async {
    
-    if (_imageFile.path.isNotEmpty) {
+
       fileName = basename(_imageFile.path);
-    }
+
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
@@ -325,13 +326,8 @@ class create_struggle1State extends State<create_struggle1> {
                       color: Color(int.parse("0xff6ed000")),
                       child: MaterialButton(
                         onPressed: () async {
-
-                         // await uploadImageToFirebase(context);
-
-                          print(fileUrl);
-                          if (_formKey.currentState.validate()&&fileUrl!="") {
-
-
+                         bool checkExistNameStruggle=await CheckNameStruggleExist(_title.text);
+                          if (_formKey.currentState.validate()&&_imageFile!=null&& !checkExistNameStruggle) {
                             setState(() {
                               processing = true;
                             });
@@ -348,14 +344,17 @@ class create_struggle1State extends State<create_struggle1> {
                             setState(() {
                               processing = false;
                             });
-                            showAlertDialogStruggle(context);
+                            showAlertDialogStruggle(context,"המאבק נוצר בהצלחה");
                           } else {
-                            setState(() {
-                              imageColorTitle = Colors.red;
-                            });
-                          }
 
-                          //successshowAlertDialog(context);
+                            if(_imageFile==null){
+                              showAlertDialogStruggle(context,"חובה לצרף תמונה למאבק");
+                            }
+                            if(checkExistNameStruggle){
+                              showAlertDialogStruggle(context,"שם שבחרת למאבק כבר קיים במערכת אנא בחר בשם אחר");
+                            }
+
+                          }
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -396,23 +395,28 @@ class Data {
   Data({this.dropdownValue});
 }
 
-showAlertDialogStruggle(BuildContext context) {
+showAlertDialogStruggle(BuildContext context,String Mess) {
   // set up the button
   Widget okButton = FlatButton(
     child: Text("OK"),
     onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => BottomNavigationBarController(2, 1)),
-      );
+      if(Mess=="המאבק נוצר בהצלחה"){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BottomNavigationBarController(2, 1)),
+        );
+      }
+      else{
+        Navigator.pop(context, true);
+      }
     },
   );
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("seccses"),
-    content: Text("seccses"),
+    title: Mess!="המאבק נוצר בהצלחה"? Text("שגיאה"):Text("מאבק חדש נוצר"),
+    content: Text(Mess),
     actions: [
       okButton,
     ],

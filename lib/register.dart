@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import'dart:io' show Platform;
+import 'dart:io' show Platform;
 import 'globalfunc.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'global.dart' as globals;
 import 'package:greenpeace/GetID_DB/getid.dart';
+
 final _firestore = Firestore.instance;
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 FirebaseUser loggedInUser;
@@ -123,16 +124,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     showSpinner = true;
                   });
                   try {
-                    bool existName =await CheckNameUserExist(name);
-                      final newUser = await _auth
-                          .createUserWithEmailAndPassword(
-                          email: email, password: password);
+                    bool existName = await CheckNameUserExist(name);
+                    if (!existName) {
+                      final newUser =
+                          await _auth.createUserWithEmailAndPassword(
+                              email: email, password: password);
 
                       if (newUser != null) {
                         print("get in");
                         FirebaseUser user = newUser.user;
                         String t = user.uid;
-
 
                         globals.name = name;
                         bool menag = await doesNameAlreadyExist(email);
@@ -140,11 +141,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         if (menag == true) {
                           globals.isMeneger = true;
                           print(globals.isMeneger);
-                          await _firestore.collection("users").document(t).setData({
+                          await _firestore
+                              .collection("users")
+                              .document(t)
+                              .setData({
                             "name": name,
                             "role": "menager",
-                            "email":email,
-
+                            "email": email,
                           });
 
                           globals.no_reg = false;
@@ -157,34 +160,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         } else {
                           globals.no_reg = false;
                           globals.isMeneger = false;
-                          await _firestore.collection("users").document(t).setData({
+                          await _firestore
+                              .collection("users")
+                              .document(t)
+                              .setData({
                             "name": name,
                             "role": "regular",
-                            "email":email,
-                            "personalMessId":FieldValue.arrayUnion(['']),
-                            "personalMessIdDeleted":FieldValue.arrayUnion(['']),
+                            "email": email,
+                            "personalMessId": FieldValue.arrayUnion(['']),
+                            "personalMessIdDeleted":
+                                FieldValue.arrayUnion(['']),
                           });
                           setState(() {
                             showSpinner = false;
                           });
                           Navigator.pushNamed(
                               context, BottomNavigationBarController.id);
+                        }
 
+                        globals.name = name;
+                        globals.UserId = t;
+                        globals.emailUser = email;
+                      } else {
+                        print("error new user");
+                        showAlertDialogRegisterName(context);
+                        setState(() {
+                          showSpinner = false;
+                        });
                       }
-
-                      globals.name=name;
-                        globals.UserId=t;
-                        globals.emailUser=email;
-                    }
-                      else{
-                     print("error new user");
-                      showAlertDialogRegisterName(context);
+                    } else {
                       setState(() {
                         showSpinner = false;
                       });
+                      errorMailhowAlertDialog(
+                          context, "שם משתמש זה כבר קיים במערכת ");
                     }
                   } catch (e) {
-
 //                    setState(() {
 //                      showSpinner = false;
 //                    });
@@ -201,9 +212,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
                           errorType = authProblems.NetworkError;
                           break;
-                      // ...
+                        // ...
                         default:
-
                       }
                     } else if (Platform.isIOS) {
                       switch (e.code) {
@@ -216,7 +226,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         case 'Error 17020':
                           errorType = authProblems.NetworkError;
                           break;
-                      // ...
+                        // ...
                         default:
                           print('Case ${e.message} is not yet implemented');
                       }
@@ -224,9 +234,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     setState(() {
                       showSpinner = false;
                     });
-                    errorMailhowAlertDialog(context,errorType.toString());
+                    errorMailhowAlertDialog(context, errorType.toString());
                   }
-
                 },
               ),
             ],
@@ -312,6 +321,7 @@ Future<bool> doesNameAlreadyExist(String email) async {
   final List<DocumentSnapshot> documents = result.documents;
   return documents.length == 1;
 }
+
 showAlertDialogRegisterName(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
@@ -324,7 +334,6 @@ showAlertDialogRegisterName(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("שם משתמש זה קיים אנא בחר בשם אחר"),
-
     actions: [
       okButton,
     ],
@@ -339,7 +348,7 @@ showAlertDialogRegisterName(BuildContext context) {
   );
 }
 
-errorMailhowAlertDialog(BuildContext context,String error) {
+errorMailhowAlertDialog(BuildContext context, String error) {
   // set up the button
   Widget okButton = FlatButton(
     child: Text("חזור"),
@@ -350,8 +359,7 @@ errorMailhowAlertDialog(BuildContext context,String error) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text(error+"שגיאה "),
-
+    title: Text(error + "שגיאה "),
     actions: [
       okButton,
     ],

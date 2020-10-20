@@ -160,7 +160,6 @@ Future<String> GetStrugle(String name) async {
 
 
 }
-
 Future<bool> CheckNameUserExist(String name) async {
   final QuerySnapshot result = await Firestore.instance
       .collection('users')
@@ -173,6 +172,30 @@ Future<bool> CheckNameUserExist(String name) async {
   else
     return false;
   }
+Future<bool> CheckNameStruggleExist(String name) async {
+  final QuerySnapshot result = await Firestore.instance
+      .collection('struggle')
+      .where('name', isEqualTo: name)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return true;
+  else
+    return false;
+}
+Future<bool> CheckNameEventExist(String name) async {
+  final QuerySnapshot result = await Firestore.instance
+      .collection('events')
+      .where('title', isEqualTo: name)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return true;
+  else
+    return false;
+}
 Future<String>Getuser(String name)async{
   final QuerySnapshot result = await Firestore.instance
       .collection('users')

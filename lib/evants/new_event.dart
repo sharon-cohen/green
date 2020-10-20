@@ -1,5 +1,6 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:intl/intl.dart';
 import 'event_model.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,6 @@ class _newEventPage extends State<newEventPage> {
   TextEditingController _description;
   TextEditingController _location;
   TextEditingController _whatapp;
-  //final format = DateFormat("yyyy-MM-dd HH:mm");
   final format = DateFormat("dd-MM-yyyy HH:mm");
   final initialValue = DateTime.now();
   final createDateEvent = DateTime.now();
@@ -321,13 +321,6 @@ class _newEventPage extends State<newEventPage> {
                 ],
               ),
 
-//           Padding(
-//                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//                child: TruggleStream(page_call:'new_event'),
-//             ),
-
-              //const SizedBox(height: 10.0),
-
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
@@ -338,7 +331,8 @@ class _newEventPage extends State<newEventPage> {
                   //borderRadius: BorderRadius.circular(30.0),
                   child: MaterialButton(
                     onPressed: () async {
-                      if (_location.text!=""&&_description.text!=""&&_title.text!=""&&_whatapp.text!="") {
+                      bool checkExistNameEvent=await CheckNameEventExist(_title.text);
+                      if (_location.text!=""&&_description.text!=""&&_title.text!=""&&_whatapp.text!=""&&!checkExistNameEvent) {
                         setState(() {
                           processing = true;
                         });
@@ -373,10 +367,15 @@ class _newEventPage extends State<newEventPage> {
                         setState(() {
                           processing = false;
                         });
-                        successshowAlertDialog(context);
+                        AlertDialogCreateEvent(context,"האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים");
                       }
                         else{
-                          errorhowAlertDialog(context);
+                         if(checkExistNameEvent==true){
+                           AlertDialogCreateEvent(context,"שם אירוע זה כבר קיים במערכת אנא בחר בשם אחר");
+                         }
+                          else{
+                           AlertDialogCreateEvent(context,"חובה למלא את כל השדות");
+                         }
                       }
                     },
                     child: Row(
@@ -425,50 +424,21 @@ class Data {
   Data({this.dropdownValue});
 }
 
-successshowAlertDialog(BuildContext context) {
-  // set up the button
-  Widget okButton = FlatButton(
-    child: Text("אישור"),
-    onPressed: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BottomNavigationBarController(
-                3,
-                3,
-              )));
-    },
-  );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("האירוע נוצר בהצלחה"),
-    content: Text("נשלח למנהלים לאישור תקבל עדכון בקרוב"),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-errorhowAlertDialog(BuildContext context) {
+AlertDialogCreateEvent(BuildContext context, String Mess) {
   // set up the button
   Widget okButton = FlatButton(
     child: Text("אישור"),
     onPressed: () {
       Navigator.pop(context, true);
+     if(Mess=="האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים")
+        Navigator.pop(context, true);
     },
   );
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("חובה למלא את כל השדות"),
+    title: Text(Mess),
 
     actions: [
       okButton,
