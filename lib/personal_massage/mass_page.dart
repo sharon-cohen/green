@@ -4,6 +4,7 @@ import 'package:greenpeace/evants/add_event.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
+import 'package:greenpeace/personal_massage/manage_massage.dart';
 
 final _firestore = Firestore.instance;
 
@@ -12,7 +13,8 @@ class mass extends StatefulWidget {
   final String text;
   final String senderId;
   final String topic;
-  mass({this.sender, this.text, this.senderId, this.topic});
+  final bool MessForAll;
+  mass({this.sender, this.text, this.senderId, this.topic,this.MessForAll});
   @override
   _massState createState() => _massState();
 }
@@ -217,8 +219,8 @@ class _massState extends State<mass> {
                                             )),
                                       ],
                                     ),
-                                    onPressed: () {
-                                      showDialog(
+                                    onPressed: () async{
+                                      await showDialog(
                                           child: new Dialog(
                                             child: Container(
                                               width: 100,
@@ -268,17 +270,39 @@ class _massState extends State<mass> {
                                                                 .document(idevent)
                                                                 .delete();
                                                             Navigator.pop(context);
-                                                          } else {
-                                                            String idevent =
-                                                            await GetPersonalMess(
-                                                                widget.text,
-                                                                widget.sender);
-                                                            await _firestore
-                                                                .collection(
-                                                                "personalMess")
-                                                                .document(idevent)
-                                                                .delete();
                                                             Navigator.pop(context);
+                                                          } else {
+                                                           if(widget.MessForAll==false) {
+                                                             String idevent =
+                                                             await GetPersonalMess(
+                                                                 widget.text,
+                                                                 widget.sender);
+                                                             await _firestore
+                                                                 .collection(
+                                                                 "personalMess")
+                                                                 .document(
+                                                                 idevent)
+                                                                 .delete();
+
+                                                           }
+                                                            else{
+                                                            print("here");
+                                                             String idMessForAll =
+                                                             await GetMessToAll(
+                                                                 widget.text,
+                                                                 widget.sender);
+                                                             Firestore.instance
+                                                                 .collection("users")
+                                                                 .document(globals.UserId)
+                                                                 .updateData({
+                                                               "personalMessIdDeleted": FieldValue.arrayUnion(
+                                                                   [idMessForAll]),
+                                                             });
+                                                           }
+                                                           Navigator.pushNamed(
+                                                               context, Allmess.id
+                                                               );
+
                                                           }
                                                         },
                                                       ),
@@ -301,25 +325,6 @@ class _massState extends State<mass> {
                                           ),
                                           context: context);
                                     },
-                                    // onPressed: () async {
-                                    //   if (globals.isMeneger) {
-                                    //     String idevent = await GetMenagerMess(
-                                    //         widget.text, widget.sender);
-                                    //     await _firestore
-                                    //         .collection("messageMenager")
-                                    //         .document(idevent)
-                                    //         .delete();
-                                    //     Navigator.pop(context);
-                                    //   } else {
-                                    //     String idevent = await GetPersonalMess(
-                                    //         widget.text, widget.sender);
-                                    //     await _firestore
-                                    //         .collection("personalMess")
-                                    //         .document(idevent)
-                                    //         .delete();
-                                    //     Navigator.pop(context);
-                                    //   }
-                                    // },
                                   ),
                                   // SizedBox(width: 200),
                                 ],

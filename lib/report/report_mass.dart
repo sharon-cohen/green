@@ -216,7 +216,16 @@ class reportMass extends StatelessWidget {
                                                                 .collection("messages")
                                                                 .document(idevent)
                                                                 .delete();
-                                                            Navigator.pop(context);
+                                                            String idreport =
+                                                            await Getreport(
+                                                                report.image, true);
+                                                            await _firestore
+                                                                .collection("report")
+                                                                .document(idreport)
+                                                                .delete();
+
+                                                            Navigator.pop(context,true);
+                                                            Navigator.pop(context,true);
                                                           } else {
                                                             String idevent =
                                                             await Getmess(
@@ -225,7 +234,14 @@ class reportMass extends StatelessWidget {
                                                                 .collection("messages")
                                                                 .document(idevent)
                                                                 .delete();
-                                                            Navigator.pop(context);
+                                                            String idreport =  await Getreport(
+                                                                report.text, false);
+                                                            await _firestore
+                                                                .collection("report")
+                                                                .document(idreport)
+                                                                .delete();
+                                                            Navigator.pop(context,true);
+                                                            Navigator.pop(context,true);
                                                           }
                                                         },
                                                       ),
@@ -358,7 +374,7 @@ class reportMass extends StatelessWidget {
                                                               color: Colors.black,
                                                             )),
                                                         onPressed: () async {
-                                                          if (report.text != "") {
+                                                          if (report.image != "") {
                                                             String idevent =
                                                             await Getreport(
                                                                 report.image, true);

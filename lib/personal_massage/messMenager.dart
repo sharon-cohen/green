@@ -58,10 +58,12 @@ class personalMessContainer extends StatelessWidget {
   final personalMessModel mess;
   var height_page;
   var width_page;
+  final MessForAll;
   personalMessContainer({
     this.mess,
     this.height_page,
     this.width_page,
+    this.MessForAll,
   });
 
   @override
@@ -116,6 +118,7 @@ class personalMessContainer extends StatelessWidget {
                                 text: mess.text,
                                 sender: mess.sender,
                                 senderId: mess.senderId,
+                                MessForAll:MessForAll,
                               )));
                 },
               ),

@@ -124,7 +124,7 @@ AssetImage getimage(String type) {
 }
 
 String getimageString(String type) {
-  if (type == 'נקיון') {
+  if (type == 'ניקיון') {
     return 'image/clean.jpg';
   }
   if (type == 'הפגנה') {
@@ -201,4 +201,13 @@ String monthConvert(String val){
   }
 
   return res;
+}
+void launchMap(String address) async {
+  String query = Uri.encodeComponent(address);
+
+  String googleUrl = "https://waze.com/ul?q=$query";
+
+  if (await canLaunch(googleUrl)) {
+    await launch(googleUrl);
+  }
 }

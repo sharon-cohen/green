@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/Component/text_class.dart';
 import 'package:greenpeace/truggel_page/struggle_model.dart';
 import 'package:greenpeace/truggel_page/one_struggle.dart';
-import 'package:greenpeace/truggel_page/struggle_model.dart';
+
 
 final _firestore = Firestore.instance;
 
@@ -57,7 +57,6 @@ class TruggleStream extends StatelessWidget {
               ),
             );
           }
-
           final truggls = snapshot.data.documents;
           for (var truggl in truggls) {
             final trugglNmae = truggl.data["name"];

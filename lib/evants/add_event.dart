@@ -53,7 +53,7 @@ class _AddEventPageState extends State<AddEventPage> {
         },
         controller: _controller,
         onSubmitted: (String submittedStr) {
-          _controller.text = "";
+          _controller.text = submittedStr;
         },
       ),
     );
@@ -363,13 +363,9 @@ showAlertDialog_mess_send(BuildContext context) {
       ),
     ),
     onPressed: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BottomNavigationBarController(
-                    2,
-                    2,
-                  )));
+      Navigator.pop(context, true);
+      Navigator.pop(context, true);
+      Navigator.pop(context, true);
     },
   );
 

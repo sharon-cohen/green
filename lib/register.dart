@@ -3,13 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'home/Home.dart';
 import'dart:io' show Platform;
 import 'globalfunc.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'global.dart' as globals;
 import 'package:greenpeace/GetID_DB/getid.dart';
-//final _firestore = Firestore.instance;
+final _firestore = Firestore.instance;
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError }
 FirebaseUser loggedInUser;
 final databaseReference = Firestore.instance;
@@ -125,52 +124,60 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   });
                   try {
                     bool existName =await CheckNameUserExist(name);
-                    print("sdfsd");
-
-
                       final newUser = await _auth
                           .createUserWithEmailAndPassword(
                           email: email, password: password);
-                    print("sdfsd");
+
                       if (newUser != null) {
+                        print("get in");
                         FirebaseUser user = newUser.user;
                         String t = user.uid;
-                        databaseReference
-                            .collection('users')
-                            .document(t)
-                            .updateData({'name': name});
+
+
                         globals.name = name;
                         bool menag = await doesNameAlreadyExist(email);
-                        print(menag);
+
                         if (menag == true) {
                           globals.isMeneger = true;
                           print(globals.isMeneger);
-                          await databaseservice(uid: user.uid)
-                              .updateUserData(name, 'menager');
+                          await _firestore.collection("users").document(t).setData({
+                            "name": name,
+                            "role": "menager",
+                            "email":email,
+
+                          });
+
                           globals.no_reg = false;
+                          setState(() {
+                            showSpinner = false;
+                          });
                           Navigator.pushNamed(
                               context, BottomNavigationBarController.id,
                               arguments: ScreenArguments_m(t, name, 'menager'));
                         } else {
                           globals.no_reg = false;
                           globals.isMeneger = false;
-                          await databaseservice(uid: user.uid)
-                              .updateUserData(name, 'regular');
+                          await _firestore.collection("users").document(t).setData({
+                            "name": name,
+                            "role": "regular",
+                            "email":email,
+                            "personalMessId":FieldValue.arrayUnion(['']),
+                            "personalMessIdDeleted":FieldValue.arrayUnion(['']),
+                          });
+                          setState(() {
+                            showSpinner = false;
+                          });
                           Navigator.pushNamed(
-                              context, BottomNavigationBarController.id,
-                              arguments: ScreenArguments(t, name, 'regular'));
+                              context, BottomNavigationBarController.id);
 
-//                      var document = await Firestore.instance.collection('users').document('ENsyb4kmVkUbDvNS8ILNARKN49m1'
-//                      ).get();
-//                          print(document.data['name']);
-                        // Navigator.pushNamed(context, BasicGridView.id);
                       }
 
-                      setState(() async {
-                        showSpinner = false;
-                      });
+                      globals.name=name;
+                        globals.UserId=t;
+                        globals.emailUser=email;
                     }
-                    else{
+                      else{
+                     print("error new user");
                       showAlertDialogRegisterName(context);
                       setState(() {
                         showSpinner = false;

@@ -1,20 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'package:intl/intl.dart';
 import 'event_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:greenpeace/streem_firestore/StruggleStream.dart';
-import 'package:intl/intl.dart';
-import 'event_model.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,6 +51,8 @@ class _newEventPage extends State<newEventPage> {
   void initState() {
     super.initState();
     _loadCurrentUser();
+
+
     _title = TextEditingController(
         text: widget.note != null ? widget.note.title : "");
     _description = TextEditingController(
@@ -307,12 +298,14 @@ class _newEventPage extends State<newEventPage> {
                       child: Column(children: <Widget>[
                         Expanded(
                           child: RadioButtonGroup(
+
                             labels: [
                               "הפגנה",
-                              "נקיון",
+                              "ניקיון",
                               "הרצאה",
                               "אחר",
                             ],
+
                             onChange: (String label, int index) {
                               print("label: $label index: $index");
                               type_event = label;

@@ -20,15 +20,7 @@ class mass_event extends StatefulWidget {
 class _mass_eventState extends State<mass_event> {
   FirebaseUser currentUser;
   String idevent;
-  void launchMap(String address) async {
-    String query = Uri.encodeComponent(address);
 
-    String googleUrl = "https://waze.com/ul?q=$query";
-
-    if (await canLaunch(googleUrl)) {
-      await launch(googleUrl);
-    }
-  }
 
   void initState() {
     super.initState();
@@ -299,7 +291,7 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
       Firestore.instance.collection("users").document(createby).updateData({
         "personalMessId": FieldValue.arrayUnion([documentReference.documentID])
       });
-
+      Navigator.pop(context, true);
       Navigator.pop(context, true);
     },
   );

@@ -93,6 +93,23 @@ Future<String> GetPersonalMess(String text,String sender) async {
 
 
 }
+Future<String> GetMessToAll(String text,String sender) async {
+
+  final QuerySnapshot result = await Firestore.instance
+      .collection('MessForAll')
+      .where('text', isEqualTo: text)
+      .where('sender',isEqualTo: sender)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+
+
+
+}
 Future<String> GetMenagerMess(String text,String sender) async {
 
   final QuerySnapshot result = await Firestore.instance
@@ -160,6 +177,18 @@ Future<String>Getuser(String name)async{
   final QuerySnapshot result = await Firestore.instance
       .collection('users')
       .where('name', isEqualTo: name)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+}
+Future<String>GetuserByEmail(String email)async{
+  final QuerySnapshot result = await Firestore.instance
+      .collection('users')
+      .where('email', isEqualTo: email)
       .limit(1)
       .getDocuments();
   final List<DocumentSnapshot> documents = result.documents;

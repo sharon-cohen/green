@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:greenpeace/globalfunc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:greenpeace/Footer/footer.dart';
+import 'package:greenpeace/home/about.dart';
 import 'package:greenpeace/streem_firestore/MessagesStream.dart';
 import 'package:greenpeace/home/send_mass_button.dart';
 import 'package:greenpeace/streem_firestore/StruggleStream.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:greenpeace/common/Header.dart';
+import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/create_struggle1.dart';
-
+import 'package:greenpeace/feed.dart';
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 
@@ -25,13 +26,18 @@ class Home_menager extends StatefulWidget {
 
 class Home_menagerState extends State<Home_menager> {
   final _auth = FirebaseAuth.instance;
+  TextEditingController  aboutController;
   bool ok = false;
   bool showSpinner = false;
   double offset = 0;
   bool no_reg = false;
   @override
   void initState() {
+
     super.initState();
+   setState(() {
+     aboutController= new TextEditingController();
+   });
     getCurrentUser();
   }
 
@@ -40,6 +46,7 @@ class Home_menagerState extends State<Home_menager> {
       child: SingleChildScrollView(child: TruggleStream(page_call: 'home')),
     );
   }
+
 
   void getCurrentUser() async {
     final user = await _auth.currentUser();
@@ -102,10 +109,7 @@ class Home_menagerState extends State<Home_menager> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          BottomNavigationBarController(
-                                            3,
-                                            0,
-                                          )));
+                                      All_truggle()));
                             },
                           ),
                           Spacer(),
@@ -165,19 +169,28 @@ class Home_menagerState extends State<Home_menager> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   textDirection: TextDirection.rtl,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  // textDirection: TextDirection.rtl,
+
                   children: <Widget>[
                     Container(
                       //  height: MediaQuery.of(context).size.height / 18,
                       child: Row(
                         children: [
-                          Text(
-                            "עדכונים",
-                            style: TextStyle(
-                                fontFamily: 'Assistant',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                          FlatButton(
+
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Feed()));
+                            },
+                            child: Text(
+                              "עדכונים",
+                              style: TextStyle(
+                                  fontFamily: 'Assistant',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
                           ),
                           Spacer(),
                           ImageIcon(
@@ -221,13 +234,55 @@ class Home_menagerState extends State<Home_menager> {
                   // mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'אודות גירנפיס',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Assistant',
-                          fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                       globals.isMeneger? IconButton(
+                          icon: new Icon(Icons.edit),
+                          onPressed: () async{
+                            showDialog(
+                                child: new Dialog(
+                                  child: Container(
+                                    width: 100,
+                                    height: 100,
+                                    child: new Column(
+                                      children: <Widget>[
+                                        new TextField(
+                                          keyboardType: TextInputType.emailAddress,
+                                          decoration: new InputDecoration(
+                                            hintText: "מה תרצה שיהיה כתוב באודות?",
+                                          ),
+                                          controller: aboutController,
+                                        ),
+                                        new FlatButton(
+                                          child: new Text("שמור"),
+                                          onPressed: () async{
+                                            await Firestore.instance
+                                                .collection('about')
+                                                .document('sYFhYhmjY5zyzL3Rowcg')
+                                                .updateData({
+                                                 "text":  aboutController.text,
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                context: context);
+                          },
+                        ):Container(),
+                        Text(
+                          'אודות גירנפיס',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Assistant',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
+
+                    About(),
                     Spacer(),
                     ImageIcon(
                       AssetImage("image/petition1.png"),
@@ -235,6 +290,7 @@ class Home_menagerState extends State<Home_menager> {
                       size: 50,
                       // color: Colors.black,
                     ),
+
                   ],
                 ),
               ),
@@ -246,46 +302,4 @@ class Home_menagerState extends State<Home_menager> {
   }
 }
 
-class MessagesStream extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection("messages").snapshots(),
-      // ignore: missing_return
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.green,
-            ),
-          );
-        }
-        final messages = snapshot.data.documents;
-        List<MessageBubble> messageBubbles = [];
-        for (var message in messages) {
-          final messageText = message.data['text'];
-          final messageSender = message.data["sender"];
-          final messageTime = message.data["time"];
-          //final currentUsser = loggedInUser.email;
-          final imag_url = message.data["url"];
-          final messageBubble = MessageBubble(
-            sender: messageSender,
-            text: messageText,
-            time: messageTime,
-            isMe: globals.name == messageSender,
-            image_u: imag_url,
-          );
-          messageBubbles.add(messageBubble);
-          messageBubbles.sort((a, b) => b.time.compareTo(a.time));
-        }
-        return Expanded(
-          child: ListView(
-            reverse: true,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-            children: messageBubbles,
-          ),
-        );
-      },
-    );
-  }
-}
+

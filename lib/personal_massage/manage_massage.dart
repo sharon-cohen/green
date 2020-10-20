@@ -43,10 +43,8 @@ class AllmessState extends State<Allmess> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-
             Row(
               children: [
-
                 Spacer(),
                 Text(
                   'הודעות',
@@ -71,17 +69,7 @@ class AllmessState extends State<Allmess> {
               alignment: FractionalOffset.topRight,
             ),
             HotStream(),
-            // new Align(
-            //   child: new Text(
-            //     "דיווחים סביבתיים",
-            //     style: new TextStyle(
-            //         fontFamily: 'Assistant',
-            //         fontWeight: FontWeight.bold,
-            //         fontSize: 25,
-            //         color: Colors.redAccent),
-            //   ), //so big text
-            //   alignment: FractionalOffset.topRight,
-            // ),
+
             //todo check if good
 
             new Align(
@@ -96,7 +84,6 @@ class AllmessState extends State<Allmess> {
               alignment: FractionalOffset.topRight,
             ),
             messMenager(),
-            AllUserlMassStream(),
             new Align(
               child: new Text(
                 "דיווחי צ'אט",
@@ -109,7 +96,6 @@ class AllmessState extends State<Allmess> {
               alignment: FractionalOffset.topRight,
             ),
             reportStream(),
-
             SizedBox(height: 10),
             new Align(
               child: new Text(
@@ -128,35 +114,19 @@ class AllmessState extends State<Allmess> {
         ),
       );
     } else {
-      final FirebaseUser user = await _auth.currentUser();
       final document =
-          await Firestore.instance.collection('users').document(user.uid).get();
+          await Firestore.instance.collection('users').document(globals.UserId).get();
       List<String> myMess = List.from(document['personalMessId']);
+      final documentdelete =
+      await Firestore.instance.collection('users').document(globals.UserId).get();
+      List<String> myMessDelete = List.from(documentdelete['personalMessIdDeleted']);
       return Container(
         margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
         child: Column(
           children: <Widget>[
-            // Align(
-            //   child: new Text(
-            //     "הודעות",
-            //     style: new TextStyle(fontSize: 25),
-            //   ), //so big text
-            //   alignment: FractionalOffset.topRight,
-            // ),
             Row(
               children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    icon: Icon(
-                      Icons.clear,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+
                 Spacer(),
                 Text(
                   'הודעות',
@@ -170,7 +140,9 @@ class AllmessState extends State<Allmess> {
               ],
             ),
             // SizedBox(height: 10),
-            AllUserlMassStream(),
+            AllUserlMassStream(
+              myMessdeleted: myMessDelete,
+            ),
             personalMassStream(
               myMess: myMess,
             ),
@@ -253,6 +225,7 @@ class personalMassStream extends StatelessWidget {
               ),
               height_page: height_page,
               width_page: width_page,
+              MessForAll: false,
             );
             personalsList.add(personalsContainer);
             //  reports.sort((a, b) => b.time.compareTo(a.time));

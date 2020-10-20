@@ -5,6 +5,7 @@ import 'package:greenpeace/Component/Alret_Dealog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
@@ -77,7 +78,7 @@ class MessageBubble extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ):Text(
-                  "",
+                  " ",
                   style: TextStyle(
                     fontFamily: 'Assistant',
                     // fontSize: 15,
@@ -121,12 +122,19 @@ class MessageBubble extends StatelessWidget {
         child: Container(
             height: 100,
             width: 100,
-            decoration: new BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                image: new DecorationImage(
-                  image: new NetworkImage(image_u),
-                  fit: BoxFit.fill,
-                ))),
+        child: CachedNetworkImage(
+          imageUrl: image_u,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              CircularProgressIndicator(value: downloadProgress.progress),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+        ),
+//            decoration: new BoxDecoration(
+//                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+//                image: new DecorationImage(
+//                  image: new NetworkImage(image_u),
+//                  fit: BoxFit.fill,
+//                ))),
       );
   }
 

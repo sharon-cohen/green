@@ -23,8 +23,10 @@ class _userStream extends State<userStream> {
     QuerySnapshot querySnapshot = await Firestore.instance.collection("users").getDocuments();
     for (int i = 0; i < querySnapshot.documents.length; i++) {
       var a = querySnapshot.documents[i].data["name"];
-      duplicateItems.add(a.toString());
-
+      String role = querySnapshot.documents[i].data["role"];
+      if(role!="menager") {
+        duplicateItems.add(a.toString());
+      }
       print(a);
     }
     items.addAll(duplicateItems);

@@ -7,13 +7,13 @@ import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/evants/calender.dart';
 import 'package:greenpeace/evants/list_event.dart';
 import 'package:greenpeace/Component/Alret_Dealog.dart';
-
-import 'package:greenpeace/ConnectUs/connect.dart';
+import 'package:greenpeace/truggel_page/frameWeb.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/welcom.dart';
 import 'package:greenpeace/HotReport/hotReport.dart';
 import 'package:greenpeace/global.dart' as globals;
+import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 final _firestore = Firestore.instance;
 
@@ -36,7 +36,7 @@ class _BottomNavigationBarControllerState
   TextEditingController _c;
 
   final List<Widget> pages = [
-    connect(key: PageStorageKey('connect')),
+    FrameWeb (Url: "https://joinus.gpi.org.il/?_ga=2.44008870.2086395743.1602839988-1666277170.1598274308&_gac=1.57860696.1602855372.CjwKCAjwiaX8BRBZEiwAQQxGx8LD5KgD6mbHUOZQodvFWGlxKE9YbuqDN8kudiAm42PJ3eE58dyKtBoCwXgQAvD_BwE",),
     Home_menager(key: PageStorageKey('home'), arguments: send),
     List_event(key: PageStorageKey(' All_truggle')),
     Allmess(key: PageStorageKey('report'), arguments: send),
@@ -53,19 +53,12 @@ class _BottomNavigationBarControllerState
   static ScreenArguments_m send;
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
         currentIndex: _selectedIndex,
-        // selectedItemColor: Colors.blueGrey,
-        // unselectedItemColor: Colors.green,
-        // fixedColor: Colors.black45,
-        //backgroundColor: Colors.black45,
         type: BottomNavigationBarType.fixed,
-        //  selectedItemColor: Color(int.parse("0xff6ed000")),
         selectedItemColor: Color(int.parse("0xff6ed000")),
         unselectedItemColor: Colors.black,
         unselectedFontSize: 12,
         selectedFontSize: 14,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-
-        //backgroundColor: Color(int.parse("0xff6ed000")),
         onTap: (int index) async {
           if (index == 0) {
             FirebaseAnalytics().logEvent(name: 'name',parameters:null);
@@ -146,6 +139,7 @@ class _BottomNavigationBarControllerState
                                 child: new Column(
                                   children: <Widget>[
                                     new TextField(
+                                      keyboardType: TextInputType.emailAddress,
                                       decoration: new InputDecoration(
                                         hintText: "דואר אלקטרוני של המנהל החדש",
                                       ),
@@ -153,8 +147,15 @@ class _BottomNavigationBarControllerState
                                     ),
                                     new FlatButton(
                                       child: new Text("שמור"),
-                                      onPressed: () {
-                                        _firestore.collection("manegar").add({
+                                      onPressed: () async{
+                                       String IdUser=await GetuserByEmail(_c.text);
+                                        Firestore.instance
+                                            .collection('users')
+                                            .document(IdUser)
+                                            .updateData({
+                                          "role":"menager",
+                                        });
+                                       await _firestore.collection("manegar").add({
                                           "email": _c.text.toString(),
                                         });
                                         Navigator.pop(context);
@@ -195,6 +196,7 @@ class _BottomNavigationBarControllerState
           }
           setState(() {
             if (index != 0) _selectedIndex = index;
+
             print(kBottomNavigationBarHeight);
           });
         },
@@ -332,6 +334,7 @@ class _BottomNavigationBarControllerState
 
   Widget build(BuildContext context) {
     return Scaffold(
+
       bottomNavigationBar: _bottomNavigationBar(_index_bifore),
       floatingActionButton: !globals.isMeneger
           ? Padding(

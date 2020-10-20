@@ -11,7 +11,7 @@ import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/common/Header.dart';
 import 'package:intl/intl.dart';
-import 'package:greenpeace/globalfunc.dart';
+
 
 final _firestore = Firestore.instance;
 
@@ -183,6 +183,31 @@ class EventDetailsPage extends StatelessWidget {
                         )),
                   ),
                   //SizedBox(height: 20.0),
+                  new Align(
+                    child: new Text(
+                      "מיקום",
+                      style: new TextStyle(fontSize: 30),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: FlatButton(
+                      color: Colors.white,
+                      textColor: Colors.green,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(8.0),
+                      splashColor: Colors.blueAccent,
+                      onPressed: () {
+                        launchMap(event.location);
+                      },
+                      child: Text(
+                        event.location,
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
                   FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {

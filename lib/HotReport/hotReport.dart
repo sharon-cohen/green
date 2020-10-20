@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-
+import 'package:path/path.dart';
 final _firestore = Firestore.instance;
 
 class HotReport extends StatefulWidget {
@@ -27,7 +27,30 @@ class _HotReport extends State<HotReport> {
   TextEditingController _description;
   TextEditingController _location;
   TextStyle style = TextStyle(fontFamily: 'Assistant', fontSize: 20.0);
+  File _imageFile;
+  String fileName = '';
+  final picker = ImagePicker();
 
+  Future pickImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = File(pickedFile.path);
+    });
+  }
+
+  Future<String> uploadImageToFirebase(BuildContext context) async {
+
+    if (_imageFile.path.isNotEmpty) {
+      fileName = basename(_imageFile.path);
+    }
+    StorageReference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('uploads/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+
+    fileUrl = await taskSnapshot.ref.getDownloadURL();
+  }
   bool processing;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -202,53 +225,32 @@ class _HotReport extends State<HotReport> {
                   ),
                 ),
               ),
-              ListTile(
-                  title: Row(
-                    children: [
-                      Image.asset(
-                        'image/addimage.png',
-                        width: 30,
-                        height: 30,
-                      ),
-                      SizedBox(width: 7),
-                      Text(
-                        "בחר בתמונה",
-                        style: new TextStyle(
-                            fontSize: 25, fontFamily: 'Assistant'),
-                      ),
-                    ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: Container(
+
+                  child: _imageFile != null
+                      ? Image.file(_imageFile)
+                      : FlatButton(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'image/addimage.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                        SizedBox(width: 7),
+                        Text(
+                          "בחר בתמונה",
+                          style: new TextStyle(
+                              fontSize: 25, fontFamily: 'Assistant'),
+                        ),
+                      ],
+                    ),
+                    onPressed: pickImage,
                   ),
-                  onTap: () async {
-                    imageFile = await ImagePicker.pickImage(
-                        source: ImageSource.gallery);
-
-                    int timestamp = new DateTime.now().microsecondsSinceEpoch;
-                    StorageReference storageReference = FirebaseStorage.instance
-                        .ref()
-                        .child('chats/img_' + timestamp.toString() + '.jpg');
-                    StorageUploadTask uploadTask =
-                        storageReference.putFile(imageFile);
-                    await uploadTask.onComplete;
-                    fileUrl = await storageReference.getDownloadURL();
-
-                    setState(() {
-                      _image = File(imageFile.path);
-                    });
-                  }),
-              // SizedBox(height: 10.0),
-              // SizedBox(
-              //   height: 20.0,
-              // ),
-              if (fileUrl != "")
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-                  child: _image == null
-                      ? Text('No image selected.')
-                      : Image.file(_image),
                 ),
-              SizedBox(
-                height: 50.0,
               ),
               SizedBox(height: 10.0),
               processing
@@ -266,7 +268,7 @@ class _HotReport extends State<HotReport> {
                               setState(() {
                                 processing = true;
                               });
-
+                              await uploadImageToFirebase(context);
                               _firestore.collection("hotReport").add({
                                 "text": _description.text,
                                 "sender": globals.name,

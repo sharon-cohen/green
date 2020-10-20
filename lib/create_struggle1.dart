@@ -86,7 +86,6 @@ class create_struggle1State extends State<create_struggle1> {
     if (_imageFile.path.isNotEmpty) {
       fileName = basename(_imageFile.path);
     }
-
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
@@ -277,29 +276,28 @@ class create_struggle1State extends State<create_struggle1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: Container(
-                  // margin:
-                  //     const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
+
                   child: _imageFile != null
                       ? Image.file(_imageFile)
                       : FlatButton(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'image/addimage.png',
-                                width: 30,
-                                height: 30,
-                              ),
-                              SizedBox(width: 7),
-                              Text(
-                                "בחר בתמונה",
-                                style: new TextStyle(
-                                    fontSize: 25, fontFamily: 'Assistant'),
-                              ),
-                            ],
-                          ),
-                          onPressed: pickImage,
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'image/addimage.png',
+                          width: 30,
+                          height: 30,
                         ),
+                        SizedBox(width: 7),
+                        Text(
+                          "בחר בתמונה",
+                          style: new TextStyle(
+                              fontSize: 25, fontFamily: 'Assistant'),
+                        ),
+                      ],
+                    ),
+                    onPressed: pickImage,
+                  ),
                 ),
               ),
 

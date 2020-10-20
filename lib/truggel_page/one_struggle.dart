@@ -7,28 +7,145 @@ import 'package:greenpeace/common/Header.dart';
 import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:social_share/social_share.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:greenpeace/truggel_page/frameWeb.dart';
 import 'package:greenpeace/truggel_page/updateStrugle.dart';
 import 'package:greenpeace/global.dart' as globals;
+import 'package:fab_circular_menu/fab_circular_menu.dart';
+final _firestore = Firestore.instance;
 final databaseReference = Firestore.instance;
-
-
 class one_struggle extends StatefulWidget {
   final StruggleModel struggle;
   one_struggle({this.struggle});
   @override
-  _one_struggle createState() => _one_struggle();
+  _one_struggleState createState() => _one_struggleState();
 }
 
-class _one_struggle extends State<one_struggle> {
-  FirebaseUser currentUser;
+class _one_struggleState extends State<one_struggle> {
   ScreenshotController screenshotController = ScreenshotController();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      floatingActionButton:  globals.isMeneger?FabCircularMenu(
+          ringColor:Colors.white70,
+          fabMargin: EdgeInsets.all(30),
+          children: <Widget>[
+            IconButton(icon: Icon(Icons.edit), onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => updatestrugle(strugle: widget.struggle,)));
+            }),
+            IconButton(icon: Icon(Icons.delete), onPressed: () {
+              ToBeSureDeleteAlertDialog(context,widget.struggle.title);
+            }),
+            IconButton(icon: new Image.asset('image/facebook.png'), onPressed: () async {
+              await screenshotController.capture().then((image) async {
+                //facebook appId is mandatory for andorid or else share won't work
+                Platform.isAndroid
+                    ?
+
+                SocialShare.shareFacebookStory(image.path,
+                    "#ffffff", "#000000", "https://google.com",
+                    appId: "975359176210597")
+                    .then((data) {
+                  print(data);
+
+                })
+                    : SocialShare.shareFacebookStory(image.path,
+                    "#ffffff", "#000000", "https://google.com")
+                    .then((data) {
+                  print(data);
+                });
+              });
+            },),
+
+            IconButton(icon: new Image.asset('image/whatsapp.png'), onPressed: () {
+              print('Favorite');
+            }),
+            IconButton(icon: new Image.asset('image/signature.png'), onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.petition,)));
+            }),
+            IconButton(icon: new Image.asset('image/join.png'), onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.donation,)));
+            }),
+
+          ]
+      ):FabCircularMenu(
+          ringColor:Colors.white70,
+          fabMargin: EdgeInsets.all(30),
+          children: <Widget>[
+            IconButton(icon: new Image.asset('image/facebook.png'), onPressed: () async {
+              await screenshotController.capture().then((image) async {
+                //facebook appId is mandatory for andorid or else share won't work
+                Platform.isAndroid
+                    ?
+
+                SocialShare.shareFacebookStory(image.path,
+                    "#ffffff", "#000000", "https://google.com",
+                    appId: "975359176210597")
+                    .then((data) {
+                  print(data);
+
+                })
+                    : SocialShare.shareFacebookStory(image.path,
+                    "#ffffff", "#000000", "https://google.com")
+                    .then((data) {
+                  print(data);
+                });
+              });
+            },),
+            IconButton(icon: new Image.asset('image/whatsapp.png'), onPressed: () {
+              print('Favorite');
+            }),
+            IconButton(icon: new Image.asset('image/signature.png'), onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.petition,)));
+            }),
+            IconButton(icon: new Image.asset('image/join.png'), onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.donation,)));
+            }),
+          ]
+      ),
+      body: screenShotStrugle(struggle: widget.struggle,screenshotController: screenshotController,),
+
+    );
+  }
+}
+
+
+
+
+class screenShotStrugle extends StatefulWidget {
+  final StruggleModel struggle;
+  final ScreenshotController screenshotController;
+  screenShotStrugle({this.struggle,this.screenshotController});
+  @override
+  _screenShotStrugle createState() => _screenShotStrugle();
+}
+
+class _screenShotStrugle extends State<screenShotStrugle> {
+  FirebaseUser currentUser;
+
   double offset=0;
   String _platformVersion = 'Unknown';
   final Color yellow = Color(0xfffbc31b);
   final Color orange = Color(0xfffb6900);
+  String _colorName = 'No';
+  Color _color = Colors.black;
   @override
   void initState() {
     super.initState();
@@ -48,28 +165,10 @@ class _one_struggle extends State<one_struggle> {
 
   Widget build(BuildContext context) {
     return Screenshot(
-          controller: screenshotController,
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            floatingActionButton: globals.isMeneger?FloatingActionButton(
-              heroTag:2,
-              backgroundColor: Colors.red,
+          controller: widget.screenshotController,
 
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => updatestrugle(strugle: widget.struggle,)));
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.edit), // icon
+            child: SingleChildScrollView(
 
-                ],
-              ),
-            ):null,
-            body: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,6 +179,7 @@ class _one_struggle extends State<one_struggle> {
                     page:"struggle",
                     offset: offset,
                   ),
+
 
                         new Align(
                           child: new Text(
@@ -100,77 +200,10 @@ class _one_struggle extends State<one_struggle> {
 
 
 
-
-
-
-
-                  RaisedButton(
-                    onPressed: () async {
-                      await screenshotController.capture().then((image) async {
-                        //facebook appId is mandatory for andorid or else share won't work
-                        Platform.isAndroid
-                            ?
-
-                        SocialShare.shareFacebookStory(image.path,
-                            "#ffffff", "#000000", "https://google.com",
-                            appId: "975359176210597")
-                            .then((data) {
-                          print(data);
-
-                        })
-                            : SocialShare.shareFacebookStory(image.path,
-                            "#ffffff", "#000000", "https://google.com")
-                            .then((data) {
-                          print(data);
-                        });
-                      });
-                    },
-                    child: Text("Share On Facebook Story"),
-                  ),
-
-                  RaisedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.donation,)));
-                    },
-                    child: Text("הצטרף אלינו למאבק"),
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FrameWeb(title: widget.struggle.title,Url: widget.struggle.petition,)));
-                    },
-                    child: Text("חתימה על עצומה"),
-                  ),
-                  RaisedButton(
-                    onPressed: () async {
-                      await screenshotController.capture().then((image) async {
-                        SocialShare.shareOptions("Hello world").then((data) {
-                          print(data);
-                        });
-                      });
-                    },
-                    child: Text("Share Options"),
-                  ),
-                  RaisedButton(
-                    onPressed: () async {
-                      SocialShare.shareWhatsapp(
-                          "Hello World \n https://google.com")
-                          .then((data) {
-                        print(data);
-                      });
-                    },
-                    child: Text("Share on Whatsapp"),
-                  ),
-
                 ],
               ),
             ),
-          ),
+
 
 
     );
@@ -178,11 +211,44 @@ class _one_struggle extends State<one_struggle> {
 }
 
 
-_launchURL(String url) async {
+ToBeSureDeleteAlertDialog(BuildContext context,String nameStruggle) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("בטוח"),
+    onPressed: () async{
+      String idstruggle =
+         await GetStrugle(nameStruggle);
+      await _firestore
+          .collection(
+          "struggle")
+          .document(idstruggle)
+          .delete();
+      Navigator.pop(context);
+      Navigator.pop(context);
+    },
+  );
+  Widget Later = FlatButton(
+    child: Text("בטל"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: FittedBox(child:
+    Text("אתה בטוח רוצה למחוק את המאבק?")),
 
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
+    actions: [
+      okButton,
+      Later,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

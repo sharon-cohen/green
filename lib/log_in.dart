@@ -130,7 +130,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       String name = document.data['name'];
                       String role = document.data['role'];
-
+                      globals.name=name;
+                      globals.no_reg=false;
+                      globals.UserId=userId;
                       if (role == 'menager') {
                         globals.isMeneger = true;
                       } else {

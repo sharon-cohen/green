@@ -41,13 +41,13 @@ class _updateEventPage extends State<updateEventPage> {
   List<String> equipmentList = [];
   bool processing;
   String temp = "";
-
+String chooseType;
 
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
-
+      chooseType=widget.event.type_event;
     _title = TextEditingController(
         text: widget.event != null ? widget.event.title : "");
     _description = TextEditingController(
@@ -185,16 +185,18 @@ class _updateEventPage extends State<updateEventPage> {
                       child: Column(children: <Widget>[
                         Expanded(
                           child: RadioButtonGroup(
+                          picked:  chooseType,
                             labels: [
                               "הפגנה",
                               "ניקיון",
                               "הרצאה",
                             ],
-                            disabled: [
-                              "${widget.event.type_event}",
-                            ],
+
                             onChange: (String label, int index) {
                               print("label: $label index: $index");
+                              setState(() {
+                                chooseType=label;
+                              });
                               //type_event=label;
                             },
                             onSelected: (String label) => print(label),
@@ -259,7 +261,7 @@ class _updateEventPage extends State<updateEventPage> {
                                 "description": _description.text,
                                 "event_date":  widget.event.eventDate,
                                 "location": _location.text,
-                                "type_event": widget.event.type_event,
+                                "type_event": chooseType,
                                 "whatapp": _whatapp.text,
                               });
 

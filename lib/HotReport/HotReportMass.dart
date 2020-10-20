@@ -4,7 +4,7 @@ import 'package:greenpeace/HotReport/HotReportModel.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/evants/add_event.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 final _firestore = Firestore.instance;
 
 class HotMass extends StatelessWidget {
@@ -28,8 +28,14 @@ class HotMass extends StatelessWidget {
     } else {
 
       return Container(
-         
-          child: Image.network(report.image, fit: BoxFit.fitWidth));
+
+          child: CachedNetworkImage(
+          imageUrl: report.image,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+          CircularProgressIndicator(value: downloadProgress.progress),
+    errorWidget: (context, url, error) => Icon(Icons.error),
+    ),
+      );
     }
   }
 
@@ -298,6 +304,7 @@ class HotMass extends StatelessWidget {
                                                        .collection("hotReport")
                                                        .document(idevent)
                                                        .delete();
+                                                   Navigator.pop(context);
                                                    Navigator.pop(context);
                                                  },
                                                ),

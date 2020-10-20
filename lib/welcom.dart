@@ -31,24 +31,25 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Animation animation;
 
   bool isLoading = false;
-  Future<Null> _sendAnalytics() async {
-    await widget.analytics
-        .logEvent(name: 'Welcom', parameters: <String, dynamic>{});
-  }
-  Future<Null> _currentScreen() async {
-    await widget.analytics.setCurrentScreen(
-        screenName: 'Welcom', screenClassOverride: 'WelcomeScreen');
-  }
+//  Future<Null> _sendAnalytics() async {
+//    await widget.analytics
+//        .logEvent(name: 'Welcom', parameters: <String, dynamic>{});
+//  }
+//  Future<Null> _currentScreen() async {
+//    await widget.analytics.setCurrentScreen(
+//        screenName: 'Welcom', screenClassOverride: 'WelcomeScreen');
+//  }
   @override
   void initState() {
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+     // _currentScreen();
       _loadCurrentUser();
       setState(() {
         isLoading = true;
       });
     });
-    _currentScreen();
   }
 
   _loadCurrentUser() async {
@@ -85,7 +86,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: 'היכנס מבלי להירשם',
               colour: Colors.white,
               onPressed: () {
-                _sendAnalytics();
+
                 globals.no_reg = true;
                 Navigator.pushNamed(context, BottomNavigationBarController.id,
                     arguments:
