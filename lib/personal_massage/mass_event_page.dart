@@ -7,12 +7,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/evants/update_event.dart';
 import 'package:greenpeace/evants/event_model.dart';
 import 'package:greenpeace/globalfunc.dart';
+
 final databaseReference = Firestore.instance;
 
 class mass_event extends StatefulWidget {
   EventModel event;
-  mass_event(
-      {this.event});
+  mass_event({this.event});
   @override
   _mass_eventState createState() => _mass_eventState();
 }
@@ -20,7 +20,6 @@ class mass_event extends StatefulWidget {
 class _mass_eventState extends State<mass_event> {
   FirebaseUser currentUser;
   String idevent;
-
 
   void initState() {
     super.initState();
@@ -47,220 +46,462 @@ class _mass_eventState extends State<mass_event> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
+          automaticallyImplyLeading: false),
       body: Container(
         height: MediaQuery.of(context).size.height,
-        margin: const EdgeInsets.all(30),
+        // margin: const EdgeInsets.all(30),
         child: ListView(
           children: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.keyboard_arrow_left,
-              ),
-              iconSize: 30,
-              color: Colors.grey,
-              splashColor: Colors.purple,
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-            ),
-            new Align(
-              child: Row(
-                children: [
-                  new Text(
-                    "מאת: ",
-                    style: new TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  new Text(
-                    widget.event.sender,
-                    style: new TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            Divider(thickness: 1, color: Colors.black),
-            new Align(
-              child: Row(
-                children: [
-                  new Text(
-                    "נושא: " + "אירוע חדש",
-                    style: new TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-
-                ],
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            Divider(thickness: 1, color: Colors.black),
-            new Align(
-              child: FittedBox(
-                child: new Text(
-                    widget.event.title,
-
-                ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: FittedBox(
-                child: new Text(
-                  widget.event.description,
-
-                ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: FittedBox(
-                child: new Text(
-                  "תאריך",
-                  style: new TextStyle(color: Colors.green),
-                ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: Text(DayConvert(widget.event.eventDate.weekday.toString())+" "+widget.event.eventDate.day.toString()+monthConvert(widget.event.eventDate.month.toString()),
-                style: new TextStyle(fontSize: 15),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: FittedBox(
-                child: new Text(
-                  "סוג האירוע",
-                  style: new TextStyle(color: Colors.green),
-                ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: FittedBox(
-                child: new Text(
-                  widget.event.type_event,
-
-                ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: FlatButton(
-
-                onPressed: () {
-                  _launchURL(widget.event.whatapp);
-                },
-                child: FittedBox(
-                  child: new Text(
-                    "הצרפות לקבוצת whatapp",
-                    style: new TextStyle(color: Colors.green),
-                  ),
-                ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-
-            new Align(
-              child: new Text(
-                "מיקום",
-                style: new TextStyle(fontSize: 30),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
-            ),
-            new Align(
-              child: FlatButton(
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
                 color: Colors.white,
-                textColor: Colors.green,
-                disabledColor: Colors.grey,
-                disabledTextColor: Colors.black,
-                padding: EdgeInsets.all(8.0),
-                splashColor: Colors.blueAccent,
-                onPressed: () {
-                  launchMap(widget.event.location);
-                },
-                child: Text(
-                         widget.event.location,
-                  style: TextStyle(fontSize: 20.0),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 20,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Spacer(),
+                    Text(
+                      "הודעות",
+                      style: new TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Assistant',
+                      ),
+                    ),
+                    Spacer(),
+                    IconButton(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      icon: Icon(
+                        Icons.keyboard_arrow_left,
+                      ),
+                      iconSize: 30,
+                      color: Colors.black,
+                      splashColor: Colors.purple,
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                    ),
+                  ],
                 ),
-              ), //so big text
-              alignment: FractionalOffset.topRight,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child: Row(
+                        children: [
+                          new Text(
+                            "מאת: ",
+                            style: new TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Assistant',
+                            ),
+                          ),
+                          new Text(widget.event.sender,
+                              style: new TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Assistant',
+                              )),
+                        ],
+                      ),
+                    ),
+                    Divider(thickness: 1, color: Colors.grey[400]),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                      child: Row(
+                        children: [
+                          new Text("נושא: אירוע חדש",
+                              style: new TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Assistant',
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 21, 16),
+              child: Column(
+                children: [
+                  new Align(
+                    child: FittedBox(
+                      child: new Text(widget.event.title,
+                          style: new TextStyle(
+                            fontFamily: 'Assistant',
+                          )),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: FittedBox(
+                      child: new Text(widget.event.description,
+                          style: new TextStyle(
+                            fontFamily: 'Assistant',
+                          )),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: FittedBox(
+                      child: new Text(
+                        "תאריך",
+                        style: new TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: Text(
+                      DayConvert(widget.event.eventDate.weekday.toString()) +
+                          " " +
+                          widget.event.eventDate.day.toString() +
+                          monthConvert(widget.event.eventDate.month.toString()),
+                      style:
+                          new TextStyle(fontSize: 15, fontFamily: 'Assistant'),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: FittedBox(
+                      child: new Text(
+                        "סוג האירוע",
+                        style: new TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontFamily: 'Assistant',
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: FittedBox(
+                      child: new Text(widget.event.type_event,
+                          style: new TextStyle(
+                            fontFamily: 'Assistant',
+                          )),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: FlatButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        _launchURL(widget.event.whatapp);
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'image/whatsapp2.png',
+                            scale: 190,
+                          ),
+                          SizedBox(width: 10),
+                          FittedBox(
+                            child: new Text(
+                              "הצרפות לקבוצת whatapp",
+                              style: new TextStyle(
+                                fontFamily: 'Assistant',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: new Text(
+                      "מיקום",
+                      style: new TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Assistant',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                  new Align(
+                    child: FlatButton(
+                      color: Colors.white,
+                      textColor: Colors.black,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(0.0),
+                      splashColor: Colors.blueAccent,
+                      onPressed: () {
+                        launchMap(widget.event.location);
+                      },
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'image/google-maps.png',
+                            width: 30,
+                            height: 30,
+                          ),
+                          SizedBox(width: 7),
+                          Text(
+                            widget.event.location,
+                            style: TextStyle(
+                                fontSize: 20.0, fontFamily: 'Assistant'),
+                          ),
+                        ],
+                      ),
+                    ), //so big text
+                    alignment: FractionalOffset.topRight,
+                  ),
+                ],
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: RaisedButton(
-                      onPressed: () async {
-                        String idevent = await Getevent(widget.event.title);
-                        await databaseReference
-                            .collection("events")
-                            .document(idevent)
-                            .delete();
-                        Navigator.pop(context);
-                      },
-                      child: const Text('הסר', style: TextStyle(fontSize: 20)),
-                      color: Colors.blue,
-                      textColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Material(
+                        color: Color(int.parse("0xff6ed000")),
+                        elevation: 5.0,
+                        //borderRadius: BorderRadius.circular(30.0),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            idevent = await Getevent(widget.event.title);
+                            databaseReference
+                                .collection('events')
+                                .document(idevent)
+                                .updateData({'approve': true});
+                            successshowAlertDialog(
+                                context,
+                                _email(),
+                                currentUser.uid,
+                                widget.event.title,
+                                widget.event.senderId);
+                          },
+                          child: Row(
+                            //crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "אשר אירוע",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              // SizedBox(width: 270),
+                              Image.asset(
+                                'image/whitearrow.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddEventPage(
-                                      sender: widget.event.sender,
-                                      senderId: widget.event.senderId,
-                                    )));
-                      },
-                      child: const Text('השב', style: TextStyle(fontSize: 20)),
-                      color: Colors.blue,
-                      textColor: Colors.white,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height / 10,
+                            width: MediaQuery.of(context).size.height / 10,
+
+                            //color: Color(int.parse("0xff6ed000")),
+                            decoration: BoxDecoration(
+                              //color: Color(int.parse("0xff6ed000")),
+                              color: Colors.grey,
+                              //border: Border.all(color: Colors.grey[600])
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FlatButton(
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                        'image/reply.png',
+                                        color: Colors.white,
+                                        width: 30,
+                                        height: 30,
+                                      ),
+                                      Text('השב ',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontFamily: 'Assistant',
+                                          )),
+                                    ],
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => AddEventPage(
+                                                  sender: widget.event.sender,
+                                                  senderId:
+                                                      widget.event.senderId,
+                                                )));
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height / 10,
+                            width: MediaQuery.of(context).size.height / 10,
+                            decoration: BoxDecoration(
+                              //border: Border.all(color: Colors.grey[600]),
+                              color: Colors.black87,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FlatButton(
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                        'image/delete.png',
+                                        color: Colors.white,
+                                        width: 30,
+                                        height: 30,
+                                      ),
+                                      Text('מחק',
+                                          style: TextStyle(
+                                            fontFamily: 'Assistant',
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          )),
+                                    ],
+                                  ),
+                                  onPressed: () async {
+                                    String idevent =
+                                        await Getevent(widget.event.title);
+                                    await databaseReference
+                                        .collection("events")
+                                        .document(idevent)
+                                        .delete();
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                // SizedBox(width: 200),
+                              ],
+                            ),
+                          ),
+                          // Container(
+                          //   height: MediaQuery.of(context).size.height / 10,
+                          //   width: MediaQuery.of(context).size.height / 10,
+                          //   decoration: BoxDecoration(
+                          //     //border: Border.all(color: Colors.grey[600]),
+                          //     color: Colors.grey[600],
+                          //   ),
+                          // child: Column(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     FlatButton(
+                          //       child: Column(
+                          //         children: [
+                          //           Image.asset(
+                          //             'image/send.png',
+                          //             color: Colors.white,
+                          //             width: 30,
+                          //             height: 30,
+                          //           ),
+                          //           Text('אישור',
+                          //               style: TextStyle(
+                          //                 fontFamily: 'Assistant',
+                          //                 fontSize: 15,
+                          //                 color: Colors.white,
+                          //               )),
+                          //         ],
+                          //       ),
+                          //       onPressed: () async {
+                          //         idevent = await Getevent(widget.event.title);
+                          //         databaseReference
+                          //             .collection('events')
+                          //             .document(idevent)
+                          //             .updateData({'approve': true});
+                          //         successshowAlertDialog(
+                          //             context,
+                          //             _email(),
+                          //             currentUser.uid,
+                          //             widget.event.title,
+                          //             widget.event.senderId);
+                          //       },
+                          //     ),
+                          //     // SizedBox(width: 200),
+                          //   ],
+                          // ),
+                          //  ),
+                          Container(
+                            height: MediaQuery.of(context).size.height / 10,
+                            width: MediaQuery.of(context).size.height / 10,
+                            decoration: BoxDecoration(
+                              //border: Border.all(color: Colors.grey[600]),
+                              color: Colors.grey,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FlatButton(
+                                  child: Column(
+                                    children: [
+                                      Icon(Icons.edit, color: Colors.white),
+                                      Text('ערוך',
+                                          style: TextStyle(
+                                            fontFamily: 'Assistant',
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          )),
+                                    ],
+                                  ),
+                                  onPressed: () async {
+                                    idevent =
+                                        await Getevent(widget.event.title);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                updateEventPage(
+                                                  event: widget.event,
+                                                )));
+                                  },
+                                ),
+                                // SizedBox(width: 200),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: RaisedButton(
-                      onPressed: () async {
-                        idevent = await Getevent(widget.event.title);
-                        databaseReference
-                            .collection('events')
-                            .document(idevent)
-                            .updateData({'approve': true});
-                        successshowAlertDialog(context, _email(),
-                            currentUser.uid, widget.event.title, widget.event.senderId);
-                      },
-                      child:
-                          const Text('אישור', style: TextStyle(fontSize: 20)),
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                    ),
-                  ),
-                  Expanded(
-                    child: RaisedButton(
-                      onPressed: () async {
-                        idevent = await Getevent(widget.event.title);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => updateEventPage(
-                                      event: widget.event,
-                                    )));
-                      },
-                      child:
-                          const Text('עריכה', style: TextStyle(fontSize: 20)),
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -275,7 +516,10 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
   FirebaseUser currentUser;
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("אישור"),
+    child: Text("אישור",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
     onPressed: () {
       DocumentReference documentReference =
           Firestore.instance.collection("personalMess").document();
@@ -298,8 +542,14 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("אירוע עודכן בהצלחה"),
-    content: Text("נשלח עידכון ליוצר האירוע"),
+    title: Text("אירוע עודכן בהצלחה",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
+    content: Text("נשלח עידכון ליוצר האירוע",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
     actions: [
       okButton,
     ],
@@ -315,8 +565,8 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
 }
 
 _launchURL(String url) async {
-  String wazeUrl="https://waze.com/ul?q=";
-  wazeUrl=wazeUrl+url;
+  String wazeUrl = "https://waze.com/ul?q=";
+  wazeUrl = wazeUrl + url;
   if (await canLaunch(wazeUrl)) {
     await launch(wazeUrl);
   } else {

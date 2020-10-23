@@ -99,9 +99,17 @@ class personalMessContainer extends StatelessWidget {
               ),
               // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
               subtitle: FittedBox(
-
-                child: Text(DayConvert(mess.time.weekday.toString())+" "+mess.time.day.toString()+monthConvert(mess.time.month.toString()),
-                    overflow: TextOverflow.ellipsis),
+                child: Text(
+                  DayConvert(mess.time.weekday.toString()) +
+                      " " +
+                      mess.time.day.toString() +
+                      monthConvert(mess.time.month.toString()),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Assistant'),
+                ),
               ),
               trailing: FlatButton(
                 padding: const EdgeInsets.all(0.0),
@@ -118,7 +126,7 @@ class personalMessContainer extends StatelessWidget {
                                 text: mess.text,
                                 sender: mess.sender,
                                 senderId: mess.senderId,
-                                MessForAll:MessForAll,
+                                MessForAll: MessForAll,
                               )));
                 },
               ),

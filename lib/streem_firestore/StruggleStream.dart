@@ -8,7 +8,6 @@ import 'package:greenpeace/Component/text_class.dart';
 import 'package:greenpeace/truggel_page/struggle_model.dart';
 import 'package:greenpeace/truggel_page/one_struggle.dart';
 
-
 final _firestore = Firestore.instance;
 
 class TruggleStream extends StatelessWidget {
@@ -188,7 +187,7 @@ class All_TtuggleContainer extends StatelessWidget {
           maxHeight: MediaQuery.of(context).size.height / (5),
         ),
         alignment: Alignment.center,
-        padding: new EdgeInsets.only(left: 16.0, bottom: 8.0),
+        //padding: new EdgeInsets.only(left: 16.0, bottom: 8.0),
         decoration: new BoxDecoration(
           //borderRadius: BorderRadius.all(const Radius.circular(20)),
           image: new DecorationImage(
@@ -341,7 +340,8 @@ class DropDownWidget extends State<DropDown> {
           }).toList(),
         ),
         Text('Selected Item = ' + '$dropdownValue',
-            style: TextStyle(fontSize: 22, color: Colors.black)),
+            style: TextStyle(
+                fontSize: 22, color: Colors.black, fontFamily: 'Assistant')),
       ]),
     );
   }

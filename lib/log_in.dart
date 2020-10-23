@@ -7,6 +7,7 @@ import 'globalfunc.dart';
 import 'global.dart' as globals;
 import 'package:greenpeace/register.dart';
 import 'package:greenpeace/forgetPassword.dart';
+
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
   @override
@@ -25,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> resetPassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -97,16 +99,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24.0,
               ),
               RoundedButton(
-                title: 'שכחת סיסמא',
-                colour: Color(int.parse("0xff6ed000")),
-                onPressed: ()  {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgetPassword()));
-                },
-              ),
-              RoundedButton(
                 title: 'הכנס',
                 colour: Color(int.parse("0xff6ed000")),
                 onPressed: () async {
@@ -130,9 +122,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       String name = document.data['name'];
                       String role = document.data['role'];
-                      globals.name=name;
-                      globals.no_reg=false;
-                      globals.UserId=userId;
+                      globals.name = name;
+                      globals.no_reg = false;
+                      globals.UserId = userId;
                       if (role == 'menager') {
                         globals.isMeneger = true;
                       } else {
@@ -151,6 +143,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
               ),
+              RoundedButton(
+                title: 'שכחתי סיסמא',
+                //colour: Color(int.parse("0xff6ed000")),
+                colour: Colors.grey[400],
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgetPassword()));
+                },
+              ),
             ],
           ),
         ),
@@ -162,13 +165,15 @@ class _LoginScreenState extends State<LoginScreen> {
 showAlertDialog_error_login(BuildContext context) {
   // set up the button
   Widget cancelButton = FlatButton(
-    child: Text("הירשם", style: TextStyle(color: Colors.black)),
+    child: Text("הירשם",
+        style: TextStyle(color: Colors.black, fontFamily: 'Assistant')),
     onPressed: () {
       Navigator.pushNamed(context, RegistrationScreen.id);
     },
   );
   Widget continueButton = FlatButton(
-    child: Text("נסה שנית", style: TextStyle(color: Colors.black)),
+    child: Text("נסה שנית",
+        style: TextStyle(color: Colors.black, fontFamily: 'Assistant')),
     onPressed: () {
       Navigator.pop(context, true);
     },
@@ -176,8 +181,14 @@ showAlertDialog_error_login(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("נכשל"),
-    content: Text("משתמש זה לא נמצא נסה שוב או הירשם"),
+    title: Text("נכשל",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
+    content: Text("משתמש זה לא נמצא נסה שוב או הירשם",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
     actions: [
       cancelButton,
       continueButton,
@@ -241,7 +252,8 @@ class RoundedButton extends StatelessWidget {
 }
 
 const kSendButtonTextStyle = TextStyle(
-  color: Colors.lightBlueAccent,
+  fontFamily: 'Assistant',
+  color: Colors.green,
   fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );
@@ -249,12 +261,19 @@ const kSendButtonTextStyle = TextStyle(
 const kMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   hintText: 'הקלד הודעה',
+  //todo check if good
   border: InputBorder.none,
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.green, width: 1.0),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.green, width: 2.0),
+  ),
 );
 
 const kMessageContainerDecoration = BoxDecoration(
   border: Border(
-    top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+    top: BorderSide(color: Colors.green, width: 2.0),
   ),
 );
 

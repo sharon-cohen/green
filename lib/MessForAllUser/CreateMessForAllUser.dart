@@ -193,7 +193,10 @@ class _SendMessForAllUser extends State<SendMessForAllUser> {
 showAlertDialog_mess_send(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("OK"),
+    child: Text(
+      "אישור",
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
     onPressed: () {
       Navigator.push(
           context,
@@ -207,8 +210,14 @@ showAlertDialog_mess_send(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("נשלח"),
-    content: Text("ההודעה נשלחה בהצלחה"),
+    title: Text(
+      "נשלח",
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
+    content: Text(
+      "ההודעה נשלחה בהצלחה",
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
     actions: [
       okButton,
     ],

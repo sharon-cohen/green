@@ -4,6 +4,7 @@ import 'package:greenpeace/streem_firestore/event_stream.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:greenpeace/Component/Alret_Dealog.dart';
+
 class List_event extends StatefulWidget {
   List_event({Key key}) : super(key: key);
   static const String id = "All_event";
@@ -27,8 +28,7 @@ class _List_event extends State<List_event> {
               children: [
                 Row(
                   children: [
-
-                    SizedBox(width: 100),
+                    Spacer(),
                     Text(
                       'אירועים',
                       style: TextStyle(
@@ -37,6 +37,7 @@ class _List_event extends State<List_event> {
                           fontWeight: FontWeight.bold,
                           fontSize: 30),
                     ),
+                    Spacer(),
                   ],
                 ),
                 event_stream(),
@@ -44,17 +45,15 @@ class _List_event extends State<List_event> {
             ),
           )),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(int.parse("0xff6ed000")),
-        child: Icon(Icons.add),
-        onPressed: () {
-          if (globals.no_reg == true) {
-            GoregisterAlertDialog(context);
-          }
-          else {
-            Navigator.pushNamed(context, 'new_event');
-          }
-        }
-          ),
+          backgroundColor: Color(int.parse("0xff6ed000")),
+          child: Icon(Icons.add),
+          onPressed: () {
+            if (globals.no_reg == true) {
+              GoregisterAlertDialog(context);
+            } else {
+              Navigator.pushNamed(context, 'new_event');
+            }
+          }),
     );
   }
 }

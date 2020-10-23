@@ -102,7 +102,7 @@ class _AddEventPageState extends State<AddEventPage> {
                                   fontFamily: 'Assistant'),
                             )
                           : Text(
-                              'הודעה חדשה',
+                              'הודעה למנהלים',
                               style: new TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold,

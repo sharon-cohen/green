@@ -24,7 +24,7 @@ class updatestrugle extends StatefulWidget {
 }
 
 class updatestrugleState extends State<updatestrugle> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  TextStyle style = TextStyle(fontFamily: 'Assistant', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   TextEditingController _share;
@@ -243,6 +243,7 @@ class updatestrugleState extends State<updatestrugle> {
                 status,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: 'Assistant',
                   color: Colors.green,
                   fontWeight: FontWeight.w500,
                   fontSize: 20.0,
@@ -341,7 +342,7 @@ class Data {
 showAlertDialogStruggle(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("OK"),
+    child: Text("אשר"),
     onPressed: () {
       Navigator.push(
         context,
@@ -353,8 +354,8 @@ showAlertDialogStruggle(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("seccses Edit"),
-    content: Text("seccses"),
+    title: Text("עריכה"),
+    content: Text("עריכה הושלמה בהצלחה"),
     actions: [
       okButton,
     ],

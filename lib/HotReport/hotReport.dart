@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:path/path.dart';
+
 final _firestore = Firestore.instance;
 
 class HotReport extends StatefulWidget {
@@ -40,17 +41,17 @@ class _HotReport extends State<HotReport> {
   }
 
   Future<String> uploadImageToFirebase(BuildContext context) async {
-
     if (_imageFile.path.isNotEmpty) {
       fileName = basename(_imageFile.path);
     }
     StorageReference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('uploads/$fileName');
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
 
     fileUrl = await taskSnapshot.ref.getDownloadURL();
   }
+
   bool processing;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -145,23 +146,27 @@ class _HotReport extends State<HotReport> {
                   ),
                 ),
               ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
+              //   child: new Align(
+              //     child: new Text(
+              //       "מיקום",
+              //       style: new TextStyle(
+              //           fontSize: 35,
+              //           color: Colors.black,
+              //           fontFamily: 'Assistant'),
+              //     ), //so big text
+              //     alignment: FractionalOffset.topRight,
+              //   ),
+              // ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-                child: new Align(
-                  child: new Text(
-                    "מיקום",
-                    style: new TextStyle(
-                        fontSize: 35,
-                        color: Colors.black,
-                        fontFamily: 'Assistant'),
-                  ), //so big text
-                  alignment: FractionalOffset.topRight,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 8.0),
+                // padding: EdgeInsets.symmetric(
+                //     horizontal: 5,
+                //     vertical: MediaQuery.of(context).size.height / 10),
+
+                padding: EdgeInsets.fromLTRB(
+                    5, MediaQuery.of(context).size.height / 15, 5, 0),
                 child: Align(
                   child: FlatButton(
                     child: Row(
@@ -173,7 +178,7 @@ class _HotReport extends State<HotReport> {
                         ),
                         SizedBox(width: 7),
                         Text(
-                          "קבל מיקום הנוכחי שלך",
+                          "צירוף המיקום הנוכחי שלך",
                           style: new TextStyle(
                               fontFamily: 'Assistant',
                               fontSize: 25,
@@ -191,15 +196,19 @@ class _HotReport extends State<HotReport> {
               if (_currentPosition != "")
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: Text(_currentAddress),
+                      horizontal: 16.0, vertical: 0.0),
+                  child: Text(
+                    _currentAddress,
+                    style:
+                        TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+                  ),
                 ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                 child: new Align(
                   child: new Text(
-                    "או הקלד כתובת",
+                    "או הוספת כתובת",
                     style: new TextStyle(
                         fontFamily: 'Assistant',
                         fontSize: 25,
@@ -216,7 +225,7 @@ class _HotReport extends State<HotReport> {
                   validator: (value) =>
                       (_location.text == "") ? "שדה המיקום חובה" : null,
                   decoration: InputDecoration(
-                    labelText: "הקלד כתובת",
+                    labelText: "הוספת כתובת",
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -226,37 +235,39 @@ class _HotReport extends State<HotReport> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                padding: EdgeInsets.fromLTRB(
+                    5, MediaQuery.of(context).size.height / 15, 5, 0),
                 child: Container(
-
                   child: _imageFile != null
                       ? Image.file(_imageFile)
                       : FlatButton(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'image/addimage.png',
-                          width: 30,
-                          height: 30,
+                          padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'image/addimage.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                "הוספת תמונה",
+                                style: new TextStyle(
+                                    fontSize: 25, fontFamily: 'Assistant'),
+                              ),
+                            ],
+                          ),
+                          onPressed: pickImage,
                         ),
-                        SizedBox(width: 7),
-                        Text(
-                          "בחר בתמונה",
-                          style: new TextStyle(
-                              fontSize: 25, fontFamily: 'Assistant'),
-                        ),
-                      ],
-                    ),
-                    onPressed: pickImage,
-                  ),
                 ),
               ),
               SizedBox(height: 10.0),
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      //  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      padding: EdgeInsets.fromLTRB(
+                          0, MediaQuery.of(context).size.height / 15, 0, 0),
                       child: Material(
                         color: Color(int.parse("0xff6ed000")),
                         elevation: 5.0,
@@ -291,6 +302,7 @@ class _HotReport extends State<HotReport> {
                               Text(
                                 "שלח דיווח",
                                 style: style.copyWith(
+                                    fontFamily: 'Assistant',
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -358,7 +370,10 @@ class Data {
 successshowAlertDialog(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("אישור"),
+    child: Text(
+      "אישור",
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
     onPressed: () {
       Navigator.push(
           context,
@@ -372,8 +387,14 @@ successshowAlertDialog(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("האירוע נוצר בהצלחה"),
-    content: Text("נשלח למנהלים לאישור תקבל עדכון בקרוב"),
+    title: Text(
+      "האירוע נוצר בהצלחה",
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
+    content: Text(
+      "נשלח למנהלים לאישור תקבל עדכון בקרוב",
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
     actions: [
       okButton,
     ],

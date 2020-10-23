@@ -83,9 +83,7 @@ class create_struggle1State extends State<create_struggle1> {
   }
 
   Future<String> uploadImageToFirebase(BuildContext context) async {
-   
-
-      fileName = basename(_imageFile.path);
+    fileName = basename(_imageFile.path);
 
     StorageReference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('uploads/$fileName');
@@ -131,17 +129,16 @@ class create_struggle1State extends State<create_struggle1> {
                         ),
                       ),
                     ),
-
                     FittedBox(
-                      fit:BoxFit.fitWidth,
+                      fit: BoxFit.fitWidth,
                       child: Text(
                         'יצירת מאבק חדש',
                         style: TextStyle(
-                            fontFamily: 'Assistant',
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                            ),
+                          fontFamily: 'Assistant',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ],
@@ -277,28 +274,27 @@ class create_struggle1State extends State<create_struggle1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: Container(
-
                   child: _imageFile != null
                       ? Image.file(_imageFile)
                       : FlatButton(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'image/addimage.png',
-                          width: 30,
-                          height: 30,
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'image/addimage.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                "בחר בתמונה",
+                                style: new TextStyle(
+                                    fontSize: 25, fontFamily: 'Assistant'),
+                              ),
+                            ],
+                          ),
+                          onPressed: pickImage,
                         ),
-                        SizedBox(width: 7),
-                        Text(
-                          "בחר בתמונה",
-                          style: new TextStyle(
-                              fontSize: 25, fontFamily: 'Assistant'),
-                        ),
-                      ],
-                    ),
-                    onPressed: pickImage,
-                  ),
                 ),
               ),
 
@@ -311,6 +307,7 @@ class create_struggle1State extends State<create_struggle1> {
                 status,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: 'Assistant',
                   color: Colors.green,
                   fontWeight: FontWeight.w500,
                   fontSize: 20.0,
@@ -326,8 +323,11 @@ class create_struggle1State extends State<create_struggle1> {
                       color: Color(int.parse("0xff6ed000")),
                       child: MaterialButton(
                         onPressed: () async {
-                         bool checkExistNameStruggle=await CheckNameStruggleExist(_title.text);
-                          if (_formKey.currentState.validate()&&_imageFile!=null&& !checkExistNameStruggle) {
+                          bool checkExistNameStruggle =
+                              await CheckNameStruggleExist(_title.text);
+                          if (_formKey.currentState.validate() &&
+                              _imageFile != null &&
+                              !checkExistNameStruggle) {
                             setState(() {
                               processing = true;
                             });
@@ -344,16 +344,17 @@ class create_struggle1State extends State<create_struggle1> {
                             setState(() {
                               processing = false;
                             });
-                            showAlertDialogStruggle(context,"המאבק נוצר בהצלחה");
+                            showAlertDialogStruggle(
+                                context, "המאבק נוצר בהצלחה");
                           } else {
-
-                            if(_imageFile==null){
-                              showAlertDialogStruggle(context,"חובה לצרף תמונה למאבק");
+                            if (_imageFile == null) {
+                              showAlertDialogStruggle(
+                                  context, "חובה לצרף תמונה למאבק");
                             }
-                            if(checkExistNameStruggle){
-                              showAlertDialogStruggle(context,"שם שבחרת למאבק כבר קיים במערכת אנא בחר בשם אחר");
+                            if (checkExistNameStruggle) {
+                              showAlertDialogStruggle(context,
+                                  "שם שבחרת למאבק כבר קיים במערכת אנא בחר בשם אחר");
                             }
-
                           }
                         },
                         child: Row(
@@ -362,6 +363,7 @@ class create_struggle1State extends State<create_struggle1> {
                             Text(
                               "צור מאבק",
                               style: style.copyWith(
+                                  fontFamily: 'Assistant',
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -395,19 +397,21 @@ class Data {
   Data({this.dropdownValue});
 }
 
-showAlertDialogStruggle(BuildContext context,String Mess) {
+showAlertDialogStruggle(BuildContext context, String Mess) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("OK"),
+    child: Text(
+      "אישור",
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
     onPressed: () {
-      if(Mess=="המאבק נוצר בהצלחה"){
+      if (Mess == "המאבק נוצר בהצלחה") {
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BottomNavigationBarController(2, 1)),
         );
-      }
-      else{
+      } else {
         Navigator.pop(context, true);
       }
     },
@@ -415,8 +419,15 @@ showAlertDialogStruggle(BuildContext context,String Mess) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Mess!="המאבק נוצר בהצלחה"? Text("שגיאה"):Text("מאבק חדש נוצר"),
-    content: Text(Mess),
+    title: Mess != "המאבק נוצר בהצלחה"
+        ? Text(
+            "שגיאה",
+          )
+        : Text("מאבק חדש נוצר"),
+    content: Text(
+      Mess,
+      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+    ),
     actions: [
       okButton,
     ],

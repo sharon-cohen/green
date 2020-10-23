@@ -14,7 +14,7 @@ class mass extends StatefulWidget {
   final String senderId;
   final String topic;
   final bool MessForAll;
-  mass({this.sender, this.text, this.senderId, this.topic,this.MessForAll});
+  mass({this.sender, this.text, this.senderId, this.topic, this.MessForAll});
   @override
   _massState createState() => _massState();
 }
@@ -44,9 +44,9 @@ class _massState extends State<mass> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-
+                      Spacer(),
                       Text(
-                        "פניות",
+                        "הודעות",
                         style: new TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
@@ -145,16 +145,19 @@ class _massState extends State<mass> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  color: Colors.white,
+                  // color: Colors.white,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                        child:  Row(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
+                              height: MediaQuery.of(context).size.height / 10,
+                              width: MediaQuery.of(context).size.height / 10,
+
                               //color: Color(int.parse("0xff6ed000")),
                               decoration: BoxDecoration(
                                 color: Color(int.parse("0xff6ed000")),
@@ -184,17 +187,19 @@ class _massState extends State<mass> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => AddEventPage(
-                                                sender: widget.sender,
-                                                senderId: widget.senderId,
-                                              )));
+                                              builder: (context) =>
+                                                  AddEventPage(
+                                                    sender: widget.sender,
+                                                    senderId: widget.senderId,
+                                                  )));
                                     },
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-
+                              height: MediaQuery.of(context).size.height / 10,
+                              width: MediaQuery.of(context).size.height / 10,
                               decoration: BoxDecoration(
                                 //border: Border.all(color: Colors.grey[600]),
                                 color: Colors.black87,
@@ -219,7 +224,7 @@ class _massState extends State<mass> {
                                             )),
                                       ],
                                     ),
-                                    onPressed: () async{
+                                    onPressed: () async {
                                       await showDialog(
                                           child: new Dialog(
                                             child: Container(
@@ -228,21 +233,27 @@ class _massState extends State<mass> {
                                               child: new Column(
                                                 children: <Widget>[
                                                   Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Row(
                                                       children: [
                                                         Padding(
                                                           padding:
-                                                          const EdgeInsets.fromLTRB(
-                                                              5, 0, 5, 0),
-                                                          child:
-                                                          Icon(Icons.delete_forever),
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  5, 0, 5, 0),
+                                                          child: Icon(Icons
+                                                              .delete_forever),
                                                         ),
-                                                        Text('האם למחוק הודעה זו?',
+                                                        Text(
+                                                            'האם למחוק הודעה זו?',
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                       ],
                                                     ),
@@ -254,67 +265,87 @@ class _massState extends State<mass> {
                                                       new FlatButton(
                                                         child: new Text("מחק",
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                         onPressed: () async {
-                                                          if (globals.isMeneger) {
+                                                          if (globals
+                                                              .isMeneger) {
                                                             String idevent =
-                                                            await GetMenagerMess(
-                                                                widget.text,
-                                                                widget.sender);
+                                                                await GetMenagerMess(
+                                                                    widget.text,
+                                                                    widget
+                                                                        .sender);
                                                             await _firestore
                                                                 .collection(
-                                                                "messageMenager")
-                                                                .document(idevent)
+                                                                    "messageMenager")
+                                                                .document(
+                                                                    idevent)
                                                                 .delete();
-                                                            Navigator.pop(context);
-                                                            Navigator.pop(context);
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
                                                           } else {
-                                                           if(widget.MessForAll==false) {
-                                                             String idevent =
-                                                             await GetPersonalMess(
-                                                                 widget.text,
-                                                                 widget.sender);
-                                                             await _firestore
-                                                                 .collection(
-                                                                 "personalMess")
-                                                                 .document(
-                                                                 idevent)
-                                                                 .delete();
-
-                                                           }
-                                                            else{
-                                                            print("here");
-                                                             String idMessForAll =
-                                                             await GetMessToAll(
-                                                                 widget.text,
-                                                                 widget.sender);
-                                                             Firestore.instance
-                                                                 .collection("users")
-                                                                 .document(globals.UserId)
-                                                                 .updateData({
-                                                               "personalMessIdDeleted": FieldValue.arrayUnion(
-                                                                   [idMessForAll]),
-                                                             });
-                                                           }
-                                                           Navigator.pushNamed(
-                                                               context, Allmess.id
-                                                               );
-
+                                                            if (widget
+                                                                    .MessForAll ==
+                                                                false) {
+                                                              String idevent =
+                                                                  await GetPersonalMess(
+                                                                      widget
+                                                                          .text,
+                                                                      widget
+                                                                          .sender);
+                                                              await _firestore
+                                                                  .collection(
+                                                                      "personalMess")
+                                                                  .document(
+                                                                      idevent)
+                                                                  .delete();
+                                                            } else {
+                                                              print("here");
+                                                              String
+                                                                  idMessForAll =
+                                                                  await GetMessToAll(
+                                                                      widget
+                                                                          .text,
+                                                                      widget
+                                                                          .sender);
+                                                              Firestore.instance
+                                                                  .collection(
+                                                                      "users")
+                                                                  .document(
+                                                                      globals
+                                                                          .UserId)
+                                                                  .updateData({
+                                                                "personalMessIdDeleted":
+                                                                    FieldValue
+                                                                        .arrayUnion([
+                                                                  idMessForAll
+                                                                ]),
+                                                              });
+                                                            }
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                Allmess.id);
                                                           }
                                                         },
                                                       ),
                                                       new FlatButton(
                                                         child: new Text("בטל",
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                         onPressed: () {
-                                                          Navigator.pop(context, true);
+                                                          Navigator.pop(
+                                                              context, true);
                                                         },
                                                       ),
                                                     ],
@@ -333,12 +364,10 @@ class _massState extends State<mass> {
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
         ),

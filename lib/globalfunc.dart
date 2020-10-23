@@ -99,9 +99,7 @@ class RoundedButton extends StatelessWidget {
           height: 42.0,
           child: Text(
             title,
-            style: TextStyle(
-              color: Colors.white,
-            ),
+            style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
           ),
         ),
       ),
@@ -111,97 +109,100 @@ class RoundedButton extends StatelessWidget {
 
 AssetImage getimage(String type) {
   if (type == 'נקיון') {
-    return new AssetImage('image/clean.jpg');
+    return new AssetImage('image/cleanup.jpg');
   }
   if (type == 'הפגנה') {
-    return new AssetImage('image/struggle.jpg');
+    return new AssetImage('image/protest.jpg');
   }
   if (type == 'הרצאה') {
-    return new AssetImage('image/lecture.jpg');
+    return new AssetImage('image/lecture2.jpg');
   } else {
-    return AssetImage('image/green.jpeg');
+    return AssetImage('image/other.jpg');
   }
 }
 
 String getimageString(String type) {
   if (type == 'ניקיון') {
-    return 'image/clean.jpg';
+    return 'image/cleanup.jpg';
   }
   if (type == 'הפגנה') {
-    return 'image/struggle.jpg';
+    return 'image/protest.jpg';
   }
   if (type == 'הרצאה') {
-    return 'image/lecture.jpg';
+    return 'image/lecture2.jpg';
   } else {
-    return 'image/green.jpeg';
+    return 'image/other.jpg';
   }
 }
 
-
-String DayConvert(String day){
-  String res="";
-  if(day=="1"){
-    res="יום א,";
+String DayConvert(String day) {
+  String res = "";
+  if (day == "1") {
+    res = "יום א,";
   }
-  if(day=="2"){
-    res="יום ב,";
+  if (day == "2") {
+    res = "יום ב,";
   }
-  if(day=="3"){
-    res="יום ג,";
+  if (day == "3") {
+    res = "יום ג,";
   }
-  if(day=="4"){
-    res="יום ד,";
+  if (day == "4") {
+    res = "יום ד,";
   }
-  if(day=="5"){
-    res="יום ה,";
+  if (day == "5") {
+    res = "יום ה,";
   }
-  if(day=="6"){
-    res="יום ו,";
-  }if(day=="7"){
-    res="יום שבת,";
+  if (day == "6") {
+    res = "יום ו,";
   }
-return res;
+  if (day == "7") {
+    res = "יום שבת,";
+  }
+  return res;
 }
-String monthConvert(String val){
-  String res="";
-  if(val=="1"){
-    res="-ינואר";
+
+String monthConvert(String val) {
+  String res = "";
+  if (val == "1") {
+    res = "-ינואר";
   }
-  if(val=="2"){
-    res="-פבואר";
+  if (val == "2") {
+    res = "-פבואר";
   }
-  if(val=="3"){
-    res="-מרץ";
+  if (val == "3") {
+    res = "-מרץ";
   }
-  if(val=="4"){
-    res="-אפריל";
+  if (val == "4") {
+    res = "-אפריל";
   }
-  if(val=="5"){
-    res="-מאי";
+  if (val == "5") {
+    res = "-מאי";
   }
-  if(val=="6"){
-    res="-יוני";
-  }if(val=="7"){
-    res="-יולי";
+  if (val == "6") {
+    res = "-יוני";
   }
-  if(val=="8"){
-    res="-אוגוסט";
+  if (val == "7") {
+    res = "-יולי";
   }
-  if(val=="9"){
-    res="-ספטמבר";
+  if (val == "8") {
+    res = "-אוגוסט";
   }
-  if(val=="10"){
-    res="-אוקטובר";
+  if (val == "9") {
+    res = "-ספטמבר";
   }
-  if(val=="11"){
-    res="-נובמבר";
+  if (val == "10") {
+    res = "-אוקטובר";
   }
-  if(val=="12"){
-    res="-דצמבר";
+  if (val == "11") {
+    res = "-נובמבר";
+  }
+  if (val == "12") {
+    res = "-דצמבר";
   }
 
   return res;
 }
+
 void launchMap(String address) async {
   String query = Uri.encodeComponent(address);
 

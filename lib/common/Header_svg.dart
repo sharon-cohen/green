@@ -57,6 +57,7 @@ class _MyHeader_svgState extends State<MyHeader_svg> {
                     child: Text(
                       "${widget.textTop} \n${widget.textBottom}",
                       style: kHeadingTextStyle.copyWith(
+                        fontFamily: 'Assistant',
                         color: Colors.white,
                       ),
                     ),
@@ -91,6 +92,7 @@ class MyClipper extends CustomClipper<Path> {
 }
 
 const kHeadingTextStyle = TextStyle(
+  fontFamily: 'Assistant',
   fontSize: 18,
   fontWeight: FontWeight.w600,
 );

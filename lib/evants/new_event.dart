@@ -40,8 +40,6 @@ class _newEventPage extends State<newEventPage> {
 
   var tmpArray = [];
 
-
-
   DateTime _eventDate;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -51,7 +49,6 @@ class _newEventPage extends State<newEventPage> {
   void initState() {
     super.initState();
     _loadCurrentUser();
-
 
     _title = TextEditingController(
         text: widget.note != null ? widget.note.title : "");
@@ -125,19 +122,19 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   cursorColor: Colors.black,
                   controller: _title,
                   validator: (value) =>
-                  (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
+                      (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                     labelText: "נושא האירוע",
                     filled: true,
                     fillColor: Colors.white,
                     labelStyle:
-                    TextStyle(fontFamily: 'Assistant', color: Colors.black),
+                        TextStyle(fontFamily: 'Assistant', color: Colors.black),
                     focusColor: Colors.lightGreen,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -150,23 +147,23 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _description,
                   minLines: 3,
                   maxLines: 5,
                   validator: (value) =>
-                  (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
+                      (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                     labelText: "תיאור האירוע",
                     labelStyle:
-                    TextStyle(fontFamily: 'Assistant', color: Colors.black),
+                        TextStyle(fontFamily: 'Assistant', color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
-                      //  borderRadius: BorderRadius.circular(10)
-                    ),
+                        //  borderRadius: BorderRadius.circular(10)
+                        ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.lightGreen),
                       //borderRadius: BorderRadius.circular(10),
@@ -176,21 +173,21 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _location,
                   validator: (value) =>
-                  (value.isEmpty) ? "שדה המיקום חובה" : null,
+                      (value.isEmpty) ? "שדה המיקום חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                     labelText: "מיקום - כתובת מדויקת",
                     labelStyle:
-                    TextStyle(fontFamily: 'Assistant', color: Colors.black),
+                        TextStyle(fontFamily: 'Assistant', color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
-                      //  borderRadius: BorderRadius.circular(10),
-                    ),
+                        //  borderRadius: BorderRadius.circular(10),
+                        ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.lightGreen),
                       //borderRadius: BorderRadius.circular(10),
@@ -200,7 +197,7 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _whatapp,
                   minLines: 3,
@@ -215,8 +212,8 @@ class _newEventPage extends State<newEventPage> {
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
-                      //  borderRadius: BorderRadius.circular(10),
-                    ),
+                        //  borderRadius: BorderRadius.circular(10),
+                        ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.lightGreen),
                       //borderRadius: BorderRadius.circular(10),
@@ -224,7 +221,6 @@ class _newEventPage extends State<newEventPage> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -275,7 +271,7 @@ class _newEventPage extends State<newEventPage> {
               ),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: new Align(
                   child: new Text(
                     "סוג האירוע",
@@ -293,19 +289,17 @@ class _newEventPage extends State<newEventPage> {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 450,
-                      width: 300,
+                      height: MediaQuery.of(context).size.height / 3.4,
+                      width: MediaQuery.of(context).size.height / 2.5,
                       child: Column(children: <Widget>[
                         Expanded(
                           child: RadioButtonGroup(
-
                             labels: [
                               "הפגנה",
                               "ניקיון",
                               "הרצאה",
                               "אחר",
                             ],
-
                             onChange: (String label, int index) {
                               print("label: $label index: $index");
                               type_event = label;
@@ -313,97 +307,100 @@ class _newEventPage extends State<newEventPage> {
                             onSelected: (String label) => print(label),
                           ),
                         ),
-
-
                       ]),
                     ),
                   ),
                 ],
               ),
-
               processing
                   ? Center(child: CircularProgressIndicator())
                   : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: Material(
-                  color: Color(int.parse("0xff6ed000")),
-                  elevation: 5.0,
-                  //borderRadius: BorderRadius.circular(30.0),
-                  child: MaterialButton(
-                    onPressed: () async {
-                      bool checkExistNameEvent=await CheckNameEventExist(_title.text);
-                      if (_location.text!=""&&_description.text!=""&&_title.text!=""&&_whatapp.text!=""&&!checkExistNameEvent) {
-                        setState(() {
-                          processing = true;
-                        });
-                        if (widget.note != null) {
-                          await eventDBS.updateData(widget.note.id, {
-                            "title": _title.text,
-                            "description": _description.text,
-                            "event_date": widget.note.eventDate,
-                            "time" :widget.note.time,
-                            "sender": globals.name,
-                            "senderId": currentUser.uid,
-                            "location": _location.text,
-                            "type_event": type_event,
-                            "whatapp": _whatapp.text,
-                          });
-                        } else {
-                          await eventDBS.createItem(EventModel(
-                            title: _title.text,
-                            description: _description.text,
-                            eventDate: value,
-                            createDateEvent: createDateEvent,
-                            approve: false,
-                            time:initialValue,
-                            sender: globals.name,
-                            senderId: currentUser.uid,
-                            type_event: type_event,
-                            location: _location.text,
-                            whatapp: _whatapp.text,
-                          ));
-                        }
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Material(
+                        color: Color(int.parse("0xff6ed000")),
+                        elevation: 5.0,
+                        //borderRadius: BorderRadius.circular(30.0),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            bool checkExistNameEvent =
+                                await CheckNameEventExist(_title.text);
+                            if (_location.text != "" &&
+                                _description.text != "" &&
+                                _title.text != "" &&
+                                _whatapp.text != "" &&
+                                !checkExistNameEvent) {
+                              setState(() {
+                                processing = true;
+                              });
+                              if (widget.note != null) {
+                                await eventDBS.updateData(widget.note.id, {
+                                  "title": _title.text,
+                                  "description": _description.text,
+                                  "event_date": widget.note.eventDate,
+                                  "time": widget.note.time,
+                                  "sender": globals.name,
+                                  "senderId": currentUser.uid,
+                                  "location": _location.text,
+                                  "type_event": type_event,
+                                  "whatapp": _whatapp.text,
+                                });
+                              } else {
+                                await eventDBS.createItem(EventModel(
+                                  title: _title.text,
+                                  description: _description.text,
+                                  eventDate: value,
+                                  createDateEvent: createDateEvent,
+                                  approve: false,
+                                  time: initialValue,
+                                  sender: globals.name,
+                                  senderId: currentUser.uid,
+                                  type_event: type_event,
+                                  location: _location.text,
+                                  whatapp: _whatapp.text,
+                                ));
+                              }
 
-                        setState(() {
-                          processing = false;
-                        });
-                        AlertDialogCreateEvent(context,"האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים");
-                      }
-                        else{
-                         if(checkExistNameEvent==true){
-                           AlertDialogCreateEvent(context,"שם אירוע זה כבר קיים במערכת אנא בחר בשם אחר");
-                         }
-                          else{
-                           AlertDialogCreateEvent(context,"חובה למלא את כל השדות");
-                         }
-                      }
-                    },
-                    child: Row(
-                      //crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "צור אירוע",
-                          style: style.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                              setState(() {
+                                processing = false;
+                              });
+                              AlertDialogCreateEvent(context,
+                                  "האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים");
+                            } else {
+                              if (checkExistNameEvent == true) {
+                                AlertDialogCreateEvent(context,
+                                    "שם אירוע זה כבר קיים במערכת אנא בחר בשם אחר");
+                              } else {
+                                AlertDialogCreateEvent(
+                                    context, "חובה למלא את כל השדות");
+                              }
+                            }
+                          },
+                          child: Row(
+                            //crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "צור אירוע",
+                                style: style.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              // SizedBox(width: 270),
+                              Image.asset(
+                                'image/whitearrow.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                              // Icon(
+                              //   Icons.play_circle_outline,
+                              //   color: Colors.white,
+                              //   size: 36.0,
+                              // ),
+                            ],
+                          ),
                         ),
-                        // SizedBox(width: 270),
-                        Image.asset(
-                          'image/whitearrow.png',
-                          width: 30,
-                          height: 30,
-                        ),
-                        // Icon(
-                        //   Icons.play_circle_outline,
-                        //   color: Colors.white,
-                        //   size: 36.0,
-                        // ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -424,14 +421,13 @@ class Data {
   Data({this.dropdownValue});
 }
 
-
 AlertDialogCreateEvent(BuildContext context, String Mess) {
   // set up the button
   Widget okButton = FlatButton(
     child: Text("אישור"),
     onPressed: () {
       Navigator.pop(context, true);
-     if(Mess=="האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים")
+      if (Mess == "האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים")
         Navigator.pop(context, true);
     },
   );
@@ -439,7 +435,6 @@ AlertDialogCreateEvent(BuildContext context, String Mess) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text(Mess),
-
     actions: [
       okButton,
     ],

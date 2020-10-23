@@ -98,8 +98,20 @@ class HotContainer extends StatelessWidget {
                 fontFamily: 'Assistant'),
           ),
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-          subtitle:  Text(DayConvert(report.time.weekday.toString())+" "+report.time.day.toString()+monthConvert(report.time.month.toString()),
-              overflow: TextOverflow.ellipsis),
+          subtitle: FittedBox(
+            child: Text(
+              DayConvert(report.time.weekday.toString()) +
+                  " " +
+                  report.time.day.toString() +
+                  monthConvert(report.time.month.toString()),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  fontFamily: 'Assistant'),
+            ),
+          ),
           trailing: FlatButton(
             padding: const EdgeInsets.all(0.0),
             child: Container(

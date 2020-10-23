@@ -21,19 +21,32 @@ class _All_truggleState extends State<All_truggle> {
             automaticallyImplyLeading: false),
         body: ListView(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                icon: Icon(
-                  Icons.clear,
-                  color: Colors.black,
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  icon: Icon(
+                    Icons.clear,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
+                Spacer(),
+                Text(
+                  'מאבקים        ',
+                  style: TextStyle(
+                      fontFamily: 'Assistant',
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),
+                ),
+                Spacer(),
+              ],
             ),
-            Container(child: TruggleStream(page_call: 'all_struggle')),
+            Container(
+                padding: EdgeInsets.all(0),
+                child: TruggleStream(page_call: 'all_struggle')),
           ],
         ));
   }

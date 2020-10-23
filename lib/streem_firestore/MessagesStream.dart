@@ -36,7 +36,7 @@ class MessageBubble extends StatelessWidget {
               ),
         elevation: 1,
         //color: isMe ? Colors.white70: Colors.green.shade200,
-        color: isMe ? Colors.green[400] : Colors.white70,
+        color: isMe ? Color(int.parse("0xff6ed000")) : Colors.white70,
         child: Padding(
           padding: EdgeInsets.symmetric(
             vertical: 10,
@@ -68,25 +68,27 @@ class MessageBubble extends StatelessWidget {
                         ),
                       ),
                 SizedBox(height: 3),
-                text!=null?Text(
-                  text.toString(),
-                  style: TextStyle(
-                    fontFamily: 'Assistant',
-                    // fontSize: 15,
-                    // color: Colors.black,
-                    color: Colors.black,
-                    fontSize: 14,
-                  ),
-                ):Text(
-                  " ",
-                  style: TextStyle(
-                    fontFamily: 'Assistant',
-                    // fontSize: 15,
-                    // color: Colors.black,
-                    color: Colors.black,
-                    fontSize: 14,
-                  ),
-                ),
+                text != null
+                    ? Text(
+                        text.toString(),
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          // fontSize: 15,
+                          // color: Colors.black,
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                      )
+                    : Text(
+                        " ",
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          // fontSize: 15,
+                          // color: Colors.black,
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
+                      ),
                 isMe
                     ? Container(
                         //width: MediaQuery.of(context).size.width,
@@ -97,7 +99,7 @@ class MessageBubble extends StatelessWidget {
                             fontFamily: 'Assistant',
                             color: Colors.grey[800],
                             fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                            //fontWeight: FontWeight.bold,
                           ),
                           // textAlign: TextAlign.end,
                         ),
@@ -118,16 +120,69 @@ class MessageBubble extends StatelessWidget {
       );
     } else
       return FlatButton(
+        padding: EdgeInsets.all(0),
+        //todo add onpress
         onPressed: () {},
-        child: Container(
-            height: 100,
-            width: 100,
-        child: CachedNetworkImage(
-          imageUrl: image_u,
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              CircularProgressIndicator(value: downloadProgress.progress),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-        ),
+        //todo trying to add a name and date
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            isMe
+                ? Text(
+                    globals.name, textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                      fontSize: 12,
+                    ),
+                    //textAlign: TextAlign.end,
+                  )
+                : Text(
+                    sender,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                      fontSize: 12,
+                    ),
+                  ),
+            Container(
+              height: 100,
+              width: 80,
+              child: CachedNetworkImage(
+                imageUrl: image_u,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(value: downloadProgress.progress),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
+            ),
+            isMe
+                ? Container(
+                    //width: MediaQuery.of(context).size.width,
+                    child: Text(
+                      GetTime(time.toDate(), true),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Assistant',
+                        color: Colors.grey[800],
+                        fontSize: 12,
+                        //fontWeight: FontWeight.bold,
+                      ),
+                      // textAlign: TextAlign.end,
+                    ),
+                  )
+                : Text(
+                    GetTime(time.toDate(), false),
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Assistant'),
+                  ),
+          ],
         ),
 //            decoration: new BoxDecoration(
 //                borderRadius: BorderRadius.all(Radius.circular(8.0)),

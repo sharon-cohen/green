@@ -32,7 +32,6 @@ class event_container extends StatelessWidget {
           maxHeight: MediaQuery.of(context).size.height / (5),
         ),
         alignment: Alignment.center,
-        padding: new EdgeInsets.only(left: 16.0, bottom: 8.0),
         decoration: new BoxDecoration(
           //  borderRadius: BorderRadius.all(const Radius.circular(20)),
           image: new DecorationImage(

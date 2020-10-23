@@ -8,12 +8,11 @@ import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'package:greenpeace/evants/event_model.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
+
 class updateEventPage extends StatefulWidget {
   EventModel event;
 
-  updateEventPage({
-   this.event
-  });
+  updateEventPage({this.event});
 
   @override
   _updateEventPage createState() => _updateEventPage();
@@ -30,10 +29,7 @@ class _updateEventPage extends State<updateEventPage> {
     dropdownValue: '',
   );
 
-
   var tmpArray = [];
-
-
 
   DateTime _eventDate = DateTime.now();
   final _formKey = GlobalKey<FormState>();
@@ -41,13 +37,13 @@ class _updateEventPage extends State<updateEventPage> {
   List<String> equipmentList = [];
   bool processing;
   String temp = "";
-String chooseType;
+  String chooseType;
 
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
-      chooseType=widget.event.type_event;
+    chooseType = widget.event.type_event;
     _title = TextEditingController(
         text: widget.event != null ? widget.event.title : "");
     _description = TextEditingController(
@@ -172,7 +168,10 @@ String chooseType;
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: new Text(
                   "סוג האירוע",
-                  style: new TextStyle(fontSize: 30),
+                  style: new TextStyle(
+                    fontSize: 25,
+                    fontFamily: 'Assistant',
+                  ),
                 ),
               ),
               Flex(
@@ -180,65 +179,60 @@ String chooseType;
                 children: [
                   Expanded(
                     child: Container(
-                      height: 300,
-                      width: 300,
+                      height: MediaQuery.of(context).size.height / 3.4,
+                      width: MediaQuery.of(context).size.height / 2.5,
                       child: Column(children: <Widget>[
                         Expanded(
                           child: RadioButtonGroup(
-                          picked:  chooseType,
-                            labels: [
-                              "הפגנה",
-                              "ניקיון",
-                              "הרצאה",
-                            ],
-
+                            picked: chooseType,
+                            labels: ["הפגנה", "ניקיון", "הרצאה", "אחר"],
                             onChange: (String label, int index) {
                               print("label: $label index: $index");
                               setState(() {
-                                chooseType=label;
+                                chooseType = label;
                               });
                               //type_event=label;
                             },
                             onSelected: (String label) => print(label),
                           ),
                         ),
-
                       ]),
                     ),
                   ),
                 ],
               ),
-
-
-
-
               ListTile(
                 title: Text(
                   "בחר תאריך",
-                  style: new TextStyle(fontSize: 30),
+                  style: new TextStyle(
+                    fontSize: 25,
+                    fontFamily: 'Assistant',
+                  ),
                 ),
                 subtitle: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: widget.event.title!=""?Text(
-                      "${widget.event.eventDate.year} - ${widget.event.eventDate.month} - ${widget.event.eventDate.day}"):Text(
-                      "${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                  child: widget.event.title != ""
+                      ? Text(
+                          "${widget.event.eventDate.year} - ${widget.event.eventDate.month} - ${widget.event.eventDate.day}")
+                      : Text(
+                          "${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
                 ),
-
                 onTap: () async {
                   print(this.data.dropdownValue);
                   DateTime picked = await showDatePicker(
                       context: context,
-                      initialDate: widget.event.title==""? _eventDate:widget.event.eventDate,
+                      initialDate: widget.event.title == ""
+                          ? _eventDate
+                          : widget.event.eventDate,
                       firstDate: DateTime(_eventDate.year - 5),
                       lastDate: DateTime(_eventDate.year + 5));
                   if (picked != null) {
                     setState(() {
-                   widget.event.eventDate = picked;
+                      widget.event.eventDate = picked;
                     });
                   }
                 },
               ),
-
               SizedBox(height: 10.0),
               processing
                   ? Center(child: CircularProgressIndicator())
@@ -255,11 +249,12 @@ String chooseType;
                               setState(() {
                                 processing = true;
                               });
-                              String IdEvent=await Getevent(widget.event.title);
+                              String IdEvent =
+                                  await Getevent(widget.event.title);
                               await eventDBS.updateData(IdEvent, {
                                 "title": _title.text,
                                 "description": _description.text,
-                                "event_date":  widget.event.eventDate,
+                                "event_date": widget.event.eventDate,
                                 "location": _location.text,
                                 "type_event": chooseType,
                                 "whatapp": _whatapp.text,
@@ -269,8 +264,12 @@ String chooseType;
                                 processing = false;
                               });
                             }
-                            successshowAlertDialog(context, currentUser.email,
-                                widget.event.senderId, widget.event.title, widget.event.sender);
+                            successshowAlertDialog(
+                                context,
+                                currentUser.email,
+                                widget.event.senderId,
+                                widget.event.title,
+                                widget.event.sender);
                           },
                           child: Row(
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,

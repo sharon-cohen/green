@@ -325,7 +325,10 @@ Future<bool> doesNameAlreadyExist(String email) async {
 showAlertDialogRegisterName(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("OK"),
+    child: Text("אישור",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
     onPressed: () {
       Navigator.pop(context, true);
     },
@@ -333,7 +336,10 @@ showAlertDialogRegisterName(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("שם משתמש זה קיים אנא בחר בשם אחר"),
+    title: Text("שם משתמש זה קיים אנא בחר בשם אחר",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
     actions: [
       okButton,
     ],
@@ -351,7 +357,10 @@ showAlertDialogRegisterName(BuildContext context) {
 errorMailhowAlertDialog(BuildContext context, String error) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("חזור"),
+    child: Text("חזור",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
     onPressed: () {
       Navigator.pop(context, true);
     },
@@ -359,7 +368,10 @@ errorMailhowAlertDialog(BuildContext context, String error) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text(error + "שגיאה "),
+    title: Text(error + "שגיאה ",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )),
     actions: [
       okButton,
     ],

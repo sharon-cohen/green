@@ -57,7 +57,6 @@ class DialogUtils {
           }
         });
 
-
         Navigator.pop(context);
       } else {
         final QuerySnapshot result = await Firestore.instance
@@ -94,12 +93,6 @@ class DialogUtils {
           return AlertDialog(
             title: Row(
               children: [
-                // Image.asset(
-                //   'alert.png',
-                //   width: 50,
-                //   height: 50,
-                //    fit: BoxFit.contain,
-                // ),
                 ImageIcon(
                   AssetImage("image/alert.png"),
                   color: Colors.black,
@@ -148,28 +141,55 @@ class DialogUtils {
         });
   }
 }
+
 GoregisterAlertDialog(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("לך להירשם"),
+    child: Text(
+      "לך להירשם",
+      style: new TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Assistant'),
+    ),
     onPressed: () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => RegistrationScreen ()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => RegistrationScreen()));
     },
   );
   Widget Later = FlatButton(
-    child: Text("אחר כך"),
+    child: Text(
+      "אחר כך",
+      style: new TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Assistant'),
+    ),
     onPressed: () {
       Navigator.pop(context);
     },
   );
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: FittedBox(child:
-    Text("בשביל לבצע פעולה זאת עלייך להירשם")),
-
+    //title: FittedBox(child: Text("בשביל לבצע פעולה זאת עלייך להירשם")),
+    title: Row(
+      children: [
+        ImageIcon(
+          AssetImage("image/alert.png"),
+          color: Colors.black,
+          size: 20,
+          // color: Colors.black,
+        ),
+        SizedBox(width: 10),
+        FittedBox(
+          child: Text(
+            "בשביל לבצע פעולה זאת עלייך להירשם",
+            style: new TextStyle(
+                color: Colors.black, fontFamily: 'Assistant', fontSize: 15),
+          ),
+        ),
+      ],
+    ),
     actions: [
       okButton,
       Later,

@@ -15,6 +15,7 @@ import 'package:greenpeace/MessForAllUser/CreateMessForAllUser.dart';
 import 'package:greenpeace/MessForAllUser/ListMessForAllStream.dart';
 import 'package:greenpeace/MessToOnePersonFromMenager/choosePerson.dart';
 import 'package:greenpeace/evants/event_model.dart';
+
 final databaseReference = Firestore.instance;
 final _firestore = Firestore.instance;
 
@@ -58,13 +59,16 @@ class AllmessState extends State<Allmess> {
               ],
             ),
             new Align(
-              child: new Text(
-                "דיווחים סביבתיים",
-                style: new TextStyle(
-                    fontFamily: 'Assistant',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.redAccent),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Text(
+                  "דיווחים סביבתיים",
+                  style: new TextStyle(
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Colors.redAccent),
+                ),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
@@ -73,38 +77,47 @@ class AllmessState extends State<Allmess> {
             //todo check if good
 
             new Align(
-              child: new Text(
-                "הודעות",
-                style: new TextStyle(
-                    fontFamily: 'Assistant',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.black),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Text(
+                  "הודעות",
+                  style: new TextStyle(
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Colors.black),
+                ),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
             messMenager(),
             new Align(
-              child: new Text(
-                "דיווחי צ'אט",
-                style: new TextStyle(
-                    fontFamily: 'Assistant',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.black),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Text(
+                  "דיווחי צ'אט",
+                  style: new TextStyle(
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Colors.black),
+                ),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
             reportStream(),
             SizedBox(height: 10),
             new Align(
-              child: new Text(
-                "אירועים חדשים לאישור",
-                style: new TextStyle(
-                    fontFamily: 'Assistant',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.black),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Text(
+                  "אירועים חדשים לאישור",
+                  style: new TextStyle(
+                      fontFamily: 'Assistant',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Colors.black),
+                ),
               ), //so big text
               alignment: FractionalOffset.topRight,
             ),
@@ -114,19 +127,23 @@ class AllmessState extends State<Allmess> {
         ),
       );
     } else {
-      final document =
-          await Firestore.instance.collection('users').document(globals.UserId).get();
+      final document = await Firestore.instance
+          .collection('users')
+          .document(globals.UserId)
+          .get();
       List<String> myMess = List.from(document['personalMessId']);
-      final documentdelete =
-      await Firestore.instance.collection('users').document(globals.UserId).get();
-      List<String> myMessDelete = List.from(documentdelete['personalMessIdDeleted']);
+      final documentdelete = await Firestore.instance
+          .collection('users')
+          .document(globals.UserId)
+          .get();
+      List<String> myMessDelete =
+          List.from(documentdelete['personalMessIdDeleted']);
       return Container(
         margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
         child: Column(
           children: <Widget>[
             Row(
               children: [
-
                 Spacer(),
                 Text(
                   'הודעות',
@@ -174,15 +191,28 @@ class AllmessState extends State<Allmess> {
               onPressed: () {
                 showAlertDialogMessManeger(context);
               }),
-      body: new FutureBuilder<Widget>(
-          future: listOfMass(),
-          builder: (BuildContext context, AsyncSnapshot<Widget> text) {
-            return globals.isMeneger
-                ? Container(child: text.data)
-                : Container(child: text.data);
-
-
-          }),
+      body: SingleChildScrollView(
+        child: new FutureBuilder<Widget>(
+            future: listOfMass(),
+            builder: (BuildContext context, AsyncSnapshot<Widget> text) {
+              //todo ask sharon its the same q
+              return globals.isMeneger
+                  ? Container(
+                      child: Column(
+                      children: [
+                        text.data,
+                        SizedBox(height: 60),
+                      ],
+                    ))
+                  : Container(
+                      child: Column(
+                      children: [
+                        text.data,
+                        SizedBox(height: 60),
+                      ],
+                    ));
+            }),
+      ),
     );
   }
 }
@@ -266,7 +296,6 @@ class reportStream extends StatelessWidget {
           final time = report.data['time'];
           final image = report.data['url'];
 
-
           //print( reportModel.getReportfromMess(messId).text.toString());
           final reportsContainer = ReportsContainer(
             report: reportModel(
@@ -299,10 +328,8 @@ class ReportsContainer extends StatelessWidget {
     this.width_page,
   });
 
-
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: Container(
@@ -332,7 +359,18 @@ class ReportsContainer extends StatelessWidget {
           ),
 
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-          subtitle: Text(DayConvert(report.time.weekday.toString())+" "+report.time.day.toString()+monthConvert(report.time.month.toString())),
+          subtitle: FittedBox(
+            child: Text(
+                DayConvert(report.time.weekday.toString()) +
+                    " " +
+                    report.time.day.toString() +
+                    monthConvert(report.time.month.toString()),
+                style: TextStyle(
+                  fontFamily: 'Assistant',
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
           trailing: FlatButton(
             padding: const EdgeInsets.all(0.0),
             child: Container(
@@ -340,7 +378,6 @@ class ReportsContainer extends StatelessWidget {
                 child: Icon(Icons.keyboard_arrow_left,
                     color: Colors.black, size: 30.0)),
             onPressed: () {
-
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -388,20 +425,17 @@ class eventStream extends StatelessWidget {
           final whatapp = event.data['whatapp'];
           if (eventapprove == false) {
             final evenContainer = eventContainer(
-              event:EventModel(
-              title: eventtitle,
-              approve: eventapprove,
-              eventDate: dateCreateEvent.toDate(),
-              time: date.toDate(),
-
-              description: eventdis,
-
-
-              sender: sender,
-              senderId: senderId,
-              location: location,
-              type_event: type_event,
-              whatapp: whatapp,
+              event: EventModel(
+                title: eventtitle,
+                approve: eventapprove,
+                eventDate: dateCreateEvent.toDate(),
+                time: date.toDate(),
+                description: eventdis,
+                sender: sender,
+                senderId: senderId,
+                location: location,
+                type_event: type_event,
+                whatapp: whatapp,
               ),
             );
             eventContainers.add(evenContainer);
@@ -419,51 +453,64 @@ class eventStream extends StatelessWidget {
 
 class eventContainer extends StatelessWidget {
   EventModel event;
-  eventContainer(
-      {this.event});
+  eventContainer({this.event});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: ListTile(
-          leading: Container(
-            decoration: new BoxDecoration(
-                border: new Border(
-                    right: new BorderSide(width: 1.0, color: Colors.white24))),
-            child: ImageIcon(
-              AssetImage("image/feed2.png"),
-              color: Colors.black,
+    return Padding(
+      padding: const EdgeInsets.all(6.0),
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: ListTile(
+            leading: Container(
+              decoration: new BoxDecoration(
+                  border: new Border(
+                      right:
+                          new BorderSide(width: 1.0, color: Colors.white24))),
+              child: ImageIcon(
+                AssetImage("image/feed2.png"),
+                color: Colors.black,
+              ),
             ),
-          ),
-          title: Text(
-            this.event.sender,
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 10),
-          ),
-          // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+            title: Text(
+              this.event.sender,
+              style: TextStyle(
+                  fontFamily: 'Assistant',
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+            ),
+            // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
 
-          subtitle: Row(
-            children: <Widget>[
-              Flexible(
-          child: Text(DayConvert(event.time.weekday.toString())+" "+event.time.day.toString()+monthConvert(event.time.month.toString()),
+            subtitle: FittedBox(
+              child: Text(
+                DayConvert(event.time.weekday.toString()) +
+                    " " +
+                    event.time.day.toString() +
+                    monthConvert(event.time.month.toString()),
+                style: TextStyle(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Assistant'),
               ),
+            ),
+            trailing: FlatButton(
+              padding: const EdgeInsets.all(0.0),
+              child: Container(
+                width: 1,
+                child: Icon(Icons.keyboard_arrow_left,
+                    color: Colors.black, size: 30.0),
               ),
-            ],
-          ),
-          trailing: FlatButton(
-            child: Icon(Icons.keyboard_arrow_left,
-                color: Colors.black, size: 30.0),
-            onPressed: () {
-
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => mass_event(
-                           event:this.event,
-                          )));
-            },
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => mass_event(
+                              event: this.event,
+                            )));
+              },
+            ),
           ),
         ),
       ),

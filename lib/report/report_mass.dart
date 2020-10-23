@@ -12,7 +12,7 @@ class reportMass extends StatelessWidget {
 
   const reportMass({Key key, this.report}) : super(key: key);
   Widget mass() {
-    if (report.text.toString() !="") {
+    if (report.text.toString() != "") {
       return Align(
         child: new Text(
           report.text,
@@ -42,7 +42,7 @@ class reportMass extends StatelessWidget {
       backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -54,9 +54,9 @@ class reportMass extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 20,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      SizedBox(width: 80),
+                      Spacer(),
                       Text(
                         "דיווחי צ'אט",
                         style: new TextStyle(
@@ -65,7 +65,7 @@ class reportMass extends StatelessWidget {
                           fontFamily: 'Assistant',
                         ),
                       ),
-                      SizedBox(width: 50),
+                      Spacer(),
                       IconButton(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -153,7 +153,8 @@ class reportMass extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  color: Colors.white,
+                  //todo suit to other
+                  // color: Colors.white,
 
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,11 +164,13 @@ class reportMass extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-
                             Container(
+                              height: MediaQuery.of(context).size.height / 10,
+                              width: MediaQuery.of(context).size.height / 8,
                               decoration: BoxDecoration(
                                 color: Color(int.parse("0xff6ed000")),
-                                //border: Border.all(color: Colors.grey[600])
+                                border: Border.all(
+                                    color: Color(int.parse("0xff6ed000"))),
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -182,16 +185,21 @@ class reportMass extends StatelessWidget {
                                               child: new Column(
                                                 children: <Widget>[
                                                   Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Row(
                                                       children: [
-                                                        Icon(Icons.not_interested),
+                                                        Icon(Icons
+                                                            .not_interested),
                                                         Text(
                                                             ' האם להסיר הודעה זו מעדכונים?',
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                       ],
                                                     ),
@@ -203,57 +211,82 @@ class reportMass extends StatelessWidget {
                                                       new FlatButton(
                                                         child: new Text("הסר",
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                         onPressed: () async {
-                                                          if (report.image != "") {
+                                                          if (report.image !=
+                                                              "") {
                                                             String idevent =
-                                                            await Getmess(
-                                                                report.image, true);
+                                                                await Getmess(
+                                                                    report
+                                                                        .image,
+                                                                    true);
                                                             await _firestore
-                                                                .collection("messages")
-                                                                .document(idevent)
+                                                                .collection(
+                                                                    "messages")
+                                                                .document(
+                                                                    idevent)
                                                                 .delete();
                                                             String idreport =
-                                                            await Getreport(
-                                                                report.image, true);
+                                                                await Getreport(
+                                                                    report
+                                                                        .image,
+                                                                    true);
                                                             await _firestore
-                                                                .collection("report")
-                                                                .document(idreport)
+                                                                .collection(
+                                                                    "report")
+                                                                .document(
+                                                                    idreport)
                                                                 .delete();
 
-                                                            Navigator.pop(context,true);
-                                                            Navigator.pop(context,true);
+                                                            Navigator.pop(
+                                                                context, true);
+                                                            Navigator.pop(
+                                                                context, true);
                                                           } else {
                                                             String idevent =
-                                                            await Getmess(
-                                                                report.text, false);
+                                                                await Getmess(
+                                                                    report.text,
+                                                                    false);
                                                             await _firestore
-                                                                .collection("messages")
-                                                                .document(idevent)
+                                                                .collection(
+                                                                    "messages")
+                                                                .document(
+                                                                    idevent)
                                                                 .delete();
-                                                            String idreport =  await Getreport(
-                                                                report.text, false);
+                                                            String idreport =
+                                                                await Getreport(
+                                                                    report.text,
+                                                                    false);
                                                             await _firestore
-                                                                .collection("report")
-                                                                .document(idreport)
+                                                                .collection(
+                                                                    "report")
+                                                                .document(
+                                                                    idreport)
                                                                 .delete();
-                                                            Navigator.pop(context,true);
-                                                            Navigator.pop(context,true);
+                                                            Navigator.pop(
+                                                                context, true);
+                                                            Navigator.pop(
+                                                                context, true);
                                                           }
                                                         },
                                                       ),
                                                       new FlatButton(
                                                         child: new Text("בטל",
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                         onPressed: () {
-                                                          Navigator.pop(context, true);
+                                                          Navigator.pop(
+                                                              context, true);
                                                         },
                                                       ),
                                                     ],
@@ -293,7 +326,7 @@ class reportMass extends StatelessWidget {
                                         ),
                                         Text('הסר',
                                             style: TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 15,
                                               color: Colors.white,
                                               fontFamily: 'Assistant',
                                             )),
@@ -305,9 +338,9 @@ class reportMass extends StatelessWidget {
                                 ],
                               ),
                             ),
-
                             Container(
-
+                              height: MediaQuery.of(context).size.height / 10,
+                              width: MediaQuery.of(context).size.height / 8,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey[600]),
                                 //color: Colors.black87,
@@ -329,7 +362,7 @@ class reportMass extends StatelessWidget {
                                         Text('התעלם',
                                             style: TextStyle(
                                               fontFamily: 'Assistant',
-                                              fontSize: 20,
+                                              fontSize: 15,
                                               color: Colors.black,
                                             )),
                                       ],
@@ -343,21 +376,27 @@ class reportMass extends StatelessWidget {
                                               child: new Column(
                                                 children: <Widget>[
                                                   Padding(
-                                                    padding: const EdgeInsets.all(8.0),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Row(
                                                       children: [
                                                         Padding(
                                                           padding:
-                                                          const EdgeInsets.fromLTRB(
-                                                              5, 0, 5, 0),
-                                                          child:
-                                                          Icon(Icons.delete_forever),
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  5, 0, 5, 0),
+                                                          child: Icon(Icons
+                                                              .delete_forever),
                                                         ),
-                                                        Text('האם להתעלם מדיווח זה?',
+                                                        Text(
+                                                            'האם להתעלם מדיווח זה?',
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                       ],
                                                     ),
@@ -367,45 +406,62 @@ class reportMass extends StatelessWidget {
                                                     children: [
                                                       Spacer(),
                                                       new FlatButton(
-                                                        child: new Text("מחק",
+                                                        child: new Text("התעלם",
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                         onPressed: () async {
-                                                          if (report.image != "") {
+                                                          if (report.image !=
+                                                              "") {
                                                             String idevent =
-                                                            await Getreport(
-                                                                report.image, true);
+                                                                await Getreport(
+                                                                    report
+                                                                        .image,
+                                                                    true);
                                                             await _firestore
-                                                                .collection("report")
-                                                                .document(idevent)
+                                                                .collection(
+                                                                    "report")
+                                                                .document(
+                                                                    idevent)
                                                                 .delete();
-                                                            Navigator.pop(context,true);
-                                                            Navigator.pop(context,true);
+                                                            Navigator.pop(
+                                                                context, true);
+                                                            Navigator.pop(
+                                                                context, true);
                                                           } else {
                                                             String idevent =
-                                                            await Getreport(
-                                                                report.text, false);
+                                                                await Getreport(
+                                                                    report.text,
+                                                                    false);
                                                             await _firestore
-                                                                .collection("report")
-                                                                .document(idevent)
+                                                                .collection(
+                                                                    "report")
+                                                                .document(
+                                                                    idevent)
                                                                 .delete();
-                                                            Navigator.pop(context,true);
-                                                            Navigator.pop(context,true);
+                                                            Navigator.pop(
+                                                                context, true);
+                                                            Navigator.pop(
+                                                                context, true);
                                                           }
                                                         },
                                                       ),
                                                       new FlatButton(
                                                         child: new Text("בטל",
                                                             style: TextStyle(
-                                                              fontFamily: 'Assistant',
+                                                              fontFamily:
+                                                                  'Assistant',
                                                               fontSize: 20,
-                                                              color: Colors.black,
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                         onPressed: () {
-                                                          Navigator.pop(context, true);
+                                                          Navigator.pop(
+                                                              context, true);
                                                         },
                                                       ),
                                                     ],
@@ -416,7 +472,6 @@ class reportMass extends StatelessWidget {
                                           ),
                                           context: context);
                                     },
-
                                   ),
                                   // SizedBox(width: 200),
                                 ],
@@ -425,17 +480,14 @@ class reportMass extends StatelessWidget {
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
         ),
       ),
     );
-
   }
 }

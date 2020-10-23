@@ -44,15 +44,12 @@ class _button_sendState extends State<button_send> {
     });
   }
 
-  image_sent_pro(BuildContext context,String image_show) {
+  image_sent_pro(BuildContext context, String image_show) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("בטל"),
-      onPressed: ()
-      {
-
+      onPressed: () {
         Navigator.pop(context, true);
-
       },
     );
     Widget continueButton = FlatButton(
@@ -66,19 +63,16 @@ class _button_sendState extends State<button_send> {
             "time": DateTime.now(),
             "url": fileUrl,
           });
-            setState(() {
-              fileUrl = "";
-              messageText="";
-            });
+          setState(() {
+            fileUrl = "";
+            messageText = "";
+          });
           Navigator.pop(context, true);
-
-
         });
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("בטוח תרצה לפרסם תמונה זו?"),
-
       actions: [
         cancelButton,
         continueButton,
@@ -98,7 +92,6 @@ class _button_sendState extends State<button_send> {
     print('wiget.reg');
     mass.clear();
 
-
     if (try_send == false) {
       //todo check if ok
       mass.add(
@@ -106,24 +99,25 @@ class _button_sendState extends State<button_send> {
           alignment: Alignment.centerLeft,
           child: FlatButton(
             onPressed: () {
-
-                try_send = true;
-                // if (widget.no_reg == true) {
-                if (globals.no_reg == true) {
-                  //globals
-                  DialogUtils.showCustomDialog(
-                    context,
-                    title: "יש צורך בהרשמה",
-                    okBtnText: "הירשם",
-                    cancelBtnText: "חזור",
-                    sender: "",
-                  );
-                }
-                setState(() {
-                  fileUrl = "";
-                  messageText="";
-                });
-
+              try_send = true;
+              // if (widget.no_reg == true) {
+              if (globals.no_reg == true) {
+                //globals
+                // DialogUtils.showCustomDialog(
+                //   context,
+                //   title: "יש צורך בהרשמה",
+                //   okBtnText: "הירשם",
+                //   cancelBtnText: "חזור",
+                //   sender: "",
+                // )
+                //
+                // ;
+                GoregisterAlertDialog(context);
+              }
+              setState(() {
+                fileUrl = "";
+                messageText = "";
+              });
             },
             child: Container(
               child: Text(
@@ -160,20 +154,19 @@ class _button_sendState extends State<button_send> {
         );
         mass.add(
           FlatButton(
-            onPressed: () async{
+            onPressed: () async {
               messageTextContoller.clear();
-             await _firestore.collection("messages").add({
+              await _firestore.collection("messages").add({
                 "text": messageText,
                 "sender": globals.name,
                 "time": DateTime.now(),
                 "url": fileUrl,
-
-             });
+              });
               setState(() {
                 fileUrl = "";
-                messageText="";
+                messageText = "";
               });
-           },
+            },
             child: Text(
               'שלח',
               //style: kSendButtonTextStyle,
@@ -203,7 +196,7 @@ class _button_sendState extends State<button_send> {
                   StorageUploadTask uploadTask =
                       storageReference.putFile(image);
                   setState(() {
-                    isLoading=true;
+                    isLoading = true;
                   });
                   await uploadTask.onComplete;
 
@@ -211,12 +204,9 @@ class _button_sendState extends State<button_send> {
                     fileUrl = await storageReference.getDownloadURL();
 
                     setState(() {
-
-                      isLoading=false;
-                      image_sent_pro(context,fileUrl);
-
+                      isLoading = false;
+                      image_sent_pro(context, fileUrl);
                     });
-
                   } catch (e) {
                     print('errordfd');
                   }
@@ -230,9 +220,11 @@ class _button_sendState extends State<button_send> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading?Center(child: CircularProgressIndicator()):Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: send_botton(),
-    );
+    return isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: send_botton(),
+          );
   }
 }
