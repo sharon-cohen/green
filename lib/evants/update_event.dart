@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'event_model.dart';
+import 'package:greenpeace/global.dart' as globals;
 import 'package:flutter/material.dart';
 import 'event_firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -245,6 +246,7 @@ class _updateEventPage extends State<updateEventPage> {
                         color: Color(int.parse("0xff6ed000")),
                         child: MaterialButton(
                           onPressed: () async {
+                            bool CreateEventIsManeger=false;//init value
                             if (_formKey.currentState.validate()) {
                               setState(() {
                                 processing = true;
@@ -260,16 +262,33 @@ class _updateEventPage extends State<updateEventPage> {
                                 "whatapp": _whatapp.text,
                               });
 
+                               CreateEventIsManeger= await TypeManegeRoleuser(widget.event.senderId);
+                              if(CreateEventIsManeger==false) {
+                                DocumentReference documentReference =
+                                Firestore.instance.collection("personalMess")
+                                    .document();
+                                await documentReference.setData({
+                                  "text": widget.event.title + 'האירוע שיצרת-' +
+                                      'בוצע עדכון על ידי המנהלים',
+                                  "sender": globals.name,
+                                  "time": DateTime.now(),
+                                  "url": "",
+                                  "senderID": globals.UserId,
+                                });
+
+                                await Firestore.instance.collection("users")
+                                    .document(widget.event.senderId)
+                                    .updateData({
+                                  "personalMessId": FieldValue.arrayUnion(
+                                      [documentReference.documentID])
+                                });
+                              }
                               setState(() {
                                 processing = false;
                               });
                             }
                             successshowAlertDialog(
-                                context,
-                                currentUser.email,
-                                widget.event.senderId,
-                                widget.event.title,
-                                widget.event.sender);
+                                context, CreateEventIsManeger);
                           },
                           child: Row(
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -315,26 +334,11 @@ class Data {
   Data({this.dropdownValue});
 }
 
-successshowAlertDialog(BuildContext context, String email, String currentuserId,
-    String name_event, String createby) {
-  // set up the button
+successshowAlertDialog(BuildContext context,bool ifCreateEventIsMenager) {
+
   Widget okButton = FlatButton(
     child: Text("אישור"),
-    onPressed: () {
-      DocumentReference documentReference =
-          Firestore.instance.collection("personalMess").document();
-      documentReference.setData({
-        "text": 'בוצע עדכון על ידי המנהל' + name_event + 'האירוע',
-        "sender": email,
-        "time": DateTime.now(),
-        "url": "",
-        "senderID": currentuserId,
-      });
-
-      Firestore.instance.collection("users").document(createby).updateData({
-        "personalMessId": FieldValue.arrayUnion([documentReference.documentID])
-      });
-
+    onPressed: () async{
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -348,7 +352,7 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("האירוע עודכן בהצלחה"),
-    content: Text("נשלח התראה ליוצר האירוע"),
+    content: ifCreateEventIsMenager==false?Text("נשלח התראה ליוצר האירוע"):Text(' '),
     actions: [
       okButton,
     ],

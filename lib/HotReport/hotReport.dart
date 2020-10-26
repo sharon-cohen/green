@@ -372,14 +372,14 @@ successshowAlertDialog(BuildContext context) {
   Widget okButton = FlatButton(
     child: Text(
       "אישור",
-      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
     ),
     onPressed: () {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => BottomNavigationBarController(
-                    3,
+                    1,
                     3,
                   )));
     },
@@ -389,11 +389,11 @@ successshowAlertDialog(BuildContext context) {
   AlertDialog alert = AlertDialog(
     title: Text(
       "האירוע נוצר בהצלחה",
-      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
     ),
     content: Text(
       "נשלח למנהלים לאישור תקבל עדכון בקרוב",
-      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
     ),
     actions: [
       okButton,

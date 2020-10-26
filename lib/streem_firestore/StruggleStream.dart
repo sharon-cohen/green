@@ -159,7 +159,7 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
               flex: 1,
               child: Container(
                 width: MediaQuery.of(context).size.width / (1),
-                child: Center(child: Text(widget.struggle.title)),
+                child: Center(child: FittedBox(child: Text(widget.struggle.title))),
               )),
         ],
       ),

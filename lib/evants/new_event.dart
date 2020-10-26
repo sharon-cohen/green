@@ -350,7 +350,7 @@ class _newEventPage extends State<newEventPage> {
                                   description: _description.text,
                                   eventDate: value,
                                   createDateEvent: createDateEvent,
-                                  approve: false,
+                                  approve: globals.isMeneger?true:false,
                                   time: initialValue,
                                   sender: globals.name,
                                   senderId: currentUser.uid,
@@ -363,12 +363,12 @@ class _newEventPage extends State<newEventPage> {
                               setState(() {
                                 processing = false;
                               });
-                              AlertDialogCreateEvent(context,
-                                  "האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים");
+                              !globals.isMeneger?AlertDialogCreateEvent(context,
+                                 "האירוע נוצר בהצלחה!"+ "\n"+"תשלח הודעה לאחר אישור מנהל"):AlertDialogCreateEvent(context,"האירוע נוצר בהצלחה");
                             } else {
                               if (checkExistNameEvent == true) {
                                 AlertDialogCreateEvent(context,
-                                    "שם אירוע זה כבר קיים במערכת אנא בחר בשם אחר");
+                                    "שם אירוע זה כבר קיים במערכת, אנא בחר בשם אחר");
                               } else {
                                 AlertDialogCreateEvent(
                                     context, "חובה למלא את כל השדות");
@@ -427,9 +427,11 @@ AlertDialogCreateEvent(BuildContext context, String Mess) {
     child: Text("אישור"),
     onPressed: () {
       Navigator.pop(context, true);
-      if (Mess == "האירוע נוצר בהצלחה תקבל עדכון בקרוב מהמנהלים")
+      if (Mess.contains("האירוע נוצר בהצלחה"))
         Navigator.pop(context, true);
-    },
+
+
+        },
   );
 
   // set up the AlertDialog

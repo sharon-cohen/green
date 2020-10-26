@@ -402,7 +402,7 @@ showAlertDialogStruggle(BuildContext context, String Mess) {
   Widget okButton = FlatButton(
     child: Text(
       "אישור",
-      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
     ),
     onPressed: () {
       if (Mess == "המאבק נוצר בהצלחה") {
@@ -426,7 +426,7 @@ showAlertDialogStruggle(BuildContext context, String Mess) {
         : Text("מאבק חדש נוצר"),
     content: Text(
       Mess,
-      style: TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
     ),
     actions: [
       okButton,

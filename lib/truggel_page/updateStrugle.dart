@@ -259,44 +259,62 @@ class updatestrugleState extends State<updatestrugle> {
                       color: Color(int.parse("0xff6ed000")),
                       child: MaterialButton(
                         onPressed: () async {
-                          setState(() {
-                            processing = true;
-                          });
+
                           try {
-                            await uploadImageToFirebase(context);
-                          } catch (e) {
-                            fileUrl = widget.strugle.image;
-                          }
-                          print(fileUrl);
-                          if (_formKey.currentState.validate()) {
-                            String idevent =
-                                await GetStrugle(widget.strugle.title);
-                            Firestore.instance
-                                .collection('struggle')
-                                .document(idevent)
-                                .updateData({
-                              "info": _description.text,
-                              "name": _title.text,
-                              "petition": _petition.text,
-                              "url_image": fileUrl,
-                              "url_share": _share.text,
-                              "donation": _donation.text,
-                            });
 
-                            setState(() {
-                              processing = false;
-                            });
-                            showAlertDialogStruggle(context);
-                          } else {
-                            setState(() {
-                              imageColorTitle = Colors.red;
-                            });
-                          }
+                            if (_formKey.currentState.validate()) {
+                              setState(() {
+                                processing = true;
+                              });
+                              if(_imageFile!=null){
+                                await uploadImageToFirebase(context);
+                              }
 
-                          //successshowAlertDialog(context);
+                              String idevent =
+
+                              await GetStrugle(widget.strugle.title);
+                              if(fileUrl=="") {
+                                await  Firestore.instance
+                                    .collection('struggle')
+                                    .document(idevent)
+                                    .updateData({
+                                  "info": _description.text,
+                                  "name": _title.text,
+                                  "petition": _petition.text,
+                                  "url_share": _share.text,
+                                  "donation": _donation.text,
+                                });
+                              }
+                              else{
+                                await Firestore.instance
+                                    .collection('struggle')
+                                    .document(idevent)
+                                    .updateData({
+                                  "info": _description.text,
+                                  "name": _title.text,
+                                  "petition": _petition.text,
+                                  "url_image": fileUrl,
+                                  "url_share": _share.text,
+                                  "donation": _donation.text,
+                                });
+                              }
+
+
+                              setState(() {
+                                processing = false;
+                              });
+                              showAlertDialogStruggle(
+                                  context, "המאבק עודכן בהצלחה");
+                            } else {
+
+                            }
+                          }//successshowAlertDialog(context);
+                          catch (e) {
+                            print("error");
+                          }
                         },
                         child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Spacer(),
                             Text(
@@ -339,23 +357,37 @@ class Data {
   Data({this.dropdownValue});
 }
 
-showAlertDialogStruggle(BuildContext context) {
+showAlertDialogStruggle(BuildContext context, String Mess) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("אשר"),
+    child: Text(
+      "אישור",
+      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
+    ),
     onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => BottomNavigationBarController(2, 1)),
-      );
+      if (Mess == "המאבק עודכן בהצלחה") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BottomNavigationBarController(2, 1)),
+        );
+      } else {
+        Navigator.pop(context, true);
+      }
     },
   );
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("עריכה"),
-    content: Text("עריכה הושלמה בהצלחה"),
+    title: Mess != "המאבק עודכן בהצלחה"
+        ? Text(
+      "שגיאה",
+    )
+        : Text("המאבק עודכן בהצלחה"),
+    content: Mess != "המאבק עודכן בהצלחה"? Text(
+      Mess,
+      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
+    ):Text(""),
     actions: [
       okButton,
     ],

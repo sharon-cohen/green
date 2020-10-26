@@ -90,7 +90,9 @@ class Home_menagerState extends State<Home_menager> {
                     Stack(
                       children: [
                         Container(
+                          width:  MediaQuery.of(context).size.width,
                           child: Row(
+
                             children: <Widget>[
                               FlatButton(
                                 child: Container(
@@ -113,18 +115,10 @@ class Home_menagerState extends State<Home_menager> {
                               Spacer(),
                               globals.isMeneger
                                   ? FlatButton(
-                                      padding: EdgeInsets.fromLTRB(
-                                          0,
-                                          0,
-                                          MediaQuery.of(context).size.width /
-                                              2.15,
-                                          0),
+
 
                                       child: Icon(Icons.add),
-                                      // child: Text("מאבק חדש",
-                                      //     style: TextStyle(
-                                      //         fontSize: 20,
-                                      //         color: Colors.green.shade900)),
+
                                       onPressed: () {
                                         Navigator.push(
                                             context,
@@ -242,13 +236,13 @@ class Home_menagerState extends State<Home_menager> {
             elevation: 0,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: MediaQuery.of(context).size.height / 2.3,
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Flex(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                direction: Axis.vertical,
+                children: [
+                 Container(
+               height: MediaQuery.of(context).size.height / 12,
+                   child: Row (
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -268,8 +262,8 @@ class Home_menagerState extends State<Home_menager> {
                                   showDialog(
                                       child: new Dialog(
                                         child: Container(
-                                          width: 100,
-                                          height: 270,
+
+                                          height: MediaQuery.of(context).size.height / 2.3,
                                           child: new Column(
                                             children: <Widget>[
                                               new TextField(
@@ -279,8 +273,8 @@ class Home_menagerState extends State<Home_menager> {
                                                                 .height /
                                                             60)
                                                         .round(),
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
+
+
                                                 decoration: new InputDecoration(
                                                     hintText:
                                                         "מה תרצה שיהיה כתוב באודות?",
@@ -333,19 +327,19 @@ class Home_menagerState extends State<Home_menager> {
                             : Container(),
                       ],
                     ),
-                    About(),
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ImageIcon(
-                        AssetImage("image/petition1.png"),
-                        color: Colors.black,
-                        size: 50,
-                        // color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
+                 ),
+                  About(),
+//                  Spacer(),
+//                  Padding(
+//                    padding: const EdgeInsets.all(8.0),
+//                    child: ImageIcon(
+//                      AssetImage("image/petition1.png"),
+//                      color: Colors.black,
+//                      size: 50,
+//                      // color: Colors.black,
+//                    ),
+//                  ),
+                ],
               ),
             ),
           ),

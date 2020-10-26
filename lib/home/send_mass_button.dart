@@ -1,5 +1,5 @@
-import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,7 +27,7 @@ class _button_sendState extends State<button_send> {
   List<Widget> mass = [];
   final messageTextContoller = TextEditingController();
   String fileUrl = "";
-  String messageText;
+  String messageText="";
   bool try_send = false;
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _button_sendState extends State<button_send> {
       },
     );
     Widget continueButton = FlatButton(
-        child: Text("שלח"),
+        child: Text("אישור"),
         onPressed: () {
           fileUrl = image_show;
           messageTextContoller.clear();
@@ -72,7 +72,13 @@ class _button_sendState extends State<button_send> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("בטוח תרצה לפרסם תמונה זו?"),
+      title: Text("האם לפרסם תמונה זו?"),
+      content: CachedNetworkImage(
+      imageUrl: image_show,
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
+          CircularProgressIndicator(value: downloadProgress.progress),
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    ),
       actions: [
         cancelButton,
         continueButton,
@@ -102,16 +108,7 @@ class _button_sendState extends State<button_send> {
               try_send = true;
               // if (widget.no_reg == true) {
               if (globals.no_reg == true) {
-                //globals
-                // DialogUtils.showCustomDialog(
-                //   context,
-                //   title: "יש צורך בהרשמה",
-                //   okBtnText: "הירשם",
-                //   cancelBtnText: "חזור",
-                //   sender: "",
-                // )
-                //
-                // ;
+
                 GoregisterAlertDialog(context);
               }
               setState(() {
@@ -156,17 +153,20 @@ class _button_sendState extends State<button_send> {
           FlatButton(
             onPressed: () async {
               messageTextContoller.clear();
-              await _firestore.collection("messages").add({
-                "text": messageText,
-                "sender": globals.name,
-                "time": DateTime.now(),
-                "url": fileUrl,
-              });
+              if (messageText != "") {
+                await _firestore.collection("messages").add({
+                  "text": messageText,
+                  "sender": globals.name,
+                  "time": DateTime.now(),
+                  "url": fileUrl,
+                });
+
               setState(() {
                 fileUrl = "";
                 messageText = "";
               });
-            },
+            }
+              },
             child: Text(
               'שלח',
               //style: kSendButtonTextStyle,

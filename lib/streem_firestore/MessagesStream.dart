@@ -20,7 +20,7 @@ class MessageBubble extends StatelessWidget {
   DateFormat dateFormat = DateFormat("dd-MM-yyyy");
   int report = 0;
 
-  Widget nassege() {
+  Widget nassege(BuildContext context) {
     if (image_u == "") {
       return Material(
         borderRadius: isMe
@@ -122,7 +122,9 @@ class MessageBubble extends StatelessWidget {
       return FlatButton(
         padding: EdgeInsets.all(0),
         //todo add onpress
-        onPressed: () {},
+        onPressed: () {
+          showAlertDialogImage(context,image_u);
+        },
         //todo trying to add a name and date
         child: Column(
           // crossAxisAlignment: CrossAxisAlignment.center,
@@ -260,11 +262,36 @@ class MessageBubble extends StatelessWidget {
                     : Container(),
               ),
             ),
-            nassege(),
+            nassege(context),
           ],
         ),
         isMe ? SizedBox(height: 10) : SizedBox(),
       ],
     );
   }
+}
+showAlertDialogImage(BuildContext context,String image) {
+
+  // set up the butto
+  AlertDialog alert = AlertDialog(
+
+    content: Container(
+
+      child: CachedNetworkImage(
+        imageUrl: image,
+          fit: BoxFit.cover,
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(value: downloadProgress.progress),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
+    ),
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

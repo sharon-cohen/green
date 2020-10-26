@@ -49,10 +49,12 @@ class _MyHeaderState extends State<MyHeader> {
         child: check_page()
             ? Padding(
                 padding: const EdgeInsets.only(
-                  left: 10,
+                  left: 30,
                   top: 30,
+
                 ),
                 child: Align(
+
                     alignment: Alignment.topRight,
                     child: CircleAvatar(
                       radius: 20,

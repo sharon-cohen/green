@@ -4,6 +4,7 @@ import 'package:greenpeace/personal_massage/manage_massage.dart';
 import 'welcom.dart';
 import 'log_in.dart';
 import 'register.dart';
+import 'package:greenpeace/evants/list_event.dart';
 import 'package:greenpeace/home/home_menager.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'package:greenpeace/evants/new_event.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
        Allmess.id:(context) =>BottomNavigationBarController(4,4),
         RegistrationScreen.id: (context) => RegistrationScreen(),
-
+        List_event.id :(context)=> BottomNavigationBarController(3,1),
         BottomNavigationBarController.id :(context)=> BottomNavigationBarController(2,1),
 
       },

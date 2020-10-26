@@ -38,9 +38,10 @@ class AllmessState extends State<Allmess> {
     width_page = MediaQuery.of(context).size.width;
   }
 
+  Widget ListallMess;
   Future<Widget> listOfMass() async {
     if (globals.isMeneger == true) {
-      return SingleChildScrollView(
+     return SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -140,35 +141,47 @@ class AllmessState extends State<Allmess> {
           List.from(documentdelete['personalMessIdDeleted']);
       return Container(
         margin: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: [
-                Spacer(),
-                Text(
-                  'הודעות',
-                  style: TextStyle(
-                      fontFamily: 'Assistant',
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30),
-                ),
-                Spacer(),
-              ],
-            ),
-            // SizedBox(height: 10),
-            AllUserlMassStream(
-              myMessdeleted: myMessDelete,
-            ),
-            personalMassStream(
-              myMess: myMess,
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  Spacer(),
+                  Text(
+                    'הודעות',
+                    style: TextStyle(
+                        fontFamily: 'Assistant',
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30),
+                  ),
+                  Spacer(),
+                ],
+              ),
+              // SizedBox(height: 10),
+              AllUserlMassStream(
+                myMessdeleted: myMessDelete,
+              ),
+              personalMassStream(
+                myMess: myMess,
+              ),
+            ],
+          ),
         ),
       );
     }
   }
-
+  bool isLoading=false;
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      listOfMass().then((value) {
+        setState(() {
+          isLoading = true;
+        });
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,28 +204,18 @@ class AllmessState extends State<Allmess> {
               onPressed: () {
                 showAlertDialogMessManeger(context);
               }),
-      body: SingleChildScrollView(
-        child: new FutureBuilder<Widget>(
-            future: listOfMass(),
-            builder: (BuildContext context, AsyncSnapshot<Widget> text) {
-              //todo ask sharon its the same q
-              return globals.isMeneger
-                  ? Container(
-                      child: Column(
-                      children: [
-                        text.data,
-                        SizedBox(height: 60),
-                      ],
-                    ))
-                  : Container(
-                      child: Column(
-                      children: [
-                        text.data,
-                        SizedBox(height: 60),
-                      ],
-                    ));
-            }),
-      ),
+      body: new FutureBuilder<Widget>(
+          future: listOfMass(),
+
+          builder: (BuildContext context, AsyncSnapshot<Widget> text) {
+            if(!text.hasData) {
+              // show loading while waiting for real data
+              return CircularProgressIndicator();
+            }
+          else{return
+            text.data;}
+
+          }),
     );
   }
 }

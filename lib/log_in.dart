@@ -185,7 +185,7 @@ showAlertDialog_error_login(BuildContext context) {
         style: new TextStyle(
           fontFamily: 'Assistant',
         )),
-    content: Text("משתמש זה לא נמצא נסה שוב או הירשם",
+    content: Text("הפרטים שהוזנו אינם נכונים",
         style: new TextStyle(
           fontFamily: 'Assistant',
         )),

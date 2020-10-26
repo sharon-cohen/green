@@ -220,3 +220,12 @@ Future<String>GetuserByEmail(String email)async{
   else
     return "not exist";
 }
+Future<bool>TypeManegeRoleuser(String userId)async{
+  DocumentSnapshot variable = await Firestore.instance.collection('users').document(userId).get();
+  if(variable.data['role']=='menager'){
+    return true;
+  }
+  else{
+    return false;
+  }
+}

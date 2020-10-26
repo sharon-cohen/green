@@ -12,6 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/common/Header.dart';
 import 'package:intl/intl.dart';
 
+import 'list_event.dart';
+
 final _firestore = Firestore.instance;
 
 class EventDetailsPage extends StatelessWidget {
@@ -93,14 +95,8 @@ class EventDetailsPage extends StatelessWidget {
                                             fontSize: 20,
                                             color: Colors.black,
                                           )),
-                                      onPressed: () async {
-                                        String idevent =
-                                            await Getevent(event.title);
-                                        _firestore
-                                            .collection("events")
-                                            .document(idevent)
-                                            .delete();
-                                        Navigator.pop(context, true);
+                                      onPressed: ()  {
+                                        ToBeSureDeleteAlertDialogEvent(context,event.title);
                                       },
                                     ),
                                     new FlatButton(
@@ -134,9 +130,7 @@ class EventDetailsPage extends StatelessWidget {
                 )
               : Container(),
           Spacer(),
-          Spacer(),
-          Spacer(),
-          Spacer(),
+
         ],
       ),
       body: SingleChildScrollView(
@@ -216,7 +210,7 @@ class EventDetailsPage extends StatelessWidget {
                   ),
                   new Align(
                     child: FlatButton(
-                      color: Colors.white,
+
                       textColor: Colors.black,
                       disabledColor: Colors.grey,
                       disabledTextColor: Colors.black,
@@ -279,4 +273,43 @@ _launchURL(String url) async {
   } else {
     throw 'Could not launch $url';
   }
+}
+ToBeSureDeleteAlertDialogEvent(BuildContext context, String eventTitle) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("מחק"),
+    onPressed: () async {
+      String idevent =
+      await Getevent(eventTitle);
+     await _firestore
+          .collection("events")
+          .document(idevent)
+          .delete();
+      Navigator.pushNamed(
+          context, List_event.id,);
+
+    },
+  );
+  Widget Later = FlatButton(
+    child: Text("בטל"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: FittedBox(child: Text("האם ברצונך למחוק את האירוע זה?")),
+    actions: [
+      okButton,
+      Later,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

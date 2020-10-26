@@ -199,41 +199,14 @@ class _mass_eventState extends State<mass_event> {
                   ),
                   new Align(
                     child: FittedBox(
-                      child: new Text(widget.event.type_event,
+                      child: new Text(widget.event.type_event.toString(),
                           style: new TextStyle(
                             fontFamily: 'Assistant',
                           )),
                     ), //so big text
                     alignment: FractionalOffset.topRight,
                   ),
-                  new Align(
-                    child: FlatButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        _launchURL(widget.event.whatapp);
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'image/whatsapp2.png',
-                            scale: 190,
-                          ),
-                          SizedBox(width: 10),
-                          FittedBox(
-                            child: new Text(
-                              "הצרפות לקבוצת whatapp",
-                              style: new TextStyle(
-                                fontFamily: 'Assistant',
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
+
                   new Align(
                     child: new Text(
                       "מיקום",
@@ -525,7 +498,7 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
           Firestore.instance.collection("personalMess").document();
       documentReference.setData({
         "text":
-            'אושר על ידי המנהלים והוסף ללוח האירועים' + name_event + 'האירוע',
+            'אושר על ידי המנהלים והוסף ללוח האירועים'+ "\n" + name_event + 'האירוע',
         "sender": email,
         "time": DateTime.now(),
         "url": "",

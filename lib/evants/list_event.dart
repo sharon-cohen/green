@@ -22,7 +22,7 @@ class _List_event extends State<List_event> {
           automaticallyImplyLeading: false),
       body: Container(
           color: Colors.white,
-          //height: MediaQuery.of(context).size.height,
+
           child: SingleChildScrollView(
             child: Column(
               children: [

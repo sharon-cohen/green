@@ -39,8 +39,10 @@ class _BottomNavigationBarControllerState
 
   final List<Widget> pages = [
     FrameWeb(
+      fromFooter: true,
       Url:
           "https://joinus.gpi.org.il/?_ga=2.44008870.2086395743.1602839988-1666277170.1598274308&_gac=1.57860696.1602855372.CjwKCAjwiaX8BRBZEiwAQQxGx8LD5KgD6mbHUOZQodvFWGlxKE9YbuqDN8kudiAm42PJ3eE58dyKtBoCwXgQAvD_BwE",
+      title: "הצטרפו אלינו",
     ),
     Home_menager(key: PageStorageKey('home'), arguments: send),
     List_event(key: PageStorageKey(' All_truggle')),
@@ -66,7 +68,7 @@ class _BottomNavigationBarControllerState
         selectedLabelStyle:
             TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Assistant'),
         onTap: (int index) async {
-          if (index == 0) {
+          if (index == 0&&_selectedIndex!=1) {
             FirebaseAnalytics().logEvent(name: 'name', parameters: null);
             await showMenu<String>(
               context: context,
@@ -209,9 +211,9 @@ class _BottomNavigationBarControllerState
             );
           }
           setState(() {
+            print(_selectedIndex);
+            print(index);
             if (index != 0) _selectedIndex = index;
-
-            print(kBottomNavigationBarHeight);
           });
         },
         items: !globals.no_reg
@@ -334,6 +336,7 @@ class _BottomNavigationBarControllerState
 
   @override
   void initState() {
+
     _c = new TextEditingController();
     super.initState();
 

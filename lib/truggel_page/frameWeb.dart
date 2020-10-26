@@ -8,8 +8,8 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 final webViewKey = GlobalKey<_FrameWeb>();
 
 class FrameWeb extends StatefulWidget {
-  FrameWeb({Key key, this.title, this.Url}) : super(key: key);
-
+  FrameWeb({Key key, this.title, this.Url,this.fromFooter}) : super(key: key);
+  final fromFooter;
   final String title;
   final String Url;
 
@@ -63,10 +63,10 @@ class _FrameWeb extends State<FrameWeb> {
             true, // put it true if you want to show CircularProgressIndicator while waiting for the page to load
         withLocalStorage: true,
         appBar: AppBar(
-          title: Text("הצטרפו אלינו"),
+          title: Text(widget.title.toString()),
           centerTitle: false,
           automaticallyImplyLeading: false,
-          leading: new IconButton(
+          leading: widget.fromFooter==false?new IconButton(
             onPressed: () {
               Navigator.pop(context, true);
             },
@@ -74,7 +74,7 @@ class _FrameWeb extends State<FrameWeb> {
               Icons.clear,
               color: Colors.white,
             ),
-          ),
+          ):Container(),
           elevation: 1, // give the appbar shadows
           iconTheme: IconThemeData(color: Colors.white),
           actions: <Widget>[
