@@ -41,7 +41,7 @@ class AllmessState extends State<Allmess> {
   Widget ListallMess;
   Future<Widget> listOfMass() async {
     if (globals.isMeneger == true) {
-     return SingleChildScrollView(
+      return SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -123,7 +123,7 @@ class AllmessState extends State<Allmess> {
               alignment: FractionalOffset.topRight,
             ),
             eventStream(),
-            SizedBox(height: 10),
+            SizedBox(height: 200),
           ],
         ),
       );
@@ -171,7 +171,8 @@ class AllmessState extends State<Allmess> {
       );
     }
   }
-  bool isLoading=false;
+
+  bool isLoading = false;
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -182,6 +183,7 @@ class AllmessState extends State<Allmess> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,15 +208,13 @@ class AllmessState extends State<Allmess> {
               }),
       body: new FutureBuilder<Widget>(
           future: listOfMass(),
-
           builder: (BuildContext context, AsyncSnapshot<Widget> text) {
-            if(!text.hasData) {
+            if (!text.hasData) {
               // show loading while waiting for real data
               return CircularProgressIndicator();
+            } else {
+              return text.data;
             }
-          else{return
-            text.data;}
-
           }),
     );
   }

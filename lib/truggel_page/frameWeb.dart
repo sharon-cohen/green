@@ -8,7 +8,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 final webViewKey = GlobalKey<_FrameWeb>();
 
 class FrameWeb extends StatefulWidget {
-  FrameWeb({Key key, this.title, this.Url,this.fromFooter}) : super(key: key);
+  FrameWeb({Key key, this.title, this.Url, this.fromFooter}) : super(key: key);
   final fromFooter;
   final String title;
   final String Url;
@@ -66,15 +66,17 @@ class _FrameWeb extends State<FrameWeb> {
           title: Text(widget.title.toString()),
           centerTitle: false,
           automaticallyImplyLeading: false,
-          leading: widget.fromFooter==false?new IconButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            icon: Icon(
-              Icons.clear,
-              color: Colors.white,
-            ),
-          ):Container(),
+          leading: widget.fromFooter == false
+              ? new IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  icon: Icon(
+                    Icons.clear,
+                    color: Colors.white,
+                  ),
+                )
+              : Container(),
           elevation: 1, // give the appbar shadows
           iconTheme: IconThemeData(color: Colors.white),
           actions: <Widget>[

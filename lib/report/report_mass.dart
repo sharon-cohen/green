@@ -56,6 +56,16 @@ class reportMass extends StatelessWidget {
                   child: Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      IconButton(
+                        padding: EdgeInsets.all(0),
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.black,
+                        ),
+                      ),
                       Spacer(),
                       Text(
                         "דיווחי צ'אט",
@@ -66,19 +76,7 @@ class reportMass extends StatelessWidget {
                         ),
                       ),
                       Spacer(),
-                      IconButton(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        icon: Icon(
-                          Icons.keyboard_arrow_left,
-                        ),
-                        iconSize: 30,
-                        color: Colors.black,
-                        splashColor: Colors.purple,
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
-                      ),
+                      Spacer(),
                     ],
                   ),
                 ),

@@ -65,6 +65,16 @@ class _mass_eventState extends State<mass_event> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.black,
+                      ),
+                    ),
                     Spacer(),
                     Text(
                       "הודעות",
@@ -75,19 +85,7 @@ class _mass_eventState extends State<mass_event> {
                       ),
                     ),
                     Spacer(),
-                    IconButton(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      icon: Icon(
-                        Icons.keyboard_arrow_left,
-                      ),
-                      iconSize: 30,
-                      color: Colors.black,
-                      splashColor: Colors.purple,
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                    ),
+                    Spacer(),
                   ],
                 ),
               ),
@@ -206,7 +204,6 @@ class _mass_eventState extends State<mass_event> {
                     ), //so big text
                     alignment: FractionalOffset.topRight,
                   ),
-
                   new Align(
                     child: new Text(
                       "מיקום",
@@ -221,7 +218,7 @@ class _mass_eventState extends State<mass_event> {
                   new Align(
                     child: FlatButton(
                       color: Colors.white,
-                      textColor: Colors.black,
+                      textColor: Color(int.parse("0xff6ed000")),
                       disabledColor: Colors.grey,
                       disabledTextColor: Colors.black,
                       padding: EdgeInsets.all(0.0),
@@ -257,48 +254,8 @@ class _mass_eventState extends State<mass_event> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Material(
-                        color: Color(int.parse("0xff6ed000")),
-                        elevation: 5.0,
-                        //borderRadius: BorderRadius.circular(30.0),
-                        child: MaterialButton(
-                          onPressed: () async {
-                            idevent = await Getevent(widget.event.title);
-                            databaseReference
-                                .collection('events')
-                                .document(idevent)
-                                .updateData({'approve': true});
-                            successshowAlertDialog(
-                                context,
-                                _email(),
-                                currentUser.uid,
-                                widget.event.title,
-                                widget.event.senderId);
-                          },
-                          child: Row(
-                            //crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "אשר אירוע",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              // SizedBox(width: 270),
-                              Image.asset(
-                                'image/whitearrow.png',
-                                width: 30,
-                                height: 30,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      padding: EdgeInsets.fromLTRB(
+                          0, MediaQuery.of(context).size.height / (5.5), 0, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -473,6 +430,49 @@ class _mass_eventState extends State<mass_event> {
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 0.0,
+                          vertical: MediaQuery.of(context).size.height / (30)),
+                      child: Material(
+                        color: Color(int.parse("0xff6ed000")),
+                        elevation: 5.0,
+                        //borderRadius: BorderRadius.circular(30.0),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            idevent = await Getevent(widget.event.title);
+                            databaseReference
+                                .collection('events')
+                                .document(idevent)
+                                .updateData({'approve': true});
+                            successshowAlertDialog(
+                                context,
+                                _email(),
+                                currentUser.uid,
+                                widget.event.title,
+                                widget.event.senderId);
+                          },
+                          child: Row(
+                            //crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "אשר אירוע",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              // SizedBox(width: 270),
+                              Image.asset(
+                                'image/whitearrow.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -497,8 +497,10 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
       DocumentReference documentReference =
           Firestore.instance.collection("personalMess").document();
       documentReference.setData({
-        "text":
-            'אושר על ידי המנהלים והוסף ללוח האירועים'+ "\n" + name_event + 'האירוע',
+        "text": 'אושר על ידי המנהלים והוסף ללוח האירועים' +
+            "\n" +
+            name_event +
+            'האירוע',
         "sender": email,
         "time": DateTime.now(),
         "url": "",

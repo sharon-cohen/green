@@ -117,99 +117,116 @@ class updatestrugleState extends State<updatestrugle> {
         child: Container(
           alignment: Alignment.center,
           child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             children: <Widget>[
-              Row(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.black,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 65),
-                  Text(
-                    'עריכת מאבק',
-                    style: TextStyle(
-                        fontFamily: 'Assistant',
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),
-                  ),
-                ],
+                    SizedBox(width: 65),
+                    Text(
+                      'עריכת מאבק',
+                      style: TextStyle(
+                          fontFamily: 'Assistant',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    ),
+                  ],
+                ),
               ),
 
-              TextFormField(
-                controller: _title,
-                validator: (value) =>
-                    (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
-                style: style,
-                decoration: InputDecoration(
-                    labelText: "שם המאבק",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextFormField(
+                  controller: _title,
+                  validator: (value) =>
+                      (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
+                  style: style,
+                  decoration: InputDecoration(
+                      labelText: "שם המאבק",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: _description,
-                minLines: 3,
-                maxLines: 5,
-                validator: (value) =>
-                    (value.isEmpty) ? "שדה תיאור המאבק חובה" : null,
-                style: style,
-                decoration: InputDecoration(
-                    labelText: "תיאור המאבק",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextFormField(
+                  controller: _description,
+                  minLines: 3,
+                  maxLines: 5,
+                  validator: (value) =>
+                      (value.isEmpty) ? "שדה תיאור המאבק חובה" : null,
+                  style: style,
+                  decoration: InputDecoration(
+                      labelText: "תיאור המאבק",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: _share,
-                validator: (value) =>
-                    (value.isEmpty) ? "שדה קישור זה חובה" : null,
-                style: style,
-                decoration: InputDecoration(
-                    labelText: "קישור לעמוד המאבק באתר",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextFormField(
+                  controller: _share,
+                  validator: (value) =>
+                      (value.isEmpty) ? "שדה קישור זה חובה" : null,
+                  style: style,
+                  decoration: InputDecoration(
+                      labelText: "קישור לעמוד המאבק באתר",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: _petition,
-                validator: (value) =>
-                    (value.isEmpty) ? "שדה קישור זה חובה" : null,
-                style: style,
-                decoration: InputDecoration(
-                    labelText: "קישור לעצומה",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextFormField(
+                  controller: _petition,
+                  validator: (value) =>
+                      (value.isEmpty) ? "שדה קישור זה חובה" : null,
+                  style: style,
+                  decoration: InputDecoration(
+                      labelText: "קישור לעצומה",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: _donation,
-                validator: (value) =>
-                    (value.isEmpty) ? "שדה קישור זה חובה" : null,
-                style: style,
-                decoration: InputDecoration(
-                    labelText: "קישור לעמוד התרומה",
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextFormField(
+                  controller: _donation,
+                  validator: (value) =>
+                      (value.isEmpty) ? "שדה קישור זה חובה" : null,
+                  style: style,
+                  decoration: InputDecoration(
+                      labelText: "קישור לעמוד התרומה",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                ),
               ),
 
 //           Padding(
@@ -259,22 +276,19 @@ class updatestrugleState extends State<updatestrugle> {
                       color: Color(int.parse("0xff6ed000")),
                       child: MaterialButton(
                         onPressed: () async {
-
                           try {
-
                             if (_formKey.currentState.validate()) {
                               setState(() {
                                 processing = true;
                               });
-                              if(_imageFile!=null){
+                              if (_imageFile != null) {
                                 await uploadImageToFirebase(context);
                               }
 
                               String idevent =
-
-                              await GetStrugle(widget.strugle.title);
-                              if(fileUrl=="") {
-                                await  Firestore.instance
+                                  await GetStrugle(widget.strugle.title);
+                              if (fileUrl == "") {
+                                await Firestore.instance
                                     .collection('struggle')
                                     .document(idevent)
                                     .updateData({
@@ -284,8 +298,7 @@ class updatestrugleState extends State<updatestrugle> {
                                   "url_share": _share.text,
                                   "donation": _donation.text,
                                 });
-                              }
-                              else{
+                              } else {
                                 await Firestore.instance
                                     .collection('struggle')
                                     .document(idevent)
@@ -299,16 +312,13 @@ class updatestrugleState extends State<updatestrugle> {
                                 });
                               }
 
-
                               setState(() {
                                 processing = false;
                               });
                               showAlertDialogStruggle(
                                   context, "המאבק עודכן בהצלחה");
-                            } else {
-
-                            }
-                          }//successshowAlertDialog(context);
+                            } else {}
+                          } //successshowAlertDialog(context);
                           catch (e) {
                             print("error");
                           }
@@ -381,13 +391,15 @@ showAlertDialogStruggle(BuildContext context, String Mess) {
   AlertDialog alert = AlertDialog(
     title: Mess != "המאבק עודכן בהצלחה"
         ? Text(
-      "שגיאה",
-    )
+            "שגיאה",
+          )
         : Text("המאבק עודכן בהצלחה"),
-    content: Mess != "המאבק עודכן בהצלחה"? Text(
-      Mess,
-      style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
-    ):Text(""),
+    content: Mess != "המאבק עודכן בהצלחה"
+        ? Text(
+            Mess,
+            style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
+          )
+        : Text(""),
     actions: [
       okButton,
     ],

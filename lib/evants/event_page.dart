@@ -95,8 +95,9 @@ class EventDetailsPage extends StatelessWidget {
                                             fontSize: 20,
                                             color: Colors.black,
                                           )),
-                                      onPressed: ()  {
-                                        ToBeSureDeleteAlertDialogEvent(context,event.title);
+                                      onPressed: () {
+                                        ToBeSureDeleteAlertDialogEvent(
+                                            context, event.title);
                                       },
                                     ),
                                     new FlatButton(
@@ -130,7 +131,6 @@ class EventDetailsPage extends StatelessWidget {
                 )
               : Container(),
           Spacer(),
-
         ],
       ),
       body: SingleChildScrollView(
@@ -158,10 +158,10 @@ class EventDetailsPage extends StatelessWidget {
                       // color: Colors.green,
                     ),
                   ),
-
+                  SizedBox(height: 20.0),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Spacer(),
                       FittedBox(
                         child: Text(
                             DayConvert(event.eventDate.weekday.toString()) +
@@ -175,12 +175,12 @@ class EventDetailsPage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             )),
                       ),
-                      Spacer(),
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Spacer(),
+                      //Spacer(),
                       FittedBox(
                         child: Text(
                             event.eventDate.hour.toString() +
@@ -193,10 +193,10 @@ class EventDetailsPage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             )),
                       ),
-                      Spacer(),
+                      //  Spacer(),
                     ],
                   ),
-                  //SizedBox(height: 20.0),
+                  SizedBox(height: 20.0),
                   new Align(
                     child: new Text(
                       "מיקום האירוע:",
@@ -210,21 +210,30 @@ class EventDetailsPage extends StatelessWidget {
                   ),
                   new Align(
                     child: FlatButton(
-
                       textColor: Colors.black,
                       disabledColor: Colors.grey,
                       disabledTextColor: Colors.black,
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(0.0),
                       splashColor: Colors.blueAccent,
                       onPressed: () {
                         launchMap(event.location);
                       },
-                      child: Text(
-                        event.location,
-                        style: TextStyle(
-                          fontFamily: 'Assistant',
-                          fontSize: 14,
-                        ),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'image/icon-waze.png',
+                            scale: 7,
+                          ),
+                          FittedBox(
+                            child: Text(
+                              '    ' + event.location,
+                              style: TextStyle(
+                                fontFamily: 'Assistant',
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ), //so big text
                     alignment: FractionalOffset.center,
@@ -274,31 +283,39 @@ _launchURL(String url) async {
     throw 'Could not launch $url';
   }
 }
+
 ToBeSureDeleteAlertDialogEvent(BuildContext context, String eventTitle) {
   // set up the button
   Widget okButton = FlatButton(
-    child: Text("מחק"),
+    child: Text("מחק",
+        style: TextStyle(
+          fontFamily: 'Assistant',
+        )),
     onPressed: () async {
-      String idevent =
-      await Getevent(eventTitle);
-     await _firestore
-          .collection("events")
-          .document(idevent)
-          .delete();
+      String idevent = await Getevent(eventTitle);
+      await _firestore.collection("events").document(idevent).delete();
       Navigator.pushNamed(
-          context, List_event.id,);
-
+        context,
+        List_event.id,
+      );
     },
   );
   Widget Later = FlatButton(
-    child: Text("בטל"),
+    child: Text("בטל",
+        style: TextStyle(
+          fontFamily: 'Assistant',
+        )),
     onPressed: () {
       Navigator.pop(context);
     },
   );
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: FittedBox(child: Text("האם ברצונך למחוק את האירוע זה?")),
+    title: FittedBox(
+        child: Text("האם ברצונך למחוק את האירוע זה?",
+            style: TextStyle(
+              fontFamily: 'Assistant',
+            ))),
     actions: [
       okButton,
       Later,

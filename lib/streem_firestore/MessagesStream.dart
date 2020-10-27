@@ -22,98 +22,101 @@ class MessageBubble extends StatelessWidget {
 
   Widget nassege(BuildContext context) {
     if (image_u == "") {
-      return Material(
-        borderRadius: isMe
-            ? BorderRadius.only(
-                topLeft: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              )
-            : BorderRadius.only(
-                topRight: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-        elevation: 1,
-        //color: isMe ? Colors.white70: Colors.green.shade200,
-        color: isMe ? Color(int.parse("0xff6ed000")) : Colors.white70,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 20,
-          ),
-          child: IntrinsicWidth(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                isMe
-                    ? Text(
-                        globals.name, textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontFamily: 'Assistant',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                          fontSize: 12,
-                        ),
-                        //textAlign: TextAlign.end,
-                      )
-                    : Text(
-                        sender,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontFamily: 'Assistant',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                          fontSize: 12,
-                        ),
-                      ),
-                SizedBox(height: 3),
-                text != null
-                    ? Text(
-                        text.toString(),
-                        style: TextStyle(
-                          fontFamily: 'Assistant',
-                          // fontSize: 15,
-                          // color: Colors.black,
-                          color: Colors.black,
-                          fontSize: 14,
-                        ),
-                      )
-                    : Text(
-                        " ",
-                        style: TextStyle(
-                          fontFamily: 'Assistant',
-                          // fontSize: 15,
-                          // color: Colors.black,
-                          color: Colors.black,
-                          fontSize: 14,
-                        ),
-                      ),
-                isMe
-                    ? Container(
-                        //width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          GetTime(time.toDate(), true),
-                          textAlign: TextAlign.left,
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        child: Material(
+          borderRadius: isMe
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                )
+              : BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+          elevation: 1,
+          //color: isMe ? Colors.white70: Colors.green.shade200,
+          color: isMe ? Color(int.parse("0xff6ed000")) : Colors.white70,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 20,
+            ),
+            child: IntrinsicWidth(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  isMe
+                      ? Text(
+                          globals.name, textAlign: TextAlign.right,
                           style: TextStyle(
                             fontFamily: 'Assistant',
+                            fontWeight: FontWeight.bold,
                             color: Colors.grey[800],
                             fontSize: 12,
-                            //fontWeight: FontWeight.bold,
                           ),
-                          // textAlign: TextAlign.end,
-                        ),
-                      )
-                    : Text(
-                        GetTime(time.toDate(), false),
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
+                          //textAlign: TextAlign.end,
+                        )
+                      : Text(
+                          sender,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: 'Assistant',
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Assistant'),
-                      ),
-              ],
+                            color: Colors.grey[800],
+                            fontSize: 12,
+                          ),
+                        ),
+                  SizedBox(height: 3),
+                  text != null
+                      ? Text(
+                          text.toString(),
+                          style: TextStyle(
+                            fontFamily: 'Assistant',
+                            // fontSize: 15,
+                            // color: Colors.black,
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
+                        )
+                      : Text(
+                          " ",
+                          style: TextStyle(
+                            fontFamily: 'Assistant',
+                            // fontSize: 15,
+                            // color: Colors.black,
+                            color: Colors.black,
+                            fontSize: 14,
+                          ),
+                        ),
+                  isMe
+                      ? Container(
+                          //width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            GetTime(time.toDate(), true),
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Assistant',
+                              color: Colors.grey[800],
+                              fontSize: 12,
+                              //fontWeight: FontWeight.bold,
+                            ),
+                            // textAlign: TextAlign.end,
+                          ),
+                        )
+                      : Text(
+                          GetTime(time.toDate(), false),
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Assistant'),
+                        ),
+                ],
+              ),
             ),
           ),
         ),
@@ -123,7 +126,7 @@ class MessageBubble extends StatelessWidget {
         padding: EdgeInsets.all(0),
         //todo add onpress
         onPressed: () {
-          showAlertDialogImage(context,image_u);
+          showAlertDialogImage(context, image_u);
         },
         //todo trying to add a name and date
         child: Column(
@@ -270,16 +273,14 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
-showAlertDialogImage(BuildContext context,String image) {
 
+showAlertDialogImage(BuildContext context, String image) {
   // set up the butto
   AlertDialog alert = AlertDialog(
-
     content: Container(
-
       child: CachedNetworkImage(
         imageUrl: image,
-          fit: BoxFit.cover,
+        fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             CircularProgressIndicator(value: downloadProgress.progress),
         errorWidget: (context, url, error) => Icon(Icons.error),

@@ -41,226 +41,229 @@ class _one_struggleState extends State<one_struggle> {
                 bottom: 20,
               ),
               children: <Widget>[
-                RawMaterialButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => updatestrugle(
-                              strugle: widget.struggle,
-                            )));
-                  },
-                  elevation: 2.0,
-                  fillColor: Colors.green,
-                  child: Icon(
-                    Icons.edit,
-                    size: 25,
+                  RawMaterialButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => updatestrugle(
+                                    strugle: widget.struggle,
+                                  )));
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: Icon(
+                      Icons.edit,
+                      size: 25,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
                   ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
-                ),
-                RawMaterialButton(
-                  onPressed: () {
-                    ToBeSureDeleteAlertDialog(
-                        context, widget.struggle.title);
-                  },
-                  elevation: 2.0,
-                  fillColor: Colors.green,
-                  child: Icon(
-                    Icons.delete,
-                    size: 25,
+                  RawMaterialButton(
+                    onPressed: () {
+                      ToBeSureDeleteAlertDialog(context, widget.struggle.title);
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: Icon(
+                      Icons.delete,
+                      size: 25,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
                   ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
-                ),
-                RawMaterialButton(
-                  onPressed: ()  async{
-                    await screenshotController.capture().then((image) async {
-                      //facebook appId is mandatory for andorid or else share won't work
-                      Platform.isAndroid
-                          ? SocialShare.shareFacebookStory(image.path,
-                          "#ffffff", "#000000", "https://google.com",
-                          appId: "975359176210597")
-                          .then((data) {
-                        print(data);
-                      })
-                          : SocialShare.shareFacebookStory(image.path,
-                          "#ffffff", "#000000", "https://google.com")
-                          .then((data) {
-                        print(data);
+                  RawMaterialButton(
+                    onPressed: () async {
+                      await screenshotController.capture().then((image) async {
+                        //facebook appId is mandatory for andorid or else share won't work
+                        Platform.isAndroid
+                            ? SocialShare.shareFacebookStory(image.path,
+                                    "#ffffff", "#000000", "https://google.com",
+                                    appId: "975359176210597")
+                                .then((data) {
+                                print(data);
+                              })
+                            : SocialShare.shareFacebookStory(image.path,
+                                    "#ffffff", "#000000", "https://google.com")
+                                .then((data) {
+                                print(data);
+                              });
                       });
-                    });
-                  },
-                  elevation: 2.0,
-                  fillColor: Colors.green,
-                  child: new Image.asset('image/facebook.png',
-                    width: 25,
-                    height: 25,
-                    fit:BoxFit.fill,
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/facebook.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
                   ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
-                ),
-                RawMaterialButton(
-                  onPressed: ()  async{
-                    await screenshotController
-                        .capture()
-                        .then((image) async {
-                      SocialShare.shareWhatsapp(widget.struggle.share);
-                    });
-                  },
-                  elevation: 2.0,
-                  fillColor: Colors.green,
-                  child: new Image.asset('image/whatsapp.png',
-                    width: 25,
-                    height: 25,
-                    fit:BoxFit.fill,
+                  RawMaterialButton(
+                    onPressed: () async {
+                      await screenshotController.capture().then((image) async {
+                        SocialShare.shareWhatsapp(widget.struggle.share);
+                      });
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/whatsapp.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
                   ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
-                ),
-                RawMaterialButton(
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FrameWeb(
-                             fromFooter: false,
-                              title: widget.struggle.title,
-                              Url: widget.struggle.petition,
-                            )));
-                  },
-                  elevation: 2.0,
-                  fillColor: Colors.green,
-                  child: new Image.asset('image/signature.png',
-                    width: 25,
-                    height: 25,
-                    fit:BoxFit.fill,
+                  RawMaterialButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FrameWeb(
+                                    fromFooter: false,
+                                    title: widget.struggle.title,
+                                    Url: widget.struggle.petition,
+                                  )));
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/petition2.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                      color: Colors.black,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
                   ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
-                ),
-                RawMaterialButton(
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FrameWeb(
-                              fromFooter: false,
-                              title: widget.struggle.title,
-                              Url: widget.struggle.donation,
-                            )));
-                  },
-                  elevation: 2.0,
-                  fillColor: Colors.green,
-                  child: new Image.asset('image/join.png',
-                    width: 25,
-                    height: 25,
-                    fit:BoxFit.fill,
+                  RawMaterialButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FrameWeb(
+                                    fromFooter: false,
+                                    title: widget.struggle.title,
+                                    Url: widget.struggle.donation,
+                                  )));
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/donate1.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                      color: Colors.black,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
                   ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
-                ),
-
                 ])
           : FabCircularMenu(
-          fabColor: Color(int.parse("0xff6ed000")),
-          ringColor: Colors.white70,
-          fabMargin: EdgeInsets.only(
-            right: 40,
-            bottom: 20,
-          ),
-          children: <Widget>[
-            RawMaterialButton(
-              onPressed: ()  async{
-                await screenshotController.capture().then((image) async {
-                  //facebook appId is mandatory for andorid or else share won't work
-                  Platform.isAndroid
-                      ? SocialShare.shareFacebookStory(image.path,
-                      "#ffffff", "#000000", "https://google.com",
-                      appId: "975359176210597")
-                      .then((data) {
-                    print(data);
-                  })
-                      : SocialShare.shareFacebookStory(image.path,
-                      "#ffffff", "#000000", "https://google.com")
-                      .then((data) {
-                    print(data);
-                  });
-                });
-              },
-              elevation: 2.0,
-              fillColor: Colors.green,
-              child: new Image.asset('image/facebook.png',
-                width: 25,
-                height: 25,
-                fit:BoxFit.fill,
+              fabColor: Color(int.parse("0xff6ed000")),
+              ringColor: Colors.white70,
+              fabMargin: EdgeInsets.only(
+                right: 40,
+                bottom: 20,
               ),
-              padding: EdgeInsets.all(15.0),
-              shape: CircleBorder(),
-            ),
-            RawMaterialButton(
-              onPressed: ()  async{
-                await screenshotController
-                    .capture()
-                    .then((image) async {
-                  SocialShare.shareWhatsapp(widget.struggle.share);
-                });
-              },
-              elevation: 2.0,
-              fillColor: Colors.green,
-              child: new Image.asset('image/whatsapp.png',
-                width: 25,
-                height: 25,
-                fit:BoxFit.fill,
-              ),
-              padding: EdgeInsets.all(15.0),
-              shape: CircleBorder(),
-            ),
-            RawMaterialButton(
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FrameWeb(
-                          fromFooter: false,
-                          title: widget.struggle.title,
-                          Url: widget.struggle.petition,
-                        )));
-              },
-              elevation: 2.0,
-              fillColor: Colors.green,
-              child: new Image.asset('image/signature.png',
-                width: 25,
-                height: 25,
-                fit:BoxFit.fill,
-              ),
-              padding: EdgeInsets.all(15.0),
-              shape: CircleBorder(),
-            ),
-            RawMaterialButton(
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FrameWeb(
-                          fromFooter: false,
-                          title: widget.struggle.title,
-                          Url: widget.struggle.donation,
-                        )));
-              },
-              elevation: 2.0,
-              fillColor: Colors.green,
-              child: new Image.asset('image/join.png',
-                width: 25,
-                height: 25,
-                fit:BoxFit.fill,
-              ),
-              padding: EdgeInsets.all(15.0),
-              shape: CircleBorder(),
-            ),
-
-          ]),
+              children: <Widget>[
+                  RawMaterialButton(
+                    onPressed: () async {
+                      await screenshotController.capture().then((image) async {
+                        //facebook appId is mandatory for andorid or else share won't work
+                        Platform.isAndroid
+                            ? SocialShare.shareFacebookStory(image.path,
+                                    "#ffffff", "#000000", "https://google.com",
+                                    appId: "975359176210597")
+                                .then((data) {
+                                print(data);
+                              })
+                            : SocialShare.shareFacebookStory(image.path,
+                                    "#ffffff", "#000000", "https://google.com")
+                                .then((data) {
+                                print(data);
+                              });
+                      });
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/facebook.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
+                  ),
+                  RawMaterialButton(
+                    onPressed: () async {
+                      await screenshotController.capture().then((image) async {
+                        SocialShare.shareWhatsapp(widget.struggle.share);
+                      });
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/whatsapp.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
+                  ),
+                  RawMaterialButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FrameWeb(
+                                    fromFooter: false,
+                                    title: widget.struggle.title,
+                                    Url: widget.struggle.petition,
+                                  )));
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/signature.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
+                  ),
+                  RawMaterialButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FrameWeb(
+                                    fromFooter: false,
+                                    title: widget.struggle.title,
+                                    Url: widget.struggle.donation,
+                                  )));
+                    },
+                    elevation: 2.0,
+                    fillColor: Color(int.parse("0xff6ed000")),
+                    child: new Image.asset(
+                      'image/join.png',
+                      width: 25,
+                      height: 25,
+                      fit: BoxFit.fill,
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    shape: CircleBorder(),
+                  ),
+                ]),
       body: screenShotStrugle(
         struggle: widget.struggle,
         screenshotController: screenshotController,
@@ -305,10 +308,8 @@ class _screenShotStrugle extends State<screenShotStrugle> {
   @override
   Widget build(BuildContext context) {
     return Screenshot(
-
       controller: widget.screenshotController,
       child: SingleChildScrollView(
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -356,9 +357,7 @@ ToBeSureDeleteAlertDialog(BuildContext context, String nameStruggle) {
     onPressed: () async {
       String idstruggle = await GetStrugle(nameStruggle);
       await _firestore.collection("struggle").document(idstruggle).delete();
-      Navigator.pushNamed(
-          context, BottomNavigationBarController.id);
-
+      Navigator.pushNamed(context, BottomNavigationBarController.id);
     },
   );
   Widget Later = FlatButton(

@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +26,7 @@ class _button_sendState extends State<button_send> {
   List<Widget> mass = [];
   final messageTextContoller = TextEditingController();
   String fileUrl = "";
-  String messageText="";
+  String messageText = "";
   bool try_send = false;
   @override
   void initState() {
@@ -74,14 +73,14 @@ class _button_sendState extends State<button_send> {
     AlertDialog alert = AlertDialog(
       title: Text("האם לפרסם תמונה זו?"),
       content: CachedNetworkImage(
-      imageUrl: image_show,
-      progressIndicatorBuilder: (context, url, downloadProgress) =>
-          CircularProgressIndicator(value: downloadProgress.progress),
-      errorWidget: (context, url, error) => Icon(Icons.error),
-    ),
+        imageUrl: image_show,
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(value: downloadProgress.progress),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
       actions: [
-        cancelButton,
         continueButton,
+        cancelButton,
       ],
     );
 
@@ -99,122 +98,133 @@ class _button_sendState extends State<button_send> {
     mass.clear();
 
     if (try_send == false) {
-      //todo check if ok
-      mass.add(
-        Align(
-          alignment: Alignment.centerLeft,
-          child: FlatButton(
-            onPressed: () {
-              try_send = true;
-              // if (widget.no_reg == true) {
-              if (globals.no_reg == true) {
+      //   //todo check if ok
+      //   mass.add(
+      //     Align(
+      //       alignment: Alignment.centerLeft,
+      //       child: FlatButton(
+      //         onPressed: () {
+      //           try_send = true;
+      //           // if (widget.no_reg == true) {
+      //           if (globals.no_reg == true) {
+      //             GoregisterAlertDialog(context);
+      //           }
+      //           setState(() {
+      //             fileUrl = "";
+      //             messageText = "";
+      //           });
+      //         },
+      //         child: Container(
+      //           child: Text(
+      //             'שלח הודעה',
+      //             textAlign: TextAlign.center,
+      //             style: TextStyle(
+      //               fontFamily: 'Assistant',
+      //               fontWeight: FontWeight.bold,
+      //               fontSize: 15,
+      //               color: Color(int.parse("0xff6ed000")),
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   );
+      //   return mass;
+      // } else {
+      //   // if (widget.no_reg == true) {
+      //   if (globals.no_reg == true) {
+      //     mass.add(
+      //       FlatButton(
+      //           onPressed: () {
+      //             Navigator.pushNamed(context, RegistrationScreen.id);
+      //           },
+      //           child: Text('הירשם')),
+      //     );
+      //     return mass;
+      //   } else
 
+      mass.add(
+        Expanded(
+          child: TextField(
+            controller: messageTextContoller,
+            onTap: () {
+              if (globals.no_reg == true) {
                 GoregisterAlertDialog(context);
               }
-              setState(() {
-                fileUrl = "";
-                messageText = "";
-              });
             },
-            child: Container(
-              child: Text(
-                'שלח הודעה',
-                textAlign: TextAlign.center,
-              ),
-            ),
+            onChanged: (value) {
+              messageText = value;
+            },
+            decoration: kMessageTextFieldDecoration,
           ),
         ),
       );
-      return mass;
-    } else {
-      // if (widget.no_reg == true) {
-      if (globals.no_reg == true) {
-        mass.add(
-          FlatButton(
-              onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
-              },
-              child: Text('הירשם')),
-        );
-        return mass;
-      } else {
-        mass.add(
-          Expanded(
-            child: TextField(
-              controller: messageTextContoller,
-              onChanged: (value) {
-                messageText = value;
-              },
-              decoration: kMessageTextFieldDecoration,
-            ),
-          ),
-        );
-        mass.add(
-          FlatButton(
-            onPressed: () async {
-              messageTextContoller.clear();
-              if (messageText != "") {
-                await _firestore.collection("messages").add({
-                  "text": messageText,
-                  "sender": globals.name,
-                  "time": DateTime.now(),
-                  "url": fileUrl,
-                });
+      mass.add(
+        FlatButton(
+          onPressed: () async {
+            messageTextContoller.clear();
+            if (messageText != "") {
+              await _firestore.collection("messages").add({
+                "text": messageText,
+                "sender": globals.name,
+                "time": DateTime.now(),
+                "url": fileUrl,
+              });
 
               setState(() {
                 fileUrl = "";
                 messageText = "";
               });
             }
-              },
+          },
+          child: Container(
             child: Text(
               'שלח',
               //style: kSendButtonTextStyle,
               style: TextStyle(
+                color: Color(int.parse("0xff6ed000")),
                 fontFamily: 'Assistant',
-                color: Colors.grey[700],
                 fontSize: 15,
               ),
             ),
           ),
-        );
-        mass.add(
-          new Container(
-            margin: new EdgeInsets.symmetric(horizontal: 4.0),
-            child: new IconButton(
-                icon: new Icon(
-                  Icons.photo_camera,
-                  color: Colors.lightGreen,
-                ),
-                onPressed: () async {
-                  var image =
-                      await ImagePicker.pickImage(source: ImageSource.gallery);
-                  int timestamp = new DateTime.now().millisecondsSinceEpoch;
-                  StorageReference storageReference = FirebaseStorage.instance
-                      .ref()
-                      .child('chats/img_' + timestamp.toString() + '.jpg');
-                  StorageUploadTask uploadTask =
-                      storageReference.putFile(image);
+        ),
+      );
+      mass.add(
+        new Container(
+          margin: new EdgeInsets.symmetric(horizontal: 4.0),
+          child: new IconButton(
+              icon: new Icon(
+                Icons.photo_camera,
+                color: Color(int.parse("0xff6ed000")),
+              ),
+              onPressed: () async {
+                var image =
+                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                StorageReference storageReference = FirebaseStorage.instance
+                    .ref()
+                    .child('chats/img_' + timestamp.toString() + '.jpg');
+                StorageUploadTask uploadTask = storageReference.putFile(image);
+                setState(() {
+                  isLoading = true;
+                });
+                await uploadTask.onComplete;
+
+                try {
+                  fileUrl = await storageReference.getDownloadURL();
+
                   setState(() {
-                    isLoading = true;
+                    isLoading = false;
+                    image_sent_pro(context, fileUrl);
                   });
-                  await uploadTask.onComplete;
-
-                  try {
-                    fileUrl = await storageReference.getDownloadURL();
-
-                    setState(() {
-                      isLoading = false;
-                      image_sent_pro(context, fileUrl);
-                    });
-                  } catch (e) {
-                    print('errordfd');
-                  }
-                }),
-          ),
-        );
-        return mass;
-      }
+                } catch (e) {
+                  print('errordfd');
+                }
+              }),
+        ),
+      );
+      return mass;
     }
   }
 

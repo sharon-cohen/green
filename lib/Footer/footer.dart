@@ -16,6 +16,7 @@ import 'package:greenpeace/HotReport/hotReport.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:greenpeace/User_Page.dart';
 
 final _firestore = Firestore.instance;
 
@@ -68,7 +69,7 @@ class _BottomNavigationBarControllerState
         selectedLabelStyle:
             TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Assistant'),
         onTap: (int index) async {
-          if (index == 0&&_selectedIndex!=1) {
+          if (index == 0 && _selectedIndex != 1) {
             FirebaseAnalytics().logEvent(name: 'name', parameters: null);
             await showMenu<String>(
               context: context,
@@ -90,22 +91,22 @@ class _BottomNavigationBarControllerState
                     },
                   ),
                 ),
-                new PopupMenuItem<String>(
-                  child: FlatButton(
-                    child: Row(
-                      children: [
-                        const Icon(Icons.event),
-                        const Text(' יומן אירועים',
-                            style: TextStyle(
-                                fontFamily: 'Assistant', fontSize: 14)),
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Calender()));
-                    },
-                  ),
-                ),
+                // new PopupMenuItem<String>(
+                //   child: FlatButton(
+                //     child: Row(
+                //       children: [
+                //         const Icon(Icons.event),
+                //         const Text(' יומן אירועים',
+                //             style: TextStyle(
+                //                 fontFamily: 'Assistant', fontSize: 14)),
+                //       ],
+                //     ),
+                //     onPressed: () {
+                //       Navigator.push(context,
+                //           MaterialPageRoute(builder: (context) => Calender()));
+                //     },
+                //   ),
+                // ),
                 new PopupMenuItem<String>(
                   child: FlatButton(
                     child: Row(
@@ -127,81 +128,87 @@ class _BottomNavigationBarControllerState
                     },
                   ),
                 ),
-                globals.isMeneger
-                    ? new PopupMenuItem<String>(
-                        child: FlatButton(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.add),
-                              const Text('הוספת מנהל',
-                                  style: TextStyle(
-                                      fontFamily: 'Assistant', fontSize: 14)),
-                            ],
-                          ),
-                          onPressed: () {
-                            showDialog(
-                                child: new Dialog(
-                                  child: Container(
-                                    width: 100,
-                                    height: 100,
-                                    child: new Column(
-                                      children: <Widget>[
-                                        new TextField(
-                                          keyboardType:
-                                              TextInputType.emailAddress,
-                                          decoration: new InputDecoration(
-                                            hintText:
-                                                "דואר אלקטרוני של המנהל החדש",
-                                          ),
-                                          controller: _c,
-                                        ),
-                                        new FlatButton(
-                                          child: new Text("שמור",
-                                              style: TextStyle(
-                                                  fontFamily: 'Assistant')),
-                                          onPressed: () async {
-                                            String IdUser =
-                                                await GetuserByEmail(_c.text);
-                                            Firestore.instance
-                                                .collection('users')
-                                                .document(IdUser)
-                                                .updateData({
-                                              "role": "menager",
-                                            });
-                                            await _firestore
-                                                .collection("manegar")
-                                                .add({
-                                              "email": _c.text.toString(),
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                context: context);
-                          },
-                        ),
-                      )
-                    : null,
+                // globals.isMeneger
+                //     ? new PopupMenuItem<String>(
+                //         child: FlatButton(
+                //           child: Row(
+                //             children: [
+                //               const Icon(Icons.add),
+                //               const Text('הוספת מנהל',
+                //                   style: TextStyle(
+                //                       fontFamily: 'Assistant', fontSize: 14)),
+                //             ],
+                //           ),
+                //           onPressed: () {
+                //             showDialog(
+                //                 child: new Dialog(
+                //                   child: Container(
+                //                     width: 100,
+                //                     height: 100,
+                //                     child: new Column(
+                //                       children: <Widget>[
+                //                         new TextField(
+                //                           keyboardType:
+                //                               TextInputType.emailAddress,
+                //                           decoration: new InputDecoration(
+                //                             hintText:
+                //                                 "דואר אלקטרוני של המנהל החדש",
+                //                           ),
+                //                           controller: _c,
+                //                         ),
+                //                         new FlatButton(
+                //                           child: new Text("שמור",
+                //                               style: TextStyle(
+                //                                   fontFamily: 'Assistant')),
+                //                           onPressed: () async {
+                //                             String IdUser =
+                //                                 await GetuserByEmail(_c.text);
+                //                             Firestore.instance
+                //                                 .collection('users')
+                //                                 .document(IdUser)
+                //                                 .updateData({
+                //                               "role": "menager",
+                //                             });
+                //                             await _firestore
+                //                                 .collection("manegar")
+                //                                 .add({
+                //                               "email": _c.text.toString(),
+                //                             });
+                //                             Navigator.pop(context);
+                //                           },
+                //                         )
+                //                       ],
+                //                     ),
+                //                   ),
+                //                 ),
+                //                 context: context);
+                //           },
+                //         ),
+                //       )
+                //     : null,
                 new PopupMenuItem<String>(
                   child: FlatButton(
                     child: Row(
                       children: [
-                        const Icon(Icons.exit_to_app),
-                        const Text('התנתק',
+                        const Icon(Icons.account_circle),
+                        const Text('פרופיל',
                             style: TextStyle(
                                 fontFamily: 'Assistant', fontSize: 14)),
                       ],
                     ),
+                    // onPressed: () async {
+                    //   await FirebaseAuth.instance.signOut();
+                    //
+                    //   Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => WelcomeScreen()));
+                    // },
                     onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
+                      //await FirebaseAuth.instance.signOut();
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomeScreen()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => UserPage()));
                     },
                   ),
                 ),
@@ -336,7 +343,6 @@ class _BottomNavigationBarControllerState
 
   @override
   void initState() {
-
     _c = new TextEditingController();
     super.initState();
 
@@ -350,31 +356,23 @@ class _BottomNavigationBarControllerState
     return Scaffold(
       bottomNavigationBar: _bottomNavigationBar(_index_bifore),
       floatingActionButton: !globals.isMeneger
-          ? Padding(
-              //todo fit to all devices
-              padding: EdgeInsets.fromLTRB(
-                  0,
-                  0,
-                  MediaQuery.of(context).size.height / 8.5,
-                  MediaQuery.of(context).size.height / 1.45),
-              child: FloatingActionButton(
-                heroTag: 2,
-                backgroundColor: Colors.red,
-                onPressed: () {
-                  if (globals.no_reg == true) {
-                    GoregisterAlertDialog(context);
-                  } else {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HotReport()));
-                  }
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.message), // icon
-                    Text("דווח"), // text
-                  ],
-                ),
+          ? FloatingActionButton(
+              heroTag: 2,
+              backgroundColor: Colors.red,
+              onPressed: () {
+                if (globals.no_reg == true) {
+                  GoregisterAlertDialog(context);
+                } else {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HotReport()));
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.message), // icon
+                  Text("דווח"), // text
+                ],
               ),
             )
           : null,

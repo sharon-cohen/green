@@ -51,10 +51,9 @@ class _MyHeaderState extends State<MyHeader> {
                 padding: const EdgeInsets.only(
                   left: 30,
                   top: 30,
-
+                  right: 10,
                 ),
                 child: Align(
-
                     alignment: Alignment.topRight,
                     child: CircleAvatar(
                       radius: 20,

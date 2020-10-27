@@ -16,6 +16,33 @@ import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/create_struggle1.dart';
 import 'package:greenpeace/feed.dart';
 
+import 'package:flutter/material.dart';
+import 'package:greenpeace/evants/event_firestore_service.dart';
+import 'package:greenpeace/evants/event_model.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:greenpeace/evants/event_page.dart';
+import 'package:greenpeace/Component/Alret_Dealog.dart';
+import 'package:greenpeace/global.dart' as globals;
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:greenpeace/home/home_menager.dart';
+import 'package:greenpeace/globalfunc.dart';
+import 'package:greenpeace/personal_massage/manage_massage.dart';
+import 'package:greenpeace/create_struggle1.dart';
+import 'package:greenpeace/truggel_page/all_truggle.dart';
+import 'package:greenpeace/evants/calender.dart';
+import 'package:greenpeace/evants/list_event.dart';
+import 'package:greenpeace/Component/Alret_Dealog.dart';
+import 'package:greenpeace/truggel_page/frameWeb.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:greenpeace/welcom.dart';
+import 'package:greenpeace/HotReport/hotReport.dart';
+import 'package:greenpeace/global.dart' as globals;
+import 'package:greenpeace/GetID_DB/getid.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 
@@ -34,8 +61,30 @@ class Home_menagerState extends State<Home_menager> {
   bool showSpinner = false;
   double offset = 0;
   bool no_reg = false;
+
+  CalendarController _controller;
+  Map<DateTime, List<dynamic>> _events;
+  List<dynamic> _selectedEvents;
+
+  Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> events) {
+    Map<DateTime, List<dynamic>> data = {};
+    events.forEach((event) {
+      print(event.title.toString());
+      if (event.approve == true) {
+        DateTime date = DateTime(event.eventDate.year, event.eventDate.month,
+            event.eventDate.day, 12);
+        if (data[date] == null) data[date] = [];
+        data[date].add(event);
+      }
+    });
+    return data;
+  }
+
   @override
   void initState() {
+    _controller = CalendarController();
+    _events = {};
+    _selectedEvents = [];
     super.initState();
     setState(() {
       aboutController = new TextEditingController();
@@ -61,6 +110,7 @@ class Home_menagerState extends State<Home_menager> {
   }
 
   @override
+  TextEditingController _c;
   Widget build(BuildContext context) {
     print("Corrected size W is ${(MediaQuery.of(context).size.width)}");
     return Scaffold(
@@ -69,7 +119,7 @@ class Home_menagerState extends State<Home_menager> {
         scrollDirection: Axis.vertical,
         children: ListTile.divideTiles(context: context, tiles: [
           MyHeader(
-            image: "image/green.jpeg",
+            image: "image/greenpeace-main-image.png",
             offset: offset,
           ),
           Card(
@@ -82,7 +132,7 @@ class Home_menagerState extends State<Home_menager> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: MediaQuery.of(context).size.height / 2.3,
+                height: MediaQuery.of(context).size.height / 2.1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   textDirection: TextDirection.rtl,
@@ -90,9 +140,8 @@ class Home_menagerState extends State<Home_menager> {
                     Stack(
                       children: [
                         Container(
-                          width:  MediaQuery.of(context).size.width,
+                          width: MediaQuery.of(context).size.width,
                           child: Row(
-
                             children: <Widget>[
                               FlatButton(
                                 child: Container(
@@ -113,12 +162,14 @@ class Home_menagerState extends State<Home_menager> {
                                 },
                               ),
                               Spacer(),
+                              Spacer(),
                               globals.isMeneger
                                   ? FlatButton(
-
-
-                                      child: Icon(Icons.add),
-
+                                      padding: const EdgeInsets.all(0.0),
+                                      child: Icon(
+                                        Icons.add,
+                                        color: Color(int.parse("0xff6ed000")),
+                                      ),
                                       onPressed: () {
                                         Navigator.push(
                                             context,
@@ -136,7 +187,7 @@ class Home_menagerState extends State<Home_menager> {
                           top: MediaQuery.of(context).size.width / 12.3,
                           right: MediaQuery.of(context).size.width / 13 / 2,
                           child: Text(
-                            'בואו נשנה את העולם',
+                            'הצטרפו ותתמכו בפעילות שלנו',
                             style: TextStyle(
                               fontFamily: 'Assistant',
                             ),
@@ -152,6 +203,23 @@ class Home_menagerState extends State<Home_menager> {
                           padding: new EdgeInsets.fromLTRB(8, 0, 8, 0),
                           child: text.data,
                         );
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(
+                        "לכל המאבקים",
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(int.parse("0xff6ed000")),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => All_truggle()));
                       },
                     ),
                   ],
@@ -207,7 +275,7 @@ class Home_menagerState extends State<Home_menager> {
                           top: MediaQuery.of(context).size.width / 12.3,
                           right: MediaQuery.of(context).size.width / 13 / 2,
                           child: Text(
-                            'דואגים שתהיו מעודכנים',
+                            'כאן ניתן לשתף את האהבה והדאגה שלנו לסביבה',
                             style: TextStyle(
                               fontFamily: 'Assistant',
                             ),
@@ -223,6 +291,188 @@ class Home_menagerState extends State<Home_menager> {
                         no_reg: no_reg,
                       ),
                     ),
+                    FlatButton(
+                      child: Text(
+                        "לכל העדכונים",
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(int.parse("0xff6ed000")),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Feed()));
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Card(
+            margin: new EdgeInsets.only(
+                left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            elevation: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "יומן אירועים",
+                      style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                    Text(
+                      'צפו באירועים הקרובים וצרו אירוע משלכם',
+                      style: TextStyle(
+                        fontFamily: 'Assistant',
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: StreamBuilder<List<EventModel>>(
+                          stream: eventDBS.streamList(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<EventModel> allEvents = snapshot.data;
+                              print("nameeee");
+                              print(allEvents[0].title.toString());
+                              if (allEvents.isNotEmpty) {
+                                _events = _groupEvents(allEvents);
+                              }
+                            }
+
+                            return SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  TableCalendar(
+                                    locale: 'he_IL',
+                                    events: _events,
+                                    initialCalendarFormat: CalendarFormat.month,
+                                    calendarStyle: CalendarStyle(
+                                        canEventMarkersOverflow: true,
+                                        todayColor:
+                                            Color(int.parse("0xff6ed000")),
+                                        selectedColor:
+                                            Color(int.parse("0xff6ed000")),
+                                        todayStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0,
+                                            color: Colors.white)),
+                                    headerStyle: HeaderStyle(
+                                      centerHeaderTitle: true,
+                                      formatButtonDecoration: BoxDecoration(
+                                        color: Color(int.parse("0xff6ed000")),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      formatButtonTextStyle:
+                                          TextStyle(color: Colors.white),
+                                      formatButtonShowsNext: false,
+                                    ),
+                                    startingDayOfWeek: StartingDayOfWeek.sunday,
+                                    onDaySelected: (date, events) {
+                                      setState(() {
+                                        _selectedEvents = events;
+                                      });
+                                    },
+                                    builders: CalendarBuilders(
+                                      selectedDayBuilder:
+                                          (context, date, events) => Container(
+                                              margin: const EdgeInsets.all(4.0),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[400],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              child: Text(
+                                                date.day.toString(),
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Assistant'),
+                                              )),
+                                      todayDayBuilder:
+                                          (context, date, events) => Container(
+                                              margin: const EdgeInsets.all(4.0),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  color: Color(
+                                                      int.parse("0xff6ed000")),
+                                                  // color: Color(int.parse("0xff6ed000")),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                              child: Text(
+                                                date.day.toString(),
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Assistant'),
+                                              )),
+                                    ),
+                                    calendarController: _controller,
+                                  ),
+                                  ..._selectedEvents.map((event) => ListTile(
+                                        title: Text(event.title,
+                                            style: new TextStyle(
+                                              fontFamily: 'Assistant',
+                                            )),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      EventDetailsPage(
+                                                        event: event,
+                                                      )));
+                                        },
+                                      )),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
+                    FlatButton(
+                      child: Text(
+                        "לכל האירועים",
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(int.parse("0xff6ed000")),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, List_event.id);
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(
+                        "צור אירוע בעצמך",
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(int.parse("0xff6ed000")),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (globals.no_reg == true) {
+                          GoregisterAlertDialog(context);
+                        } else {
+                          Navigator.pushNamed(context, 'new_event');
+                        }
+                      },
+                    )
                   ],
                 ),
               ),
@@ -240,9 +490,9 @@ class Home_menagerState extends State<Home_menager> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 direction: Axis.vertical,
                 children: [
-                 Container(
-               height: MediaQuery.of(context).size.height / 12,
-                   child: Row (
+                  Container(
+                    height: MediaQuery.of(context).size.height / 12,
+                    child: Row(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -257,13 +507,18 @@ class Home_menagerState extends State<Home_menager> {
                         Spacer(),
                         globals.isMeneger
                             ? IconButton(
-                                icon: new Icon(Icons.edit),
+                                icon: new Icon(
+                                  Icons.edit,
+                                  color: Color(int.parse("0xff6ed000")),
+                                ),
                                 onPressed: () async {
                                   showDialog(
                                       child: new Dialog(
                                         child: Container(
-
-                                          height: MediaQuery.of(context).size.height / 2.3,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              2.3,
                                           child: new Column(
                                             children: <Widget>[
                                               new TextField(
@@ -273,8 +528,6 @@ class Home_menagerState extends State<Home_menager> {
                                                                 .height /
                                                             60)
                                                         .round(),
-
-
                                                 decoration: new InputDecoration(
                                                     hintText:
                                                         "מה תרצה שיהיה כתוב באודות?",
@@ -327,7 +580,7 @@ class Home_menagerState extends State<Home_menager> {
                             : Container(),
                       ],
                     ),
-                 ),
+                  ),
                   About(),
 //                  Spacer(),
 //                  Padding(
@@ -343,6 +596,79 @@ class Home_menagerState extends State<Home_menager> {
               ),
             ),
           ),
+          globals.isMeneger
+              ? Card(
+                  margin: new EdgeInsets.only(
+                      left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
+                  //margin: new EdgeInsets.only(top: 8.0, bottom: 5.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  elevation: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      // width: 100,
+                      // height: 100,
+                      child: new Column(
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Text(
+                                'הוספת מנהל חדש',
+                                style: TextStyle(
+                                    fontFamily: 'Assistant',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ],
+                          ),
+                          new TextField(
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: new InputDecoration(
+                              hintText: "דואר אלקטרוני של המנהל החדש",
+                            ),
+                            controller: _c,
+                          ),
+                          new FlatButton(
+                            child: new Text("שמור",
+                                style: TextStyle(
+                                  fontFamily: 'Assistant',
+                                  color: Color(int.parse("0xff6ed000")),
+                                )),
+                            onPressed: () async {
+                              String IdUser = await GetuserByEmail(_c.text);
+                              Firestore.instance
+                                  .collection('users')
+                                  .document(IdUser)
+                                  .updateData({
+                                "role": "menager",
+                              });
+                              await _firestore.collection("manegar").add({
+                                "email": _c.text.toString(),
+                              });
+                              Navigator.pop(context);
+                            },
+                            // onPressed: () async {
+                            //   String IdUser = await GetuserByEmail(_c.text);
+                            //   Firestore.instance
+                            //       .collection('users')
+                            //       .document(IdUser)
+                            //       .updateData({
+                            //     "role": "menager",
+                            //   });
+                            //   await _firestore.collection("manegar").add({
+                            //     "email": _c.text.toString(),
+                            //   });
+                            //   Navigator.pop(context);
+                            // },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : Container(height: 100)
         ]).toList(),
       ),
     );
