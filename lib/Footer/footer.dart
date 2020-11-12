@@ -218,7 +218,7 @@ class _BottomNavigationBarControllerState
             );
           }
           setState(() {
-            print(_selectedIndex);
+
             print(index);
             if (index != 0) _selectedIndex = index;
           });
@@ -355,26 +355,33 @@ class _BottomNavigationBarControllerState
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _bottomNavigationBar(_index_bifore),
-      floatingActionButton: !globals.isMeneger
-          ? FloatingActionButton(
-              heroTag: 2,
-              backgroundColor: Colors.red,
-              onPressed: () {
-                if (globals.no_reg == true) {
-                  GoregisterAlertDialog(context);
-                } else {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HotReport()));
-                }
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.message), // icon
-                  Text("דווח"), // text
-                ],
+      floatingActionButton: !globals.isMeneger && _selectedIndex!=1
+          ? Padding(
+        padding: EdgeInsets.fromLTRB(
+            0,
+            0,
+            MediaQuery.of(context).size.height / 8.5,
+            MediaQuery.of(context).size.height / 1.3),
+        child: FloatingActionButton(
+                heroTag: 2,
+                backgroundColor: Colors.red,
+                onPressed: () {
+                  if (globals.no_reg == true) {
+                    GoregisterAlertDialog(context);
+                  } else {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HotReport()));
+                  }
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.message), // icon
+                    Text("דווח"), // text
+                  ],
+                ),
               ),
-            )
+          )
           : null,
       body: PageStorage(
         child: pages[_selectedIndex - 1],

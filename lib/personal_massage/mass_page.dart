@@ -82,8 +82,15 @@ class _massState extends State<mass> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                         child: Row(
                           children: [
-                            new Text(
+                            globals.isMeneger?new Text(
                               "מאת: ",
+                              style: new TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Assistant',
+                              ),
+                            ):new Text(
+                              "מאת מנהלים: ",
                               style: new TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -312,7 +319,7 @@ class _massState extends State<mass> {
                                                                           .text,
                                                                       widget
                                                                           .sender);
-                                                              Firestore.instance
+                                                             await Firestore.instance
                                                                   .collection(
                                                                       "users")
                                                                   .document(

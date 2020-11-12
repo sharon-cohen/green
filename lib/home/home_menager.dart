@@ -15,33 +15,15 @@ import 'package:greenpeace/common/Header.dart';
 import 'package:greenpeace/truggel_page/all_truggle.dart';
 import 'package:greenpeace/create_struggle1.dart';
 import 'package:greenpeace/feed.dart';
-
-import 'package:flutter/material.dart';
 import 'package:greenpeace/evants/event_firestore_service.dart';
 import 'package:greenpeace/evants/event_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:greenpeace/evants/event_page.dart';
 import 'package:greenpeace/Component/Alret_Dealog.dart';
-import 'package:greenpeace/global.dart' as globals;
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:greenpeace/home/home_menager.dart';
-import 'package:greenpeace/globalfunc.dart';
-import 'package:greenpeace/personal_massage/manage_massage.dart';
-import 'package:greenpeace/create_struggle1.dart';
-import 'package:greenpeace/truggel_page/all_truggle.dart';
-import 'package:greenpeace/evants/calender.dart';
 import 'package:greenpeace/evants/list_event.dart';
-import 'package:greenpeace/Component/Alret_Dealog.dart';
-import 'package:greenpeace/truggel_page/frameWeb.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:greenpeace/welcom.dart';
-import 'package:greenpeace/HotReport/hotReport.dart';
-import 'package:greenpeace/global.dart' as globals;
+
 import 'package:greenpeace/GetID_DB/getid.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
@@ -124,7 +106,7 @@ class Home_menagerState extends State<Home_menager> {
           ),
           Card(
             margin: new EdgeInsets.only(
-                left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
+                left: 12.0, right: 12.0, top: 0, bottom: 5.0),
             //margin: new EdgeInsets.only(top: 8.0, bottom: 5.0),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
@@ -132,95 +114,91 @@ class Home_menagerState extends State<Home_menager> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: MediaQuery.of(context).size.height / 2.1,
+                height: MediaQuery.of(context).size.height / 2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   textDirection: TextDirection.rtl,
                   children: <Widget>[
-                    Stack(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            children: <Widget>[
-                              FlatButton(
-                                child: Container(
-                                  child: Text(
-                                    "המאבקים שלנו",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Assistant',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => All_truggle()));
-                                },
-                              ),
-                              Spacer(),
-                              Spacer(),
-                              globals.isMeneger
-                                  ? FlatButton(
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Color(int.parse("0xff6ed000")),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    create_struggle1()));
-                                      },
-                                    )
-                                  : Container(),
-                            ],
+                    
+                    Expanded(
+                      flex:1,
+                      child: Container(
+                        child: Text(
+                          "המאבקים שלנו",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Assistant',
+                            fontSize: 20,
                           ),
-                        ),
-                        Positioned(
-                          //top: 31,
-                          top: MediaQuery.of(context).size.width / 12.3,
-                          right: MediaQuery.of(context).size.width / 13 / 2,
-                          child: Text(
-                            'הצטרפו ותתמכו בפעילות שלנו',
-                            style: TextStyle(
-                              fontFamily: 'Assistant',
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    new FutureBuilder<Widget>(
-                      future: listOfMass(),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<Widget> text) {
-                        return new SingleChildScrollView(
-                          padding: new EdgeInsets.fromLTRB(8, 0, 8, 0),
-                          child: text.data,
-                        );
-                      },
-                    ),
-                    FlatButton(
-                      child: Text(
-                        "לכל המאבקים",
-                        style: TextStyle(
-                          fontFamily: 'Assistant',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          color: Color(int.parse("0xff6ed000")),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => All_truggle()));
-                      },
+                    ),
+                    Expanded(
+                      flex:1,
+                      child: Container(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          'הצטרפו ותתמכו בפעילות שלנו',
+                          style: TextStyle(
+                            fontFamily: 'Assistant',
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    Expanded(
+                      flex:10,
+                      child: new FutureBuilder<Widget>(
+                        future: listOfMass(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot<Widget> text) {
+                          return new SingleChildScrollView(
+                            padding: new EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: text.data,
+                          );
+                        },
+                      ),
+                    ),
+                    globals.isMeneger? Expanded(
+                      flex:2,
+                      child: FlatButton(
+                        child: Text(
+                          "הוספת מאבק",
+                          style: TextStyle(
+                            fontFamily: 'Assistant',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Color(int.parse("0xff6ed000")),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      create_struggle1()));
+                        },
+                      ),
+                    ):Container(),
+                    Expanded(
+                      flex:2,
+                      child: FlatButton(
+                        child: Text(
+                          "לכל המאבקים",
+                          style: TextStyle(
+                            fontFamily: 'Assistant',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Color(int.parse("0xff6ed000")),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => All_truggle()));
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -236,52 +214,42 @@ class Home_menagerState extends State<Home_menager> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: MediaQuery.of(context).size.height / 2.3,
+                height: MediaQuery.of(context).size.height / 2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   textDirection: TextDirection.rtl,
                   children: <Widget>[
-                    Stack(
-                      children: [
-                        Container(
-                          //  height: MediaQuery.of(context).size.height / 18,
-                          child: Row(
-                            children: [
-                              FlatButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Feed()));
-                                },
-                                child: Text(
-                                  "עדכונים",
-                                  style: TextStyle(
-                                      fontFamily: 'Assistant',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                              ),
-                              Spacer(),
-                              ImageIcon(
-                                AssetImage("image/feed1.png"),
-                                color: Colors.black,
-                                // color: Colors.black,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: MediaQuery.of(context).size.width / 12.3,
-                          right: MediaQuery.of(context).size.width / 13 / 2,
-                          child: Text(
-                            'כאן ניתן לשתף את האהבה והדאגה שלנו לסביבה',
-                            style: TextStyle(
-                              fontFamily: 'Assistant',
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        children: [
+                          Container(
+                          height:MediaQuery.of(context).size.height / 25,
+                            child: Text(
+                              "עדכונים",
+                              style: TextStyle(
+                                  fontFamily: 'Assistant',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
                             ),
                           ),
+                          Spacer(),
+                          ImageIcon(
+                            AssetImage("image/feed1.png"),
+                            color: Colors.black,
+                            // color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height:MediaQuery.of(context).size.height / 25,
+                      child: Text(
+                        'כאן ניתן לשתף את האהבה והדאגה שלנו לסביבה',
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
                         ),
-                      ],
+                      ),
                     ),
                     SizedBox(height: 15),
                     Container(child: MessagesStream()),
@@ -432,7 +400,7 @@ class Home_menagerState extends State<Home_menager> {
                                               MaterialPageRoute(
                                                   builder: (_) =>
                                                       EventDetailsPage(
-                                                        event: event,
+//                                                        event: event,
                                                       )));
                                         },
                                       )),

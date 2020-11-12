@@ -31,6 +31,7 @@ class _newEventPage extends State<newEventPage> {
   final initialValue = DateTime.now();
   final createDateEvent = DateTime.now();
   DateTime value = DateTime.now();
+  DateTime now = DateTime.now();
   int savedCount = 0;
   int changedCount = 0;
   String type_event;
@@ -332,6 +333,7 @@ class _newEventPage extends State<newEventPage> {
                               setState(() {
                                 processing = true;
                               });
+
                               if (widget.note != null) {
                                 await eventDBS.updateData(widget.note.id, {
                                   "title": _title.text,
@@ -345,6 +347,9 @@ class _newEventPage extends State<newEventPage> {
                                   "whatapp": _whatapp.text,
                                 });
                               } else {
+                                if(now.day==value.day &&now.month==value.month && now.year==value.year){
+                                   AlertDialogDateIsNow(context);
+                                }
                                 await eventDBS.createItem(EventModel(
                                   title: _title.text,
                                   description: _description.text,
@@ -444,6 +449,30 @@ AlertDialogCreateEvent(BuildContext context, String Mess) {
 
   // show the dialog
   showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+AlertDialogDateIsNow(BuildContext context) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("אישור"),
+    onPressed: () => Navigator.pop(context),
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("שים לב"),
+    content: Text("תאריך האירוע נקבע להיום"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+ showDialog(
     context: context,
     builder: (BuildContext context) {
       return alert;

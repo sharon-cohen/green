@@ -33,7 +33,7 @@ class _MyHeaderState extends State<MyHeader> {
     return ClipPath(
       clipper: MyClipper(),
       child: Container(
-        height: MediaQuery.of(context).size.height / (2.3),
+        height: MediaQuery.of(context).size.height / (2.6),
         width: double.infinity,
         decoration: BoxDecoration(
           image: check_image()

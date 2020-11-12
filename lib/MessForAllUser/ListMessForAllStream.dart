@@ -31,6 +31,7 @@ class AllUserlMassStream extends StatelessWidget {
           if (!myMessdeleted.contains(report.documentID)){
             print(report.documentID);
           final messageText = report.data["text"];
+
           final messageSender = report.data["sender"];
           final time = report.data["time"].toDate();
           final messageSenderId = report.data["senderId"];

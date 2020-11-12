@@ -34,13 +34,7 @@ class _UserPageState extends State<UserPage> {
               children: <Widget>[
                 Container(
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                          Color(int.parse("0xff6ed000")),
-                          Colors.white
-                        ])),
+                       ),
                     child: Container(
                       width: double.infinity,
                       height: 350.0,
@@ -131,13 +125,13 @@ class _UserPageState extends State<UserPage> {
                     padding: EdgeInsets.all(0.0),
                     child: Ink(
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.centerRight,
-                            end: Alignment.centerLeft,
-                            colors: [
-                              Color(int.parse("0xff6ed000")),
-                              Colors.lightGreen
-                            ]),
+//                        gradient: LinearGradient(
+//                            begin: Alignment.centerRight,
+//                            end: Alignment.centerLeft,
+//                            colors: [
+//                              Color(int.parse("0xff6ed000")),
+//                              Colors.lightGreen
+//                            ]),
                         //borderRadius: BorderRadius.circular(30.0),
                       ),
                       child: Expanded(

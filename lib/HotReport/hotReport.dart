@@ -146,24 +146,8 @@ class _HotReport extends State<HotReport> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-              //   child: new Align(
-              //     child: new Text(
-              //       "מיקום",
-              //       style: new TextStyle(
-              //           fontSize: 35,
-              //           color: Colors.black,
-              //           fontFamily: 'Assistant'),
-              //     ), //so big text
-              //     alignment: FractionalOffset.topRight,
-              //   ),
-              // ),
+
               Padding(
-                // padding: EdgeInsets.symmetric(
-                //     horizontal: 5,
-                //     vertical: MediaQuery.of(context).size.height / 10),
 
                 padding: EdgeInsets.fromLTRB(
                     5, MediaQuery.of(context).size.height / 15, 5, 0),
@@ -279,7 +263,11 @@ class _HotReport extends State<HotReport> {
                               setState(() {
                                 processing = true;
                               });
-                              await uploadImageToFirebase(context);
+                              if(_imageFile!=null){
+
+                                await uploadImageToFirebase(context);
+                              }
+
                               _firestore.collection("hotReport").add({
                                 "text": _description.text,
                                 "sender": globals.name,
@@ -379,7 +367,7 @@ successshowAlertDialog(BuildContext context) {
           context,
           MaterialPageRoute(
               builder: (context) => BottomNavigationBarController(
-                    1,
+                    2,
                     3,
                   )));
     },
@@ -388,11 +376,11 @@ successshowAlertDialog(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text(
-      "האירוע נוצר בהצלחה",
+      "דיווח נשלח למנהלים",
       style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
     ),
     content: Text(
-      "נשלח למנהלים לאישור תקבל עדכון בקרוב",
+      "תודה על שיתוף הפעולה",
       style: TextStyle(color: Colors.black, fontFamily: 'Assistant'),
     ),
     actions: [

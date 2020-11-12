@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 import 'package:greenpeace/streem_firestore/MessagesStream.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,9 +22,10 @@ class _FeedState extends State<Feed> {
           backgroundColor: Colors.white,
           title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
           actions: <Widget>[
+
             IconButton(
               icon: Icon(
-                Icons.arrow_back_outlined,
+                Icons.clear,
                 color: Colors.black,
               ),
               onPressed: () {

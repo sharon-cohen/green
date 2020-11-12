@@ -91,7 +91,9 @@ class CalenderState extends State<Calender> {
                       children: <Widget>[
                         TableCalendar(
                           events: _events,
+
                           initialCalendarFormat: CalendarFormat.month,
+
                           calendarStyle: CalendarStyle(
                               canEventMarkersOverflow: true,
                               todayColor: Color(int.parse("0xff6ed000")),
@@ -110,7 +112,7 @@ class CalenderState extends State<Calender> {
                                 TextStyle(color: Colors.white),
                             formatButtonShowsNext: false,
                           ),
-                          startingDayOfWeek: StartingDayOfWeek.sunday,
+
                           onDaySelected: (date, events) {
                             setState(() {
                               _selectedEvents = events;

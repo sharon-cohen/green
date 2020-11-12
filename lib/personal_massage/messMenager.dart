@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:greenpeace/personal_massage/personalMessModel.dart';
 import 'package:greenpeace/personal_massage/mass_page.dart';
 import 'package:greenpeace/globalfunc.dart';
+import 'package:greenpeace/global.dart' as globals;
+import 'package:greenpeace/personal_massage/TextContainerListMess.dart';
 
 final _firestore = Firestore.instance;
 
@@ -90,26 +92,25 @@ class personalMessContainer extends StatelessWidget {
                   ),
                 ),
               ),
-              title: Text(
-                mess.sender,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15),
+
+              //mess.sender,
+              //20
+              //30
+              title: TextStyleMess(
+                text: mess.sender,
+                size: 20,
+                sizeHeight: MediaQuery.of(context).size.height / 30,
+                sizeWidth: MediaQuery.of(context).size.width,
               ),
               // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-              subtitle: FittedBox(
-                child: Text(
-                  DayConvert(mess.time.weekday.toString()) +
-                      " " +
-                      mess.time.day.toString() +
-                      monthConvert(mess.time.month.toString()),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Assistant'),
-                ),
+              subtitle: TextStyleMess(
+                text: DayConvert(mess.time.weekday.toString()) +
+                    " " +
+                    mess.time.day.toString() +
+                    monthConvert(mess.time.month.toString()),
+                size: 15,
+                sizeHeight: MediaQuery.of(context).size.height / 35,
+                sizeWidth: MediaQuery.of(context).size.width,
               ),
               trailing: FlatButton(
                 padding: const EdgeInsets.all(0.0),

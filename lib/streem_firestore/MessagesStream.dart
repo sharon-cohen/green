@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:greenpeace/globalfunc.dart';
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 
@@ -274,25 +274,4 @@ class MessageBubble extends StatelessWidget {
   }
 }
 
-showAlertDialogImage(BuildContext context, String image) {
-  // set up the butto
-  AlertDialog alert = AlertDialog(
-    content: Container(
-      child: CachedNetworkImage(
-        imageUrl: image,
-        fit: BoxFit.cover,
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            CircularProgressIndicator(value: downloadProgress.progress),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      ),
-    ),
-  );
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}

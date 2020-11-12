@@ -24,14 +24,14 @@ class _MyHeader_svgState extends State<MyHeader_svg> {
         height: 350,
         width: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color(0xFF36C12C),
-              Color(0xFF3382CC).withOpacity(.8),
-            ],
-          ),
+//          gradient: LinearGradient(
+//            begin: Alignment.topRight,
+//            end: Alignment.bottomLeft,
+//            colors: [
+//              Color(0xFF36C12C),
+//              Color(0xFF3382CC).withOpacity(.8),
+//            ],
+//          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,

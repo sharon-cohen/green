@@ -22,7 +22,7 @@ class event_container extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => EventDetailsPage(
-                      event: Event,
+                 event: Event,
                     )));
       },
       child: Container(

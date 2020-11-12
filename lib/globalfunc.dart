@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -211,4 +212,26 @@ void launchMap(String address) async {
   if (await canLaunch(googleUrl)) {
     await launch(googleUrl);
   }
+}
+showAlertDialogImage(BuildContext context, String image) {
+  // set up the butto
+  AlertDialog alert = AlertDialog(
+    content: Container(
+      child: CachedNetworkImage(
+        imageUrl: image,
+        fit: BoxFit.cover,
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(value: downloadProgress.progress),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
+    ),
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

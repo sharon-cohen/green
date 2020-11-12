@@ -1,17 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:greenpeace/report/report_model.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:greenpeace/globalfunc.dart';
 final _firestore = Firestore.instance;
 
 class reportMass extends StatelessWidget {
   final reportModel report;
 
   const reportMass({Key key, this.report}) : super(key: key);
-  Widget mass() {
+  Widget mass(BuildContext context) {
     if (report.text.toString() != "") {
       return Align(
         child: new Text(
@@ -24,10 +25,20 @@ class reportMass extends StatelessWidget {
         alignment: FractionalOffset.topRight,
       );
     } else {
-      print("image");
-      print(report.image.toString());
-      return Image(
-        image: NetworkImage(report.image),
+
+      return FlatButton(
+        onPressed: (){
+          showAlertDialogImage(context, report.image);
+        },
+
+        child: Container(
+      child: CachedNetworkImage(
+      imageUrl: report.image,
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(value: downloadProgress.progress),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      ),
+    ),
       );
     }
   }
@@ -144,7 +155,7 @@ class reportMass extends StatelessWidget {
                   height: MediaQuery.of(context).size.height / 1.87,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
-                    child: mass(),
+                    child: mass(context),
                   ),
                 ),
               ),

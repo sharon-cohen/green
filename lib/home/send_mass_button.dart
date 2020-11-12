@@ -9,7 +9,7 @@ import '../globalfunc.dart';
 import 'package:flutter_image/network.dart';
 import '../register.dart';
 import 'package:greenpeace/global.dart' as globals;
-
+import 'package:greenpeace/global.dart' as globals;
 final _firestore = Firestore.instance;
 
 class button_send extends StatefulWidget {
@@ -98,51 +98,6 @@ class _button_sendState extends State<button_send> {
     mass.clear();
 
     if (try_send == false) {
-      //   //todo check if ok
-      //   mass.add(
-      //     Align(
-      //       alignment: Alignment.centerLeft,
-      //       child: FlatButton(
-      //         onPressed: () {
-      //           try_send = true;
-      //           // if (widget.no_reg == true) {
-      //           if (globals.no_reg == true) {
-      //             GoregisterAlertDialog(context);
-      //           }
-      //           setState(() {
-      //             fileUrl = "";
-      //             messageText = "";
-      //           });
-      //         },
-      //         child: Container(
-      //           child: Text(
-      //             'שלח הודעה',
-      //             textAlign: TextAlign.center,
-      //             style: TextStyle(
-      //               fontFamily: 'Assistant',
-      //               fontWeight: FontWeight.bold,
-      //               fontSize: 15,
-      //               color: Color(int.parse("0xff6ed000")),
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   );
-      //   return mass;
-      // } else {
-      //   // if (widget.no_reg == true) {
-      //   if (globals.no_reg == true) {
-      //     mass.add(
-      //       FlatButton(
-      //           onPressed: () {
-      //             Navigator.pushNamed(context, RegistrationScreen.id);
-      //           },
-      //           child: Text('הירשם')),
-      //     );
-      //     return mass;
-      //   } else
-
       mass.add(
         Expanded(
           child: TextField(
@@ -199,29 +154,38 @@ class _button_sendState extends State<button_send> {
                 color: Color(int.parse("0xff6ed000")),
               ),
               onPressed: () async {
-                var image =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
-                int timestamp = new DateTime.now().millisecondsSinceEpoch;
-                StorageReference storageReference = FirebaseStorage.instance
-                    .ref()
-                    .child('chats/img_' + timestamp.toString() + '.jpg');
-                StorageUploadTask uploadTask = storageReference.putFile(image);
-                setState(() {
-                  isLoading = true;
-                });
-                await uploadTask.onComplete;
-
-                try {
-                  fileUrl = await storageReference.getDownloadURL();
-
-                  setState(() {
-                    isLoading = false;
-                    image_sent_pro(context, fileUrl);
-                  });
-                } catch (e) {
-                  print('errordfd');
+                if(globals.no_reg=true){
+                  GoregisterAlertDialog(context);
                 }
-              }),
+                else{
+                  var image =
+                  await ImagePicker.pickImage(source: ImageSource.gallery);
+                  int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                  StorageReference storageReference = FirebaseStorage.instance
+                      .ref()
+                      .child('chats/img_' + timestamp.toString() + '.jpg');
+                  StorageUploadTask uploadTask = storageReference.putFile(image);
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await uploadTask.onComplete;
+
+                  try {
+                    fileUrl = await storageReference.getDownloadURL();
+
+                    setState(() {
+                      isLoading = false;
+                      image_sent_pro(context, fileUrl);
+                    });
+                  } catch (e) {
+                    print('errordfd');
+                  }
+
+                }
+
+              })
+
+          ,
         ),
       );
       return mass;

@@ -15,6 +15,7 @@ import 'package:greenpeace/MessForAllUser/CreateMessForAllUser.dart';
 import 'package:greenpeace/MessForAllUser/ListMessForAllStream.dart';
 import 'package:greenpeace/MessToOnePersonFromMenager/choosePerson.dart';
 import 'package:greenpeace/evants/event_model.dart';
+import 'package:greenpeace/personal_massage/TextContainerListMess.dart';
 
 final databaseReference = Firestore.instance;
 final _firestore = Firestore.instance;
@@ -123,7 +124,7 @@ class AllmessState extends State<Allmess> {
               alignment: FractionalOffset.topRight,
             ),
             eventStream(),
-            SizedBox(height: 200),
+            Container( height: MediaQuery.of(context).size.height/15 ,)
           ],
         ),
       );
@@ -159,12 +160,29 @@ class AllmessState extends State<Allmess> {
                 ],
               ),
               // SizedBox(height: 10),
+              Text(
+                'הודעות עבור כולם',
+                style: TextStyle(
+                    fontFamily: 'Assistant',
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
+              ),
               AllUserlMassStream(
                 myMessdeleted: myMessDelete,
+              ),
+              Text(
+                'הודעות עבורו אישי',
+                style: TextStyle(
+                    fontFamily: 'Assistant',
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
               ),
               personalMassStream(
                 myMess: myMess,
               ),
+              Container( height: MediaQuery.of(context).size.height/15 ,)
             ],
           ),
         ),
@@ -261,7 +279,7 @@ class personalMassStream extends StatelessWidget {
               MessForAll: false,
             );
             personalsList.add(personalsContainer);
-            //  reports.sort((a, b) => b.time.compareTo(a.time));
+            personalsList.sort((a, b) => b.mess.time.compareTo(a.mess.time));
           }
         }
         return Column(
@@ -352,27 +370,21 @@ class ReportsContainer extends StatelessWidget {
               ),
             ),
           ),
-          title: Text(
-            report.sender.toString(),
-            style: TextStyle(
-                fontFamily: 'Assistant',
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 15),
+          title: TextStyleMess(
+            text: report.sender,
+            size: 20,
+            sizeHeight: MediaQuery.of(context).size.height / 30,
+            sizeWidth: MediaQuery.of(context).size.width,
           ),
-
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-          subtitle: FittedBox(
-            child: Text(
-                DayConvert(report.time.weekday.toString()) +
-                    " " +
-                    report.time.day.toString() +
-                    monthConvert(report.time.month.toString()),
-                style: TextStyle(
-                  fontFamily: 'Assistant',
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.bold,
-                )),
+          subtitle: TextStyleMess(
+            text: DayConvert(report.time.weekday.toString()) +
+                " " +
+                report.time.day.toString() +
+                monthConvert(report.time.month.toString()),
+            size: 15,
+            sizeHeight: MediaQuery.of(context).size.height / 35,
+            sizeWidth: MediaQuery.of(context).size.width,
           ),
           trailing: FlatButton(
             padding: const EdgeInsets.all(0.0),
@@ -476,27 +488,21 @@ class eventContainer extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            title: Text(
-              this.event.sender,
-              style: TextStyle(
-                  fontFamily: 'Assistant',
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15),
+            title: TextStyleMess(
+              text: event.sender,
+              size: 20,
+              sizeHeight: MediaQuery.of(context).size.height / 30,
+              sizeWidth: MediaQuery.of(context).size.width,
             ),
             // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
-            subtitle: FittedBox(
-              child: Text(
-                DayConvert(event.time.weekday.toString()) +
-                    " " +
-                    event.time.day.toString() +
-                    monthConvert(event.time.month.toString()),
-                style: TextStyle(
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Assistant'),
-              ),
+            subtitle: TextStyleMess(
+              text: DayConvert(event.time.weekday.toString()) +
+                  " " +
+                  event.time.day.toString() +
+                  monthConvert(event.time.month.toString()),
+              size: 15,
+              sizeHeight: MediaQuery.of(context).size.height / 35,
+              sizeWidth: MediaQuery.of(context).size.width,
             ),
             trailing: FlatButton(
               padding: const EdgeInsets.all(0.0),

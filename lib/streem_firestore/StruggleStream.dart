@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -124,7 +125,7 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
       child: Column(
         children: <Widget>[
           new Expanded(
-              flex: 6,
+              flex: 4,
               child: FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
@@ -158,8 +159,11 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
           new Expanded(
               flex: 1,
               child: Container(
-                width: MediaQuery.of(context).size.width / (1),
-                child: Center(child: FittedBox(child: Text(widget.struggle.title))),
+                width: MediaQuery.of(context).size.width ,
+                child: Center(child: AutoSizeText(widget.struggle.title,
+                    style: TextStyle(fontSize: 15),
+                    maxLines: 2
+                )),
               )),
         ],
       ),
@@ -247,7 +251,7 @@ class All_TtuggleContainer extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -262,7 +266,7 @@ class All_TtuggleContainer extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 5,
             child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),

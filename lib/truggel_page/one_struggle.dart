@@ -4,12 +4,10 @@ import 'package:greenpeace/Footer/footer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/truggel_page/struggle_model.dart';
 import 'package:greenpeace/common/Header.dart';
-import 'package:flutter_share_me/flutter_share_me.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:social_share/social_share.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'dart:io';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'dart:async';
 import 'package:greenpeace/truggel_page/frameWeb.dart';
 import 'package:greenpeace/truggel_page/updateStrugle.dart';
@@ -309,41 +307,44 @@ class _screenShotStrugle extends State<screenShotStrugle> {
   Widget build(BuildContext context) {
     return Screenshot(
       controller: widget.screenshotController,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            MyHeader(
-              image: widget.struggle.image,
-              page: "struggle",
-              offset: offset,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: new Align(
-                child: new Text(
-                  widget.struggle.title,
-                  style: new TextStyle(
-                      fontSize: 30,
-                      fontFamily: 'Assistant',
-                      fontWeight: FontWeight.bold),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
+      child: Scaffold(
+      backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              MyHeader(
+                image: widget.struggle.image,
+                page: "struggle",
+                offset: offset,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Align(
-                child: new Text(
-                  widget.struggle.description,
-                  style: new TextStyle(fontSize: 20),
-                ), //so big text
-                alignment: FractionalOffset.topRight,
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: new Align(
+                  child: new Text(
+                    widget.struggle.title,
+                    style: new TextStyle(
+                        fontSize: 30,
+                        fontFamily: 'Assistant',
+                        fontWeight: FontWeight.bold),
+                  ), //so big text
+                  alignment: FractionalOffset.topRight,
+                ),
               ),
-            ),
-            SizedBox(height: 200),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Align(
+                  child: new Text(
+                    widget.struggle.description,
+                    style: new TextStyle(fontSize: 20),
+                  ), //so big text
+                  alignment: FractionalOffset.topRight,
+                ),
+              ),
+              SizedBox(height: 200),
+            ],
+          ),
         ),
       ),
     );

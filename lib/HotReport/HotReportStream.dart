@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/HotReport/HotReportModel.dart';
 import 'package:greenpeace/HotReport/HotReportMass.dart';
 import 'package:greenpeace/globalfunc.dart';
-
+import 'package:greenpeace/personal_massage/TextContainerListMess.dart';
 final _firestore = Firestore.instance;
 
 class HotStream extends StatelessWidget {
@@ -89,28 +89,21 @@ class HotContainer extends StatelessWidget {
               ),
             ),
           ),
-          title: Text(
-            report.sender.toString(),
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                fontFamily: 'Assistant'),
+          title: TextStyleMess(
+            text: report.sender,
+            size: 20,
+            sizeHeight: MediaQuery.of(context).size.height / 30,
+            sizeWidth: MediaQuery.of(context).size.width,
           ),
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-          subtitle: FittedBox(
-            child: Text(
-              DayConvert(report.time.weekday.toString()) +
-                  " " +
-                  report.time.day.toString() +
-                  monthConvert(report.time.month.toString()),
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: Colors.grey[600],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  fontFamily: 'Assistant'),
-            ),
+          subtitle: TextStyleMess(
+            text: DayConvert(report.time.weekday.toString()) +
+                " " +
+                report.time.day.toString() +
+                monthConvert(report.time.month.toString()),
+            size: 15,
+            sizeHeight: MediaQuery.of(context).size.height / 35,
+            sizeWidth: MediaQuery.of(context).size.width,
           ),
           trailing: FlatButton(
             padding: const EdgeInsets.all(0.0),

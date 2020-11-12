@@ -5,14 +5,14 @@ import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/evants/add_event.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:greenpeace/globalfunc.dart';
 final _firestore = Firestore.instance;
 
 class HotMass extends StatelessWidget {
   final HotModel report;
 
   const HotMass({Key key, this.report}) : super(key: key);
-  Widget mass() {
+  Widget mass(BuildContext context) {
     if (report.image == "") {
       return Align(
         child: new Text(
@@ -27,12 +27,17 @@ class HotMass extends StatelessWidget {
         alignment: FractionalOffset.bottomRight,
       );
     } else {
-      return Container(
-        child: CachedNetworkImage(
-          imageUrl: report.image,
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              CircularProgressIndicator(value: downloadProgress.progress),
-          errorWidget: (context, url, error) => Icon(Icons.error),
+      return FlatButton(
+        onPressed: (){
+          showAlertDialogImage(context, report.image);
+        },
+        child: Container(
+          child: CachedNetworkImage(
+            imageUrl: report.image,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                CircularProgressIndicator(value: downloadProgress.progress),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
         ),
       );
     }
@@ -158,7 +163,7 @@ class HotMass extends StatelessWidget {
                                 fontSize: 20, fontFamily: 'Assistant'),
                           ),
                         ),
-                        Expanded(child: mass()),
+                        Expanded(child: mass(context)),
                       ],
                     ),
                   ),

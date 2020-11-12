@@ -80,41 +80,18 @@ class _FrameWeb extends State<FrameWeb> {
           elevation: 1, // give the appbar shadows
           iconTheme: IconThemeData(color: Colors.white),
           actions: <Widget>[
-            InkWell(
-              child: Icon(Icons.refresh),
-              onTap: () {
-                flutterWebviewPlugin.reload();
-                // flutterWebviewPlugin.reloadUrl(); // if you want to reloade another url
-              },
-            ),
-            InkWell(
-              child: Icon(Icons.stop),
-              onTap: () {
-                flutterWebviewPlugin.stopLoading(); // stop loading the url
-              },
-            ),
-            // InkWell(
-            //   child: Icon(Icons.remove_red_eye),
-            //   onTap: () {
-            //     flutterWebviewPlugin.show(); // appear the webview widget
-            //   },
-            // ),
-            // InkWell(
-            //child: Icon(Icons.close),
-            //   onTap: () {
-            //     flutterWebviewPlugin.hide(); // hide the webview widget
-            //   },
-            // ),
+
             InkWell(
               child: Icon(Icons.arrow_back),
               onTap: () {
-                flutterWebviewPlugin.goBack(); // for going back
+                flutterWebviewPlugin.goForward();  // for going back
               },
             ),
             InkWell(
               child: Icon(Icons.forward),
               onTap: () {
-                flutterWebviewPlugin.goForward(); // for going forward
+                flutterWebviewPlugin.goBack();
+               // for going forward
               },
             ),
           ], // make the icons colors inside appbar with white color
