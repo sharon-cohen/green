@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:greenpeace/evants/add_event.dart';
@@ -137,114 +138,145 @@ class _mass_eventState extends State<mass_event> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 21, 16),
-              child: Column(
-                children: [
-                  new Align(
-                    child: FittedBox(
-                      child: new Text(widget.event.title,
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    new Align(
+                      child: FittedBox(
+                        child: new Text(
+                          "שם האירוע",
                           style: new TextStyle(
-                            fontFamily: 'Assistant',
-                          )),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                  new Align(
-                    child: FittedBox(
-                      child: new Text(widget.event.description,
-                          style: new TextStyle(
-                            fontFamily: 'Assistant',
-                          )),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                  new Align(
-                    child: FittedBox(
-                      child: new Text(
-                        "תאריך",
-                        style: new TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontFamily: 'Assistant',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                  new Align(
-                    child: Text(
-                      DayConvert(widget.event.eventDate.weekday.toString()) +
-                          " " +
-                          widget.event.eventDate.day.toString() +
-                          monthConvert(widget.event.eventDate.month.toString()),
-                      style:
-                          new TextStyle(fontSize: 15, fontFamily: 'Assistant'),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                  new Align(
-                    child: FittedBox(
-                      child: new Text(
-                        "סוג האירוע",
-                        style: new TextStyle(
                             fontSize: 20,
                             color: Colors.black,
                             fontFamily: 'Assistant',
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                  new Align(
-                    child: FittedBox(
-                      child: new Text(widget.event.type_event.toString(),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+
+                    new Align(
+                      child: FittedBox(
+                        child: new Text(widget.event.title,
+                            style: new TextStyle(
+                              fontFamily: 'Assistant',
+                            )),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    new Align(
+                      child: FittedBox(
+                        child: new Text(
+                          "תיאור האירוע",
                           style: new TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
                             fontFamily: 'Assistant',
-                          )),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                  new Align(
-                    child: new Text(
-                      "מיקום",
-                      style: new TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Assistant',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                  new Align(
-                    child: FlatButton(
-                      color: Colors.white,
-                      textColor: Color(int.parse("0xff6ed000")),
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.black,
-                      padding: EdgeInsets.all(0.0),
-                      splashColor: Colors.blueAccent,
-                      onPressed: () {
-                        launchMap(widget.event.location);
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'image/google-maps.png',
-                            width: 30,
-                            height: 30,
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(width: 7),
-                          Text(
-                            widget.event.location,
-                            style: TextStyle(
-                                fontSize: 20.0, fontFamily: 'Assistant'),
+                        ),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    new Align(
+                     child: AutoSizeText(
+                       widget.event.description,
+                       style: TextStyle(fontFamily: 'Assistant', fontSize:15,
+                         // color: Colors.green,
+                       ),
+                     ),
+                    ),
+                    new Align(
+                      child: FittedBox(
+                        child: new Text(
+                          "תאריך",
+                          style: new TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontFamily: 'Assistant',
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
-                    ), //so big text
-                    alignment: FractionalOffset.topRight,
-                  ),
-                ],
+                        ),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    new Align(
+                      child: Text(
+                        DayConvert(widget.event.eventDate.weekday.toString()) +
+                            " " +
+                            widget.event.eventDate.day.toString() +
+                            monthConvert(widget.event.eventDate.month.toString())+yearConvert(widget.event.time.year.toString()),
+                        style:
+                            new TextStyle(fontSize: 15, fontFamily: 'Assistant'),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    new Align(
+                      child: FittedBox(
+                        child: new Text(
+                          "סוג האירוע",
+                          style: new TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontFamily: 'Assistant',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    new Align(
+                      child: FittedBox(
+                        child: new Text(widget.event.type_event.toString(),
+                            style: new TextStyle(
+                              fontFamily: 'Assistant',
+                            )),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    new Align(
+                      child: new Text(
+                        "מיקום",
+                        style: new TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                    new Align(
+                      child: FlatButton(
+                        color: Colors.white,
+                        textColor: Color(int.parse("0xff6ed000")),
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.black,
+                        padding: EdgeInsets.all(0.0),
+                        splashColor: Colors.blueAccent,
+                        onPressed: () {
+                          launchMap(widget.event.location);
+                        },
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'image/google-maps.png',
+                              width: 30,
+                              height: 30,
+                            ),
+                            SizedBox(width: 7),
+                            Text(
+                              widget.event.location,
+                              style: TextStyle(
+                                  fontSize: 20.0, fontFamily: 'Assistant'),
+                            ),
+                          ],
+                        ),
+                      ), //so big text
+                      alignment: FractionalOffset.topRight,
+                    ),
+                  ],
+                ),
               ),
             ),
             Align(
@@ -255,7 +287,7 @@ class _mass_eventState extends State<mass_event> {
                   children: [
                     Padding(
                       padding: EdgeInsets.fromLTRB(
-                          0, MediaQuery.of(context).size.height / (5.5), 0, 0),
+                          0, MediaQuery.of(context).size.height / (10), 0, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -344,51 +376,7 @@ class _mass_eventState extends State<mass_event> {
                               ],
                             ),
                           ),
-                          // Container(
-                          //   height: MediaQuery.of(context).size.height / 10,
-                          //   width: MediaQuery.of(context).size.height / 10,
-                          //   decoration: BoxDecoration(
-                          //     //border: Border.all(color: Colors.grey[600]),
-                          //     color: Colors.grey[600],
-                          //   ),
-                          // child: Column(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     FlatButton(
-                          //       child: Column(
-                          //         children: [
-                          //           Image.asset(
-                          //             'image/send.png',
-                          //             color: Colors.white,
-                          //             width: 30,
-                          //             height: 30,
-                          //           ),
-                          //           Text('אישור',
-                          //               style: TextStyle(
-                          //                 fontFamily: 'Assistant',
-                          //                 fontSize: 15,
-                          //                 color: Colors.white,
-                          //               )),
-                          //         ],
-                          //       ),
-                          //       onPressed: () async {
-                          //         idevent = await Getevent(widget.event.title);
-                          //         databaseReference
-                          //             .collection('events')
-                          //             .document(idevent)
-                          //             .updateData({'approve': true});
-                          //         successshowAlertDialog(
-                          //             context,
-                          //             _email(),
-                          //             currentUser.uid,
-                          //             widget.event.title,
-                          //             widget.event.senderId);
-                          //       },
-                          //     ),
-                          //     // SizedBox(width: 200),
-                          //   ],
-                          // ),
-                          //  ),
+
                           Container(
                             height: MediaQuery.of(context).size.height / 10,
                             width: MediaQuery.of(context).size.height / 10,

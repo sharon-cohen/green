@@ -47,7 +47,7 @@ class AllUserlMassStream extends StatelessWidget {
             MessForAll:true,
           );
           personalsList.add(personalsContainer);
-          //  reports.sort((a, b) => b.time.compareTo(a.time));
+            personalsList.sort((a, b) => b.mess.time.compareTo(a.mess.time));
         }
         }
         return Column(

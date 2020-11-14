@@ -326,16 +326,26 @@ class Home_menagerState extends State<Home_menager> {
                                     locale: 'he_IL',
                                     events: _events,
                                     initialCalendarFormat: CalendarFormat.month,
+                                    startingDayOfWeek: StartingDayOfWeek.saturday,
                                     calendarStyle: CalendarStyle(
-                                        canEventMarkersOverflow: true,
-                                        todayColor:
-                                            Color(int.parse("0xff6ed000")),
-                                        selectedColor:
-                                            Color(int.parse("0xff6ed000")),
-                                        todayStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18.0,
-                                            color: Colors.white)),
+                                      outsideDaysVisible: false,
+                                      weekendStyle: TextStyle().copyWith(color: Colors.black),
+                                      holidayStyle: TextStyle().copyWith(color: Colors.black),
+                                    ),
+                                    daysOfWeekStyle: DaysOfWeekStyle(
+                                      weekendStyle: TextStyle().copyWith(color: Colors.black),
+                                    ),
+//                                    calendarStyle: CalendarStyle(
+//                                        canEventMarkersOverflow: true,
+//                                        weekendStyle: TextStyle().copyWith(color: Colors.black),
+//                                        todayColor:
+//                                            Color(int.parse("0xff6ed000")),
+//                                        selectedColor:
+//                                            Color(int.parse("0xff6ed000")),
+//                                        todayStyle: TextStyle(
+//                                            fontWeight: FontWeight.bold,
+//                                            fontSize: 18.0,
+//                                            color: Colors.white)),
                                     headerStyle: HeaderStyle(
                                       centerHeaderTitle: true,
                                       formatButtonDecoration: BoxDecoration(
@@ -347,7 +357,7 @@ class Home_menagerState extends State<Home_menager> {
                                           TextStyle(color: Colors.white),
                                       formatButtonShowsNext: false,
                                     ),
-                                    startingDayOfWeek: StartingDayOfWeek.sunday,
+
                                     onDaySelected: (date, events) {
                                       setState(() {
                                         _selectedEvents = events;
@@ -400,7 +410,7 @@ class Home_menagerState extends State<Home_menager> {
                                               MaterialPageRoute(
                                                   builder: (_) =>
                                                       EventDetailsPage(
-//                                                        event: event,
+                                                    event: event,
                                                       )));
                                         },
                                       )),

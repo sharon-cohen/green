@@ -116,7 +116,7 @@ class B extends StatelessWidget {
                           DayConvert(event.eventDate.weekday.toString()) +
                               " " +
                               event.eventDate.day.toString() +
-                              monthConvert(event.eventDate.month.toString()),
+                              monthConvert(event.eventDate.month.toString())+yearConvert(event.time.year.toString()),
                           style: TextStyle(
                             fontSize: 14,
                             fontFamily: 'Assistant',

@@ -14,6 +14,7 @@ class _ForgetPassword extends State<ForgetPassword> {
 
   @override
   Future<void> resetPassword(String email) async {
+    print(email);
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 

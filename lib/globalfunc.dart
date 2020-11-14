@@ -203,7 +203,27 @@ String monthConvert(String val) {
 
   return res;
 }
+String yearConvert(String year){
+  final now = DateTime.now();
+  if(now.year.toString()==year){
+    print("year same");
+    return " ";
+  }
+  else{
+    int yearInt = int.parse(year);
+    int Years=now.year-yearInt;
+    if(Years==1){
+      return  ", לפני שנה ";
+    }
+   else{
+      return " שנים"+Years.toString()+", לפני ";
 
+    }
+
+  }
+
+
+}
 void launchMap(String address) async {
   String query = Uri.encodeComponent(address);
 

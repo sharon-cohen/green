@@ -21,7 +21,7 @@ class TextStyleMess extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
               color: Colors.grey[600],
-
+              fontWeight: FontWeight.bold,
               fontSize: size,
               fontFamily: 'Assistant'),
         ),

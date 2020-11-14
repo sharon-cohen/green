@@ -329,7 +329,7 @@ class reportStream extends StatelessWidget {
             width_page: width_page,
           );
           reportsContainers.add(reportsContainer);
-          //  reports.sort((a, b) => b.time.compareTo(a.time));
+          reportsContainers.sort((a, b) => b.report.time.compareTo(a.report.time));
         }
         return Column(
           children: reportsContainers,
@@ -381,7 +381,7 @@ class ReportsContainer extends StatelessWidget {
             text: DayConvert(report.time.weekday.toString()) +
                 " " +
                 report.time.day.toString() +
-                monthConvert(report.time.month.toString()),
+                monthConvert(report.time.month.toString())+yearConvert(report.time.year.toString()),
             size: 15,
             sizeHeight: MediaQuery.of(context).size.height / 35,
             sizeWidth: MediaQuery.of(context).size.width,
@@ -443,8 +443,8 @@ class eventStream extends StatelessWidget {
               event: EventModel(
                 title: eventtitle,
                 approve: eventapprove,
-                eventDate: dateCreateEvent.toDate(),
-                time: date.toDate(),
+                eventDate: date.toDate(),
+                time:dateCreateEvent.toDate(),
                 description: eventdis,
                 sender: sender,
                 senderId: senderId,
@@ -456,7 +456,7 @@ class eventStream extends StatelessWidget {
             eventContainers.add(evenContainer);
           }
 
-          //  reports.sort((a, b) => b.time.compareTo(a.time));
+          eventContainers.sort((a, b) => b.event.time.compareTo(a.event.time));
         }
         return Column(
           children: eventContainers,
@@ -499,7 +499,7 @@ class eventContainer extends StatelessWidget {
               text: DayConvert(event.time.weekday.toString()) +
                   " " +
                   event.time.day.toString() +
-                  monthConvert(event.time.month.toString()),
+                  monthConvert(event.time.month.toString())+yearConvert(event.time.year.toString()),
               size: 15,
               sizeHeight: MediaQuery.of(context).size.height / 35,
               sizeWidth: MediaQuery.of(context).size.width,

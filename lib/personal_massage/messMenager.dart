@@ -45,7 +45,7 @@ class messMenager extends StatelessWidget {
             width_page: width_page,
           );
           personalsList.add(personalsContainer);
-          //  reports.sort((a, b) => b.time.compareTo(a.time));
+          personalsList.sort((a, b) => b.mess.time.compareTo(a.mess.time));
 
         }
         return Column(
@@ -107,7 +107,7 @@ class personalMessContainer extends StatelessWidget {
                 text: DayConvert(mess.time.weekday.toString()) +
                     " " +
                     mess.time.day.toString() +
-                    monthConvert(mess.time.month.toString()),
+                    monthConvert(mess.time.month.toString())+yearConvert(mess.time.year.toString()),
                 size: 15,
                 sizeHeight: MediaQuery.of(context).size.height / 35,
                 sizeWidth: MediaQuery.of(context).size.width,

@@ -49,7 +49,7 @@ class HotStream extends StatelessWidget {
             width_page: width_page,
           );
           reportsContainers.add(reportsContainer);
-          //  reports.sort((a, b) => b.time.compareTo(a.time));
+          reportsContainers.sort((a, b) => b.report.time.compareTo(a.report.time));
         }
         return Column(
           children: reportsContainers,
@@ -100,7 +100,7 @@ class HotContainer extends StatelessWidget {
             text: DayConvert(report.time.weekday.toString()) +
                 " " +
                 report.time.day.toString() +
-                monthConvert(report.time.month.toString()),
+                monthConvert(report.time.month.toString())+yearConvert(report.time.year.toString()),
             size: 15,
             sizeHeight: MediaQuery.of(context).size.height / 35,
             sizeWidth: MediaQuery.of(context).size.width,

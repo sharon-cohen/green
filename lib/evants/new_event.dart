@@ -329,7 +329,7 @@ class _newEventPage extends State<newEventPage> {
                                 _description.text != "" &&
                                 _title.text != "" &&
                                 _whatapp.text != "" &&
-                                !checkExistNameEvent) {
+                                !checkExistNameEvent && value!=null) {
                               setState(() {
                                 processing = true;
                               });
@@ -347,9 +347,7 @@ class _newEventPage extends State<newEventPage> {
                                   "whatapp": _whatapp.text,
                                 });
                               } else {
-                                if(now.day==value.day &&now.month==value.month && now.year==value.year){
-                                   AlertDialogDateIsNow(context);
-                                }
+
                                 await eventDBS.createItem(EventModel(
                                   title: _title.text,
                                   description: _description.text,
