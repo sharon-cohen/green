@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:greenpeace/welcom.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'globalfunc.dart';
 import 'global.dart' as globals;
 import 'package:greenpeace/register.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:greenpeace/forgetPassword.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
+
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -20,8 +26,13 @@ class _LoginScreenState extends State<LoginScreen> {
   String email;
   String password;
   String name;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  bool isSignIn = false;
+  bool google = false;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   FirebaseUser currentUser;
+
   @override
   Future<void> resetPassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
@@ -88,27 +99,79 @@ class _LoginScreenState extends State<LoginScreen> {
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                     //
-                    //
-                    //
-                    //
-                    // borderRadius: BorderRadius.circular(25.7),
                   ),
                 ),
               ),
               SizedBox(
                 height: 24.0,
               ),
+              RaisedButton(
+                  child: Text("Login with Google"),
+                  onPressed: () async {
+                    FirebaseUser res=null;
+                    try {
+
+                      res = await signInWithGoogle();
+                      print(res.email);
+                     final if_user_exsist=await GetuserByEmail(res.email);
+                    if( if_user_exsist == "not exist"){
+                      showAlertDialog_error_login(
+                          context, "המשתמש לא קיים במערכת");
+                    }
+                    }
+                    catch(er){
+                    print("dfdfd");
+                    }
+                    print("res");
+                      print(res);
+
+                      bool chaeckBan = await GetuserBan(res.email);
+                      if (chaeckBan == false) {
+                      if (res == null) {
+                        print("error logging in with google");
+                      } else {
+                        FirebaseUser user1 = res;
+                        String t = user1.uid;
+                        String userId =
+                            (await FirebaseAuth.instance.currentUser()).uid;
+                        globals.emailUser = user1.email;
+                        var document = await Firestore.instance
+                            .collection('users')
+                            .document(userId)
+                            .get();
+                        String name = document.data['name'];
+                        String role = document.data['role'];
+                        globals.name = name;
+                        globals.no_reg = false;
+                        globals.UserId = userId;
+                        if (role == 'menager') {
+                          globals.isMeneger = true;
+                        } else {
+                          globals.isMeneger = false;
+                        }
+                        globals.name = name;
+                        Navigator.pushNamed(
+                            context, BottomNavigationBarController.id,
+                            arguments: ScreenArguments_m(t, name, 'menager'));
+                      }
+                    }else{showAlertDialog_error_login(
+                        context, "המשתמש חסום במערכת");}
+                  }),
               RoundedButton(
                 title: 'הכנס',
                 colour: Color(int.parse("0xff6ed000")),
                 onPressed: () async {
                   setState(() {
+
                     showSpinner = true;
                   });
                   try {
                     final user2 = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
-                    if (user2 != null) {
+                    bool chaeckBan = await GetuserBan(email);
+
+                    print(chaeckBan);
+                    if (user2 != null && chaeckBan == false) {
                       FirebaseUser user1 = user2.user;
                       String t = user1.uid;
 
@@ -134,12 +197,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushNamed(
                           context, BottomNavigationBarController.id,
                           arguments: ScreenArguments_m(t, name, 'menager'));
+                    } else {
+                      if (chaeckBan == true) {
+                        showAlertDialog_error_login(
+                            context, "המשתמש חסום במערכת");
+                        setState(() {
+                          showSpinner = false;
+                        });
+                      }
                     }
                   } catch (e) {
                     setState(() {
                       showSpinner = false;
                     });
-                    showAlertDialog_error_login(context);
+                    showAlertDialog_error_login(
+                        context, "התחברות נכשלה יש לנסות להתחבר בשנית");
                   }
                 },
               ),
@@ -154,6 +226,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           builder: (context) => ForgetPassword()));
                 },
               ),
+              FlatButton(
+                child: Text('חזור לתפריט הראשי',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                    )),
+
+                //colour: Color(int.parse("0xff6ed000")),
+
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => WelcomeScreen()));
+                },
+              ),
             ],
           ),
         ),
@@ -162,7 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-showAlertDialog_error_login(BuildContext context) {
+showAlertDialog_error_login(BuildContext context, String mass) {
   // set up the button
   Widget cancelButton = FlatButton(
     child: Text("הירשם",
@@ -172,7 +257,7 @@ showAlertDialog_error_login(BuildContext context) {
     },
   );
   Widget continueButton = FlatButton(
-    child: Text("נסה שנית",
+    child: Text("ביטול",
         style: TextStyle(color: Colors.black, fontFamily: 'Assistant')),
     onPressed: () {
       Navigator.pop(context, true);
@@ -185,12 +270,15 @@ showAlertDialog_error_login(BuildContext context) {
         style: new TextStyle(
           fontFamily: 'Assistant',
         )),
-    content: Text("הפרטים שהוזנו אינם נכונים",
+    content: mass == "המשתמש חסום במערכת" ? Text(mass+"\n\n"+"לטובת ביטול החסימה ניתן לפנות למייל gpmedisr@greenpeace.org",
+        style: new TextStyle(
+          fontFamily: 'Assistant',
+        )):Text(mass,
         style: new TextStyle(
           fontFamily: 'Assistant',
         )),
     actions: [
-      cancelButton,
+      mass != "המשתמש חסום במערכת" ? cancelButton : Container(),
       continueButton,
     ],
   );
@@ -292,3 +380,72 @@ const kTextFieldDecoration = InputDecoration(
     //   borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
+
+class AuthProvider {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<bool> signInWithEmail(String email, String password) async {
+    try {
+      AuthResult result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      FirebaseUser user = result.user;
+      if (user != null)
+        return true;
+      else
+        return false;
+    } catch (e) {
+      print(e.message);
+      return false;
+    }
+  }
+
+  Future<void> logOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print("error logging out");
+    }
+  }
+
+  Future<bool> loginWithGoogle() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn();
+      GoogleSignInAccount account = await googleSignIn.signIn();
+      if (account == null) return false;
+      AuthResult res =
+          await _auth.signInWithCredential(GoogleAuthProvider.getCredential(
+        idToken: (await account.authentication).idToken,
+        accessToken: (await account.authentication).accessToken,
+      ));
+      if (res.user == null) return false;
+      return true;
+    } catch (e) {
+      print(e.message);
+      print("Error logging with google");
+      return false;
+    }
+  }
+}
+
+Future<FirebaseUser> signInWithGoogle() async {
+  GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+  final GoogleSignInAuthentication googleSignInAuthentication =
+      await googleSignInAccount.authentication;
+
+  final AuthCredential credential = GoogleAuthProvider.getCredential(
+    accessToken: googleSignInAuthentication.accessToken,
+    idToken: googleSignInAuthentication.idToken,
+  );
+
+  final AuthResult authResult = await _auth.signInWithCredential(credential);
+  final FirebaseUser user = authResult.user;
+  print(user.displayName.toString());
+  assert(!user.isAnonymous);
+  assert(await user.getIdToken() != null);
+
+  final FirebaseUser currentUser = await _auth.currentUser();
+  assert(user.uid == currentUser.uid);
+
+  return user;
+}

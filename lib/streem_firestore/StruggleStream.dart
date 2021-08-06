@@ -59,36 +59,66 @@ class TruggleStream extends StatelessWidget {
           }
           final truggls = snapshot.data.documents;
           for (var truggl in truggls) {
-            final trugglNmae = truggl.data["name"];
-            final imag_url = truggl.data["url_image"];
-            final info = truggl.data["info"];
+            if(truggl.documentID!="render" && truggl.documentID!="sumStruggle"){
+            final trugglNmae = truggl.data["title"];
+            final imag_url = truggl.data["image"];
+            final description1 = truggl.data["description1"];
+            final description2 = truggl.data["description2"];
+            final description3 = truggl.data["description3"];
+            final description4 = truggl.data["description4"];
+            final description5 = truggl.data["description5"];
             final url_money = truggl.data["petition"];
-            final share = truggl.data["url_share"];
+
+            final image1 = truggl.data["image1"];
+            final image2 = truggl.data["image2"];
+            final image3 = truggl.data["image3"];
+            final image4 = truggl.data["image4"];
+            final image5 = truggl.data["image5"];
+            final share = truggl.data["share"];
             final donation = truggl.data["donation"];
             final All_TtuggleContainer_new = All_TtuggleContainer(
                 struggle: StruggleModel(
-              title: trugglNmae,
-              image: imag_url,
-              description: info,
-              share: share,
-              petition: url_money,
-              donation: donation,
-            ));
+                  title: trugglNmae,
+                  image: imag_url,
+                  description1: description1,
+                  description2: description2,
+                  description3: description3,
+                  description4: description4,
+                  description5: description5,
+                  share: share,
+                  image1: image1,
+                  image2: image2,
+                  image3: image3,
+                  image4: image4,
+                  image5: image5,
+                  petition: url_money,
+                  donation: donation,
+                ));
             final TtuggleContainer_new = TtuggleContainer(
                 struggle: StruggleModel(
-              title: trugglNmae,
-              image: imag_url,
-              description: info,
-              share: share,
-              petition: url_money,
-              donation: donation,
-            ));
+                  title: trugglNmae,
+                  image: imag_url,
+                  description1: description1,
+                  description2: description2,
+                  description3: description3,
+                  description4: description4,
+                  description5: description5,
+                  share: share,
+                  image1: image1,
+                  image2: image2,
+                  image3: image3,
+                  image4: image4,
+                  image5: image5,
+                  petition: url_money,
+                  donation: donation,
+                ));
             if (NameStruggle.contains(trugglNmae) == false) {
               NameStruggle.add(trugglNmae);
             }
             TtuggleContainers.add(TtuggleContainer_new);
             ALL_TtuggleContainers.add(All_TtuggleContainer_new);
           }
+        }
           if (page_call == 'new_event') {
             return Align(
               alignment: AlignmentDirectional.centerStart,
@@ -149,9 +179,9 @@ class _TtuggleContainerState extends State<TtuggleContainer> {
                     borderRadius: BorderRadius.all(const Radius.circular(20)),
                     image: DecorationImage(
                       image: widget.struggle.image != null
-                          ? NetworkImage(widget.struggle.image)
-                          : AssetImage('image/image_icon.png'),
-                      fit: BoxFit.fill,
+                          ? NetworkImage(widget.struggle.image,)
+                          : AssetImage('image/image_icon.png',),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -196,7 +226,8 @@ class All_TtuggleContainer extends StatelessWidget {
           //borderRadius: BorderRadius.all(const Radius.circular(20)),
           image: new DecorationImage(
             colorFilter: new ColorFilter.mode(
-                Colors.black.withOpacity(0.7), BlendMode.dstATop),
+                Colors.black.withOpacity(0.3), BlendMode.multiply),
+
             image: NetworkImage(struggle.image),
             fit: BoxFit.cover,
           ),

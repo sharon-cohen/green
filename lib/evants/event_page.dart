@@ -11,7 +11,7 @@ import 'package:greenpeace/globalfunc.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/common/Header.dart';
-import 'package:intl/intl.dart';
+import 'package:greenpeace/GoogleMap.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'list_event.dart';
 
@@ -46,11 +46,11 @@ class EventDetailsPage extends StatelessWidget {
                       offset: 0,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top:  MediaQuery.of(context).size.height/5),
+                      padding: EdgeInsets.only(top:  MediaQuery.of(context).size.height/4),
                       child: B(event: event,),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top:MediaQuery.of(context).size.height/1.9),
+                      padding: EdgeInsets.only(top:MediaQuery.of(context).size.height/1.7),
                       child: Container(
                         padding: EdgeInsets.all(14),
                         margin: EdgeInsets.all(14),
@@ -87,7 +87,7 @@ class B extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Expanded(
-           flex: 5,
+            flex: 5,
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,52 +98,53 @@ class B extends StatelessWidget {
                       fit: BoxFit.scaleDown,
                       child: Text(
                         event.title,
-                          // style: Theme.of(context).textTheme.display1,
-                          style: TextStyle(
-                            fontFamily: 'Assistant',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                             color: Colors.green,
-                          ),
+                        // style: Theme.of(context).textTheme.display1,
+                        style: TextStyle(
+                          fontFamily: 'Assistant',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.green,
                         ),
+                      ),
                     ),
                   ),
                   Material(
                     color: Colors.transparent,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                          DayConvert(event.eventDate.weekday.toString()) +
-                              " " +
-                              event.eventDate.day.toString() +
-                              monthConvert(event.eventDate.month.toString()),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'Assistant',
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          )),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                                DayConvert(event.eventDate.weekday.toString()) +
+                                    " " +
+                                    event.eventDate.day.toString() +
+                                    monthConvert(event.eventDate.month.toString()),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Assistant',
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                              child: AutoSizeText(event.eventDate.hour.toString()+":"+event.eventDate.minute.toString(),
+                                style: TextStyle(fontSize: 14),maxLines: 2,)),
+                        ),
+                        
+                      ],
                     ),
                   )
                 ],
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-            ),
-          ),
-          Container(
-            height: 1,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.grey[300],
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-            ),
-          ),
+
+
           Expanded(
             flex: 10,
             child: Container(
@@ -152,110 +153,92 @@ class B extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                          flex:3,
-                          child: Container(
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 5.0, right: 5.0),
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            flex:3,
+                            child: Container(
 
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xffF3F3FE),
-                            ),
-                            child: FlatButton(
-                              onPressed: (){
-                                launchMap(event.location);
-                              },
-                              child: Image.asset(
-                                'image/icon-waze.png',
-                                scale: 7,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xffF3F3FE),
                               ),
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          flex:1,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                event.location,
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontFamily: 'Regular',
-                                  fontSize: 14,
+                              child: FlatButton(
+                                onPressed: (){
+                                  launchMap(event.location);
+                                },
+                                child: Image.asset(
+                                  'image/google-maps.png',
+                                  scale: 12,
                                 ),
                               ),
                             ),
                           ),
-                        )
-                      ],
+
+                          Expanded(
+                              child: Center(
+                                  child: AutoSizeText(event.location,
+                                      style: TextStyle(fontSize: 14),maxLines: 2,)),
+                            ),
+
+                        ],
+                      ),
                     ),
                   ),
 
-                  Container(
-
-                    height: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                           margin: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(0xffEEFBFA),
-                            ),
-                            child: FlatButton(
-                             onPressed: (){
-                               _launchURL(event.whatapp);
-                             },
-                              child: Image.asset(
-                                'image/whatsapp2.png',
-                                scale: 170,
+                  event.whatapp!=""?  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 5.0, right: 5.0),
+                      height: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                           Expanded(
+                            flex: 3,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xffEEFBFA),
                               ),
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          flex: 1,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                ' קבוצת הwhatsapp ',
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontFamily: 'Regular',
-                                  fontSize: 14,
+                              child: FlatButton(
+                                onPressed: (){
+                                  _launchURL(event.whatapp);
+                                },
+                                child: Image.asset(
+                                  'image/whatsapp2.png',
+                                  scale: 110,
                                 ),
                               ),
                             ),
                           ),
-                        )
-                      ],
+
+                          Expanded(
+                            child: Center(
+                                child: AutoSizeText( ' קבוצת הwhatsapp שלנו ',
+                                  style: TextStyle(fontSize: 14),maxLines: 2,)),
+                          ),
+
+                        ],
+                      ),
                     ),
-                  ),
+                  ):Container(),
 
                 ],
               ),
             ),
           ),
           Spacer(),
-          !globals.isMeneger? Expanded(
-           flex:4,
+          globals.isMeneger? Expanded(
+            flex:4,
             child: Container(
               child: Row(
                 children: [
                   Spacer(),
                   CircleAvatar(
-                    backgroundColor: Colors.blue,
+                    backgroundColor:  Color(int.parse("0xff6ed000")),
                     radius: 20,
                     child: IconButton(
                       padding: EdgeInsets.zero,
@@ -268,77 +251,21 @@ class B extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => updateEventPage(
                                   event: this.event,
+                                  cameFrom: "event",
                                 )));
                       },
                     ),
                   ),
                   CircleAvatar(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Color(int.parse("0xff6ed000")),
                     radius: 20,
                     child: IconButton(
                       padding: EdgeInsets.zero,
                       icon: Icon(Icons.delete),
                       color: Colors.white,
                       onPressed: () {
-                        showDialog(
-                            child: new Dialog(
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                child: new Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                5, 0, 5, 0),
-                                            child: Icon(Icons.delete_forever),
-                                          ),
-                                          Text('האם למחוק אירוע זה?',
-                                              style: TextStyle(
-                                                fontFamily: 'Assistant',
-                                                fontSize: 20,
-                                                color: Colors.black,
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Row(
-                                      children: [
-                                        Spacer(),
-                                        new FlatButton(
-                                          child: new Text("מחק",
-                                              style: TextStyle(
-                                                fontFamily: 'Assistant',
-                                                fontSize: 20,
-                                                color: Colors.black,
-                                              )),
-                                          onPressed: () {
-                                            ToBeSureDeleteAlertDialogEvent(
-                                                context, event.title);
-                                          },
-                                        ),
-                                        new FlatButton(
-                                          child: new Text("בטל",
-                                              style: TextStyle(
-                                                fontFamily: 'Assistant',
-                                                fontSize: 20,
-                                                color: Colors.black,
-                                              )),
-                                          onPressed: () {
-                                            Navigator.pop(context, true);
-                                          },
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            context: context);
+                        ToBeSureDeleteAlertDialogEvent(
+                            context, event.title);
                       },
 
                     ),

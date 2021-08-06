@@ -60,7 +60,8 @@ class _ForgetPassword extends State<ForgetPassword> {
                   padding: EdgeInsets.all(8.0),
                   splashColor: Color(int.parse("0xff6ed000")),
                   onPressed: () async {
-                    await resetPassword(UserName);
+
+                    resetPassword(UserName);
                     showAlertDialogForgetPassword(context);
                   },
                   child: Text(
@@ -89,7 +90,7 @@ showAlertDialogForgetPassword(BuildContext context) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("בעוד כמה רגעים ישלח לך מייל לאיפוס סיסמה",
+    title: Text("בעוד כמה רגעים ישלח לכם מייל לאיפוס סיסמה",
         style: new TextStyle(
           fontFamily: 'Assistant',
         )),

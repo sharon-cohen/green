@@ -36,7 +36,7 @@ class event_container extends StatelessWidget {
           //  borderRadius: BorderRadius.all(const Radius.circular(20)),
           image: new DecorationImage(
             colorFilter: new ColorFilter.mode(
-                Colors.black.withOpacity(0.7), BlendMode.dstATop),
+                Colors.black.withOpacity(0.3), BlendMode.multiply),
             image: getimage(Event.type_event),
             fit: BoxFit.cover,
           ),
@@ -45,9 +45,9 @@ class event_container extends StatelessWidget {
             style: new TextStyle(
               shadows: [
                 Shadow(
-                  blurRadius: 10.0,
-                  color: Colors.grey[800],
-                  offset: Offset(5.0, 5.0),
+                  blurRadius: 30.0,
+                  color: Colors.black,
+                  offset: Offset(10.0, 10.0),
                 ),
               ],
               color: Colors.white,

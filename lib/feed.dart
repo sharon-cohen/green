@@ -20,20 +20,22 @@ class _FeedState extends State<Feed> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
-          actions: <Widget>[
+          centerTitle: true,
+          title: Container(
 
-            IconButton(
-              icon: Icon(
-                Icons.clear,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-            )
-          ],
-          automaticallyImplyLeading: false),
+              child: Image.asset('image/logo_greem.png', scale: 2)),
+          leading:
+          IconButton(
+            icon: Icon(
+              Icons.clear,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          )
+
+      ),
       body: Card(
         margin:
             new EdgeInsets.only(left: 12.0, right: 12.0, top: 8.0, bottom: 5.0),
@@ -78,9 +80,9 @@ class _FeedState extends State<Feed> {
                 Container(child: MessagesStream()),
                 Container(
                   decoration: kMessageContainerDecoration,
-                  child: button_send(
+                  child: !globals.no_reg?button_send(
                     no_reg: globals.no_reg,
-                  ),
+                  ):null,
                 ),
               ],
             ),

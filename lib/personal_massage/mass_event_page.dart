@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:greenpeace/evants/update_event.dart';
 import 'package:greenpeace/evants/event_model.dart';
 import 'package:greenpeace/globalfunc.dart';
+import 'package:greenpeace/GoogleMap.dart';
 
 final databaseReference = Firestore.instance;
 
@@ -187,6 +188,7 @@ class _mass_eventState extends State<mass_event> {
                          // color: Colors.green,
                        ),
                      ),
+                      alignment: FractionalOffset.topRight,
                     ),
                     new Align(
                       child: FittedBox(
@@ -363,13 +365,92 @@ class _mass_eventState extends State<mass_event> {
                                     ],
                                   ),
                                   onPressed: () async {
-                                    String idevent =
-                                        await Getevent(widget.event.title);
-                                    await databaseReference
-                                        .collection("events")
-                                        .document(idevent)
-                                        .delete();
-                                    Navigator.pop(context);
+                                    showDialog(
+                                        child: new Dialog(
+                                          child: Container(
+                                            width: 100,
+                                            height: 100,
+                                            child: new Column(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                  const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets
+                                                            .fromLTRB(5, 0, 5, 0),
+                                                        child: Icon(
+                                                            Icons.delete_forever),
+                                                      ),
+                                                      Text('האם למחוק הודעה זו?',
+                                                          style: TextStyle(
+                                                            fontFamily: 'Assistant',
+                                                            fontSize: 20,
+                                                            color: Colors.black,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Row(
+                                                  children: [
+                                                    Spacer(),
+                                                    new FlatButton(
+                                                      child: new Text("מחק",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Assistant',
+                                                            fontSize: 20,
+                                                            color: Colors.black,
+                                                          )),
+                                                      onPressed: () async {
+                                                        String idevent =
+                                                        await Getevent(widget.event.title);
+                                                        await databaseReference
+                                                            .collection("events")
+                                                            .document(idevent)
+                                                            .delete();
+                                                        DocumentReference documentReference =
+                                                        Firestore.instance.collection("personalMess").document();
+                                                        documentReference.setData({
+                                                          "text": 'האירוע לא אושר על ידי המנהלים-' +
+                                                              "\n" +
+                                                        widget.event.title,
+
+                                                          "sender": _email(),
+                                                          "time": DateTime.now(),
+                                                          "url": "",
+                                                          "senderID":  currentUser.uid,
+                                                        });
+                                                        Firestore.instance.collection("users").document(widget.event.senderId).updateData({
+                                                          "personalMessId": FieldValue.arrayUnion([documentReference.documentID])
+                                                        });
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    new FlatButton(
+                                                      child: new Text("בטל",
+                                                          style: TextStyle(
+                                                            fontFamily: 'Assistant',
+                                                            fontSize: 20,
+                                                            color: Colors.black,
+                                                          )),
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context, true);
+                                                      },
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        context: context);
+
+
+
                                   },
                                 ),
                                 // SizedBox(width: 200),
@@ -408,6 +489,7 @@ class _mass_eventState extends State<mass_event> {
                                             builder: (context) =>
                                                 updateEventPage(
                                                   event: widget.event,
+                                                  cameFrom: "message",
                                                 )));
                                   },
                                 ),
@@ -485,10 +567,10 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
       DocumentReference documentReference =
           Firestore.instance.collection("personalMess").document();
       documentReference.setData({
-        "text": 'אושר על ידי המנהלים והוסף ללוח האירועים' +
+        "text":  'האירוע אושר על ידי המנהלים והוסף ללוח האירועים- ' +
             "\n" +
-            name_event +
-            'האירוע',
+            name_event,
+
         "sender": email,
         "time": DateTime.now(),
         "url": "",
@@ -526,6 +608,16 @@ successshowAlertDialog(BuildContext context, String email, String currentuserId,
     },
   );
 }
+
+
+
+  // set up the AlertDialog
+
+
+  // show the dialog
+
+
+
 
 _launchURL(String url) async {
   String wazeUrl = "https://waze.com/ul?q=";

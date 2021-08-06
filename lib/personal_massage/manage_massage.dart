@@ -160,25 +160,11 @@ class AllmessState extends State<Allmess> {
                 ],
               ),
               // SizedBox(height: 10),
-              Text(
-                'הודעות עבור כולם',
-                style: TextStyle(
-                    fontFamily: 'Assistant',
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30),
-              ),
+
               AllUserlMassStream(
                 myMessdeleted: myMessDelete,
               ),
-              Text(
-                'הודעות עבורו אישי',
-                style: TextStyle(
-                    fontFamily: 'Assistant',
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30),
-              ),
+
               personalMassStream(
                 myMess: myMess,
               ),
@@ -370,11 +356,22 @@ class ReportsContainer extends StatelessWidget {
               ),
             ),
           ),
-          title: TextStyleMess(
-            text: report.sender,
-            size: 20,
-            sizeHeight: MediaQuery.of(context).size.height / 30,
-            sizeWidth: MediaQuery.of(context).size.width,
+          title:FlatButton (
+            padding: EdgeInsets.all(0),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => reportMass(
+                        report: report,
+                      )));
+            },
+            child: TextStyleMess(
+              text: report.sender,
+              size: 20,
+              sizeHeight: MediaQuery.of(context).size.height / 30,
+              sizeWidth: MediaQuery.of(context).size.width,
+            ),
           ),
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
           subtitle: TextStyleMess(
@@ -488,11 +485,22 @@ class eventContainer extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            title: TextStyleMess(
-              text: event.sender,
-              size: 20,
-              sizeHeight: MediaQuery.of(context).size.height / 30,
-              sizeWidth: MediaQuery.of(context).size.width,
+            title: FlatButton(
+              padding: EdgeInsets.all(0),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => mass_event(
+                          event: this.event,
+                        )));
+              },
+              child: TextStyleMess(
+                text: event.sender,
+                size: 20,
+                sizeHeight: MediaQuery.of(context).size.height / 30,
+                sizeWidth: MediaQuery.of(context).size.width,
+              ),
             ),
             // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
             subtitle: TextStyleMess(

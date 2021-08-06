@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'event_model.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:flutter/material.dart';
@@ -9,11 +10,11 @@ import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:greenpeace/Footer/footer.dart';
 import 'package:greenpeace/evants/event_model.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
-
+import 'package:greenpeace/evants/new_event.dart';
 class updateEventPage extends StatefulWidget {
   EventModel event;
-
-  updateEventPage({this.event});
+  String cameFrom;
+  updateEventPage({this.event,this.cameFrom});
 
   @override
   _updateEventPage createState() => _updateEventPage();
@@ -21,11 +22,17 @@ class updateEventPage extends StatefulWidget {
 
 class _updateEventPage extends State<updateEventPage> {
   FirebaseUser currentUser;
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  double _latitude=0;
+  double _longitude=0;
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   TextEditingController _title;
   TextEditingController _description;
   TextEditingController _location;
   TextEditingController _whatapp;
+  Position _currentPosition;
+  Position po;
+  String _currentAddress = "";
   Data data = Data(
     dropdownValue: '',
   );
@@ -58,7 +65,7 @@ class _updateEventPage extends State<updateEventPage> {
     _description = TextEditingController(text: widget.event.description);
     _location = TextEditingController(text: widget.event.location);
     _whatapp = TextEditingController(
-        text: 'https://chat.whatsapp.com/Eb12U02niq2EEhK290DoiL');
+        text: widget.event.whatapp);
   }
 
   void _loadCurrentUser() {
@@ -75,8 +82,22 @@ class _updateEventPage extends State<updateEventPage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
-          automaticallyImplyLeading: false),
+          centerTitle: true,
+          title: Container(
+
+              child: Image.asset('image/logo_greem.png', scale: 2)),
+          leading:
+          IconButton(
+            icon: Icon(
+              Icons.clear,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          )
+
+      ),
       key: _key,
       body: Form(
         key: _formKey,
@@ -104,6 +125,7 @@ class _updateEventPage extends State<updateEventPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
+                  maxLength: 25,
                   controller: _title,
                   validator: (value) =>
                       (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
@@ -125,8 +147,16 @@ class _updateEventPage extends State<updateEventPage> {
                   controller: _description,
                   minLines: 3,
                   maxLines: 5,
-                  validator: (value) =>
-                      (value.isEmpty) ? "שדה תיאור הבעיה חובה" : null,
+                  validator: (value) {
+                    print("value");
+                    print(value);
+                    if(value.isEmpty) {
+                      return "שדה תיאור הבעיה חובה";
+                    }
+                    else{
+                      return null;
+                    }
+                  },
                   style: style,
                   decoration: InputDecoration(
                       labelText: "תיאור הבעיה",
@@ -150,19 +180,74 @@ class _updateEventPage extends State<updateEventPage> {
                 ),
               ),
               Padding(
+
+                padding: EdgeInsets.fromLTRB(
+                    5, MediaQuery.of(context).size.height / 15, 5, 0),
+                child: Align(
+                  child: FlatButton(
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'image/google-maps.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                        SizedBox(width: 7),
+                        Text(
+                          "צירוף המיקום הנוכחי שלך",
+                          style: new TextStyle(
+                              fontFamily: 'Assistant',
+                              fontSize: 25,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      _getCurrentLocation();
+                    },
+                  ),
+                  alignment: FractionalOffset.topRight,
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 0.0),
+                child: Text(
+                  _currentAddress,
+                  style:
+                  TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+                ),
+              ),
+              Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                child: new Align(
+                  child: new Text(
+                    "או הוספת כתובת",
+                    style: new TextStyle(
+                        fontFamily: 'Assistant',
+                        fontSize: 25,
+                        color: Colors.black),
+                  ), //so big text
+                  alignment: FractionalOffset.topRight,
+                ),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
                   controller: _location,
                   validator: (value) =>
-                      (value.isEmpty) ? "שדה המיקום חובה" : null,
-                  style: style,
+                  (_location.text == "") ? "שדה המיקום חובה" : null,
                   decoration: InputDecoration(
-                      labelText: "מיקום",
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                          //      borderRadius: BorderRadius.circular(10)
-                          )),
+                    labelText: "הוספת כתובת",
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      //borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
               Padding(
@@ -247,7 +332,10 @@ class _updateEventPage extends State<updateEventPage> {
                         child: MaterialButton(
                           onPressed: () async {
                             bool CreateEventIsManeger=false;//init value
-                            if (_formKey.currentState.validate()) {
+                            print("_description.text");
+                            print(_description.text.isEmpty);
+                            if (_formKey.currentState.validate() && _description.text.isNotEmpty && _location.text.isNotEmpty &&_title.text.isNotEmpty && _title.text.length < 26 ) {
+
                               setState(() {
                                 processing = true;
                               });
@@ -260,6 +348,8 @@ class _updateEventPage extends State<updateEventPage> {
                                 "location": _location.text,
                                 "type_event": chooseType,
                                 "whatapp": _whatapp.text,
+                                "lat":_latitude,
+                                "long":_longitude,
                               });
 
                                CreateEventIsManeger= await TypeManegeRoleuser(widget.event.senderId);
@@ -268,8 +358,8 @@ class _updateEventPage extends State<updateEventPage> {
                                 Firestore.instance.collection("personalMess")
                                     .document();
                                 await documentReference.setData({
-                                  "text": widget.event.title + 'האירוע שיצרת-' +
-                                      'בוצע עדכון על ידי המנהלים',
+                                  "text":  'בוצע עדכון על ידי המנהלים לאירוע שיצרת -' +widget.event.title,
+
                                   "sender": globals.name,
                                   "time": DateTime.now(),
                                   "url": "",
@@ -286,9 +376,16 @@ class _updateEventPage extends State<updateEventPage> {
                               setState(() {
                                 processing = false;
                               });
+                              successshowAlertDialog(
+                                  context, CreateEventIsManeger,widget.cameFrom);
+
                             }
-                            successshowAlertDialog(
-                                context, CreateEventIsManeger);
+                            else{
+                                  AlertDialogCreateEvent(
+                                  context, "חובה למלא את כל השדות");
+
+                            }
+
                           },
                           child: Row(
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -327,6 +424,41 @@ class _updateEventPage extends State<updateEventPage> {
     _description.dispose();
     super.dispose();
   }
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition.latitude,  _currentPosition.longitude);
+
+      Placemark place = p[0];
+
+      setState(() {
+        _currentAddress =
+        "${place.locality}, ${place.name}, ${place.country}";
+        _location.text = _currentAddress;
+        _latitude=_currentPosition.latitude;
+        _longitude=_currentPosition.longitude;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+  _getCurrentLocation() async {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        po= Position(longitude:34.770311487619885,latitude:32.062964166026792  );
+
+
+      });
+//37.4219983
+//I/flutter ( 7289): -122.084
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
 }
 
 class Data {
@@ -334,18 +466,22 @@ class Data {
   Data({this.dropdownValue});
 }
 
-successshowAlertDialog(BuildContext context,bool ifCreateEventIsMenager) {
+successshowAlertDialog(BuildContext context,bool ifCreateEventIsMenager,String cameFrom) {
 
   Widget okButton = FlatButton(
     child: Text("אישור"),
     onPressed: () async{
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BottomNavigationBarController(
-                    3,
-                    3,
-                  )));
+      Navigator.pop(context, true);
+      Navigator.pop(context, true);
+      if (cameFrom =="message")
+        Navigator.pop(context, true);
+//      Navigator.push(
+//          context,
+//          MaterialPageRoute(
+//              builder: (context) => BottomNavigationBarController(
+//                    3,
+//                    3,
+//                  )));
     },
   );
 

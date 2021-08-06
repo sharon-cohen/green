@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenpeace/evants/add_event.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:greenpeace/globalfunc.dart';
+import 'package:greenpeace/GoogleMap.dart';
 final _firestore = Firestore.instance;
 
 class HotMass extends StatelessWidget {
@@ -19,7 +20,7 @@ class HotMass extends StatelessWidget {
           "ללא תמונה",
           style: new TextStyle(
             fontSize: 15,
-            color: Colors.red,
+
             fontWeight: FontWeight.bold,
             fontFamily: 'Assistant',
           ),
@@ -163,6 +164,36 @@ class HotMass extends StatelessWidget {
                                 fontSize: 20, fontFamily: 'Assistant'),
                           ),
                         ),
+                        Expanded(
+                          child: Container(
+
+                            child: Row(
+
+                              children: [
+                                Expanded(
+                                  child: FlatButton(
+                                    onPressed: (){
+                                      launchMap(report.location);
+                                    },
+                                    child: Image.asset(
+                                      'image/google-maps.png',
+                                      scale: 12,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: new Text(
+                                    report.location,
+                                    style: new TextStyle(
+                                        fontSize: 20, fontFamily: 'Assistant'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                       
                         Expanded(child: mass(context)),
                       ],
                     ),

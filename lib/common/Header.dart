@@ -60,12 +60,13 @@ class _MyHeaderState extends State<MyHeader> {
                       backgroundColor: Colors.grey,
                       child: IconButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    BottomNavigationBarController(2, 1)),
-                          );
+                          Navigator.pop(context);
+//                          Navigator.push(
+//                            context,
+//                            MaterialPageRoute(
+//                                builder: (context) =>
+//                                    BottomNavigationBarController(2, 1)),
+//                          );
                         },
                         icon: Icon(
                           Icons.clear,

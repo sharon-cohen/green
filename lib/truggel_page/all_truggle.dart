@@ -17,32 +17,28 @@ class _All_truggleState extends State<All_truggle> {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.white,
-            title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
-            automaticallyImplyLeading: false),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+            title: Container(
+
+                child: Image.asset('image/logo_greem.png', scale: 2)),
+        ),
         body: ListView(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    color: Colors.black,
-                  ),
-                ),
-                Spacer(),
-                Text(
+            Container(
+              width: MediaQuery.of(context).size.width,
+
+              child: Center(
+                child: Text(
                   'מאבקים        ',
                   style: TextStyle(
                       fontFamily: 'Assistant',
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 30),
+                  textAlign: TextAlign.center,
                 ),
-                Spacer(),
-              ],
+              ),
             ),
             Container(
                 padding: EdgeInsets.all(0),

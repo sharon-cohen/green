@@ -1,69 +1,145 @@
-import 'dart:io';
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:async';
 
-void main() {
-  runApp(MyApp());
+void main() => runApp(MyApp());
+class ListItem {
+  List<String> listItem;
+  ListItem(List<String> engine) {
+    this.listItem = engine;
+
+  }
 }
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+      home: Scaffold(
+        appBar: AppBar(title: Text('Spinner Drop Down List in Flutter')),
+        body: allDrop(),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+class allDrop extends StatefulWidget {
+  @override
+  _allDropState createState() => _allDropState();
+}
+
+class _allDropState extends State<allDrop> {
+  int _count = 0;
+  ListItem item=new ListItem([
+    'One',
+    'Two',
+    'Three',
+    'Four',
+    'Five',
+    '...',
+  ]);
+  void _update(int count) {
+    setState(() => _count = count);
+    print(_count);
+  }
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
+  @override
+
+  ListItem  renderItem(){
+    setState(() {
+
+    });
+    return item;
+  }
+  Widget build(BuildContext context) {
+    return Container(
+
+      child:Column(
+        children: [
+
+          Expanded(child: DropDown(update: _update,spinnerItems:renderItem())),
+          Expanded(child: DropDown(update: _update,spinnerItems:renderItem())),
+          Expanded(child: DropDown(update: _update,spinnerItems:renderItem())),
+          Expanded(child: DropDown(update: _update,spinnerItems:renderItem())),
+          Expanded(child: DropDown(update: _update,spinnerItems:renderItem())),
+        ],
+
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
+class DropDown extends StatefulWidget {
+  ListItem spinnerItems;
+  final ValueChanged<int> update;
+  DropDown({this.spinnerItems,this.update});
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  DropDownWidget createState() => DropDownWidget();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  WebViewController controller;
+class DropDownWidget extends State<DropDown> {
+  List <String> listItem;
+  String dropdownValue = '...';
+  @override
+  void initState() {
+    setState(() {
 
-  final Completer<WebViewController> _controllerCompleter =
-  Completer<WebViewController>();
-
-  Future<void> _onWillPop(BuildContext context) async {
-    print("onwillpop");
-    if (await controller.canGoBack()) {
-      controller.goBack();
-    } else {
-      exit(0);
-      return Future.value(false);
-    }
+    });
+    super.initState();
   }
+  void deleteList(String s){
 
+    widget.spinnerItems.listItem.remove(s);
+  }
+  List<String>getnewL(){
+    return widget.spinnerItems.listItem;
+  }
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => _onWillPop(context),
-      child: Scaffold(
-        appBar: AppBar(
 
-          backgroundColor: Colors.red,
-        ),
-        body: WebView(
-          initialUrl: 'das',
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController c) {
-            _controllerCompleter.future.then((value) => controller = value);
-            _controllerCompleter.complete(c);
-          },
-        ),
+
+    return Scaffold(
+      body: Center(
+        child :
+        Column(children: <Widget>[
+
+          DropdownButton<String>(
+            value: null,
+            isDense: true,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 24,
+            elevation: 16,
+            style: TextStyle(color: Colors.red, fontSize: 18),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
+            ),
+            onChanged: (String data) {
+              setState(() {
+                dropdownValue = data;
+               int i=widget.spinnerItems.listItem.indexOf(data);
+
+               widget.spinnerItems.listItem.remove(data);
+                widget.update(1);
+
+              });
+            },
+            items: getnewL().map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+
+          Text('Selected Item = ' + '$dropdownValue',
+              style: TextStyle
+                (fontSize: 22,
+                  color: Colors.black)),
+        ]),
       ),
     );
   }

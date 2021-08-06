@@ -1,6 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:greenpeace/global.dart' as globals;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:greenpeace/global.dart' as globals;
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:flutter/material.dart';
+import 'package:greenpeace/Footer/footer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:greenpeace/Component/Alret_Dealog.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/material.dart';
 import 'package:greenpeace/Footer/footer.dart';
@@ -18,7 +30,8 @@ class SendMessForAllUser extends StatefulWidget {
 class _SendMessForAllUser extends State<SendMessForAllUser> {
   final TextEditingController _controller = new TextEditingController();
   FirebaseUser currentUser;
-
+  bool isLoading=false;
+  String fileUrl="";
   String str = "";
   String submitStr = "";
   @override
@@ -168,7 +181,105 @@ class _SendMessForAllUser extends State<SendMessForAllUser> {
                 ),
               ),
 
-              // Divider(thickness: 1, color: Colors.black),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    new IconButton(
+                        padding:  EdgeInsets.only(top:10,bottom: 10,left: 10),
+                        constraints: BoxConstraints(),
+                        icon: new Icon(
+                          Icons.photo_camera,
+                          color: Color(int.parse("0xff6ed000")),
+                        ),
+                        onPressed: () async {
+                          if(globals.no_reg==true){
+                            GoregisterAlertDialog(context);
+                          }
+                          else{
+
+                            var image =
+                            await ImagePicker.pickImage(source: ImageSource.camera);
+                            int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                            StorageReference storageReference = FirebaseStorage.instance
+                                .ref()
+                                .child('chats/img_' + timestamp.toString() + '.jpg');
+                            StorageUploadTask uploadTask = storageReference.putFile(image);
+                            setState(() {
+                              isLoading = true;
+                            });
+                            await uploadTask.onComplete;
+
+                            try {
+                              fileUrl = await storageReference.getDownloadURL();
+
+                              setState(() {
+                                isLoading = false;
+
+                                _firestore.collection("messages").add({
+                                  "text": "",
+                                  "sender": globals.name,
+                                  "time": DateTime.now(),
+                                  "url": fileUrl,
+                                });
+                                setState(() {
+                                  fileUrl = "";
+
+                                });
+                              });
+                            } catch (e) {
+                              print('errordfd');
+                            }
+
+                          }
+
+                        }),
+
+                    new IconButton(
+                        padding:  EdgeInsets.only(top:10,bottom: 10,left: 2),
+                        constraints: BoxConstraints(),
+                        icon: new Icon(
+
+                          Icons.upload_file,
+                          color: Color(int.parse("0xff6ed000")),
+                        ),
+                        onPressed: () async {
+                          if(globals.no_reg==true){
+                            GoregisterAlertDialog(context);
+                          }
+                          else{
+
+                            var image =
+                            await ImagePicker.pickImage(source: ImageSource.gallery);
+                            int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                            StorageReference storageReference = FirebaseStorage.instance
+                                .ref()
+                                .child('chats/img_' + timestamp.toString() + '.jpg');
+                            StorageUploadTask uploadTask = storageReference.putFile(image);
+                            setState(() {
+                              isLoading = true;
+                            });
+                            await uploadTask.onComplete;
+
+                            try {
+                              fileUrl = await storageReference.getDownloadURL();
+
+                              setState(() {
+                                isLoading = false;
+
+                              });
+                            } catch (e) {
+                              print('errordfd');
+                            }
+
+                          }
+
+                        }),
+
+                  ],
+                ),
+              ),
               Padding(
                 //padding: const EdgeInsets.all(8.0),
                 padding: EdgeInsets.fromLTRB(8, 1, 8, 8),

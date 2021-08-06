@@ -32,7 +32,7 @@ class HotStream extends StatelessWidget {
           final text = report.data['text'];
           final time = report.data['time'];
           final image = report.data['url_image'];
-          final location = report.data['image'];
+          final location = report.data['location'];
           final senderId = report.data['senderId'];
 
           //print( reportModel.getReportfromMess(messId).text.toString());
@@ -44,6 +44,7 @@ class HotStream extends StatelessWidget {
               image: image,
               senderId: senderId,
               location: location,
+
             ),
             height_page: height_page,
             width_page: width_page,
@@ -89,11 +90,22 @@ class HotContainer extends StatelessWidget {
               ),
             ),
           ),
-          title: TextStyleMess(
-            text: report.sender,
-            size: 20,
-            sizeHeight: MediaQuery.of(context).size.height / 30,
-            sizeWidth: MediaQuery.of(context).size.width,
+          title: FlatButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HotMass(
+                        report: report,
+                      )));
+            },
+            padding: EdgeInsets.all(0),
+            child: TextStyleMess(
+              text: report.sender,
+              size: 20,
+              sizeHeight: MediaQuery.of(context).size.height / 30,
+              sizeWidth: MediaQuery.of(context).size.width,
+            ),
           ),
           // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
           subtitle: TextStyleMess(

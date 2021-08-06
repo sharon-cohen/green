@@ -39,19 +39,20 @@ class _BottomNavigationBarControllerState
   TextEditingController _c;
 
   final List<Widget> pages = [
+    All_truggle(key: PageStorageKey(" All_truggle"),),
     FrameWeb(
       fromFooter: true,
       Url:
           "https://joinus.gpi.org.il/?_ga=2.44008870.2086395743.1602839988-1666277170.1598274308&_gac=1.57860696.1602855372.CjwKCAjwiaX8BRBZEiwAQQxGx8LD5KgD6mbHUOZQodvFWGlxKE9YbuqDN8kudiAm42PJ3eE58dyKtBoCwXgQAvD_BwE",
       title: "הצטרפו אלינו",
     ),
+
     Home_menager(key: PageStorageKey('home'), arguments: send),
-    List_event(key: PageStorageKey(' All_truggle')),
+    List_event(key: PageStorageKey('All_truggle')),
     Allmess(key: PageStorageKey('report'), arguments: send),
     create_struggle1(key: PageStorageKey('create_struggle1'), arguments: send),
-    Calender(
-      key: PageStorageKey('Calender'),
-    ),
+
+
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -69,171 +70,25 @@ class _BottomNavigationBarControllerState
         selectedLabelStyle:
             TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Assistant'),
         onTap: (int index) async {
-          if (index == 0 && _selectedIndex != 1) {
-            FirebaseAnalytics().logEvent(name: 'name', parameters: null);
-            await showMenu<String>(
-              context: context,
-              position: RelativeRect.fromLTRB(kBottomNavigationBarHeight,
-                  MediaQuery.of(context).size.height, 0.0, 0),
-              items: <PopupMenuItem<String>>[
-                new PopupMenuItem<String>(
-                  child: FlatButton(
-                    child: Row(
-                      children: [
-                        const Icon(Icons.arrow_downward),
-                        const Text('הסתר',
-                            style: TextStyle(
-                                fontFamily: 'Assistant', fontSize: 14)),
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                // new PopupMenuItem<String>(
-                //   child: FlatButton(
-                //     child: Row(
-                //       children: [
-                //         const Icon(Icons.event),
-                //         const Text(' יומן אירועים',
-                //             style: TextStyle(
-                //                 fontFamily: 'Assistant', fontSize: 14)),
-                //       ],
-                //     ),
-                //     onPressed: () {
-                //       Navigator.push(context,
-                //           MaterialPageRoute(builder: (context) => Calender()));
-                //     },
-                //   ),
-                // ),
-                new PopupMenuItem<String>(
-                  child: FlatButton(
-                    child: Row(
-                      children: [
-                        const ImageIcon(
-                          AssetImage("image/Struggle1.png"),
-                          //  color: Colors.black,
-                        ),
-                        const Text(' מאבקים',
-                            style: TextStyle(
-                                fontFamily: 'Assistant', fontSize: 14)),
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => All_truggle()));
-                    },
-                  ),
-                ),
-                // globals.isMeneger
-                //     ? new PopupMenuItem<String>(
-                //         child: FlatButton(
-                //           child: Row(
-                //             children: [
-                //               const Icon(Icons.add),
-                //               const Text('הוספת מנהל',
-                //                   style: TextStyle(
-                //                       fontFamily: 'Assistant', fontSize: 14)),
-                //             ],
-                //           ),
-                //           onPressed: () {
-                //             showDialog(
-                //                 child: new Dialog(
-                //                   child: Container(
-                //                     width: 100,
-                //                     height: 100,
-                //                     child: new Column(
-                //                       children: <Widget>[
-                //                         new TextField(
-                //                           keyboardType:
-                //                               TextInputType.emailAddress,
-                //                           decoration: new InputDecoration(
-                //                             hintText:
-                //                                 "דואר אלקטרוני של המנהל החדש",
-                //                           ),
-                //                           controller: _c,
-                //                         ),
-                //                         new FlatButton(
-                //                           child: new Text("שמור",
-                //                               style: TextStyle(
-                //                                   fontFamily: 'Assistant')),
-                //                           onPressed: () async {
-                //                             String IdUser =
-                //                                 await GetuserByEmail(_c.text);
-                //                             Firestore.instance
-                //                                 .collection('users')
-                //                                 .document(IdUser)
-                //                                 .updateData({
-                //                               "role": "menager",
-                //                             });
-                //                             await _firestore
-                //                                 .collection("manegar")
-                //                                 .add({
-                //                               "email": _c.text.toString(),
-                //                             });
-                //                             Navigator.pop(context);
-                //                           },
-                //                         )
-                //                       ],
-                //                     ),
-                //                   ),
-                //                 ),
-                //                 context: context);
-                //           },
-                //         ),
-                //       )
-                //     : null,
-                new PopupMenuItem<String>(
-                  child: FlatButton(
-                    child: Row(
-                      children: [
-                        const Icon(Icons.account_circle),
-                        const Text('פרופיל',
-                            style: TextStyle(
-                                fontFamily: 'Assistant', fontSize: 14)),
-                      ],
-                    ),
-                    // onPressed: () async {
-                    //   await FirebaseAuth.instance.signOut();
-                    //
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => WelcomeScreen()));
-                    // },
-                    onPressed: () async {
-                      //await FirebaseAuth.instance.signOut();
 
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => UserPage()));
-                    },
-                  ),
-                ),
-              ],
-              elevation: 1,
-              color: Colors.white,
-            );
-          }
           setState(() {
-
             print(index);
-            if (index != 0) _selectedIndex = index;
+            _selectedIndex = index;
           });
         },
         items: !globals.no_reg
             ? const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
 
-                    //backgroundColor: Color(int.parse("0xff6ed000")),
-                    // ignore: deprecated_member_use
-                    icon: Icon(
-                      Icons.add,
-                      // color: Colors.black,
-                    ),
-                    title: Text('')),
+            // ignore: deprecated_member_use
+              icon: ImageIcon(
+                AssetImage("image/Struggle1.png"),
+              ),
+              title: Text('מאבקים',
+                  style: TextStyle(
+                    //color: Colors.black,
+                    fontFamily: 'Assistant',
+                  ))),
                 BottomNavigationBarItem(
 
                     // ignore: deprecated_member_use
@@ -286,17 +141,16 @@ class _BottomNavigationBarControllerState
               ]
             : const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                    // ignore: deprecated_member_use
-                    icon: Icon(
-                      Icons.add,
-                      //  color: Colors.black,
-                    ),
-                    title: Text('',
-                        style: TextStyle(
-                          // color: Colors.black,
-                          fontFamily: 'Assistant',
-                          //fontSize: 6
-                        ))),
+
+            // ignore: deprecated_member_use
+              icon: ImageIcon(
+                AssetImage("image/Struggle1.png"),
+              ),
+              title: Text('מאבקים',
+                  style: TextStyle(
+                    //color: Colors.black,
+                    fontFamily: 'Assistant',
+                  ))),
                 BottomNavigationBarItem(
 
                     // ignore: deprecated_member_use
@@ -384,7 +238,7 @@ class _BottomNavigationBarControllerState
           )
           : null,
       body: PageStorage(
-        child: pages[_selectedIndex - 1],
+        child: pages[_selectedIndex ],
         bucket: bucket,
       ),
     );

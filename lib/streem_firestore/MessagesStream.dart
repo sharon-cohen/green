@@ -235,13 +235,16 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+
       crossAxisAlignment:
           isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: <Widget>[
         Column(
+
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Container(
+     Container(
+              margin: const EdgeInsets.only(top:20),
               child: GestureDetector(
                 onTap: () => DialogUtils.showCustomDialog(
                   context,
@@ -253,18 +256,26 @@ class MessageBubble extends StatelessWidget {
                   image_u: image_u,
                   flage_report: report,
                 ),
-                child: !isMe
+                child: !isMe && !globals.no_reg
                     ? Container(
-                        height: 15,
-                        width: 15,
-                        decoration: new BoxDecoration(
-                            image: new DecorationImage(
+                        height: 20,
+                        width: 20,
+
+                    decoration: new BoxDecoration(
+
+                        image: new DecorationImage(
                           image: new AssetImage('image/3dots.png'),
                           fit: BoxFit.fill,
-                        )))
-                    : Container(),
+                        ))
+                )
+                    : Container(
+                    height: 15,
+                    width: 15,
+
+                )
               ),
-            ),
+            ) ,
+
             nassege(context),
           ],
         ),

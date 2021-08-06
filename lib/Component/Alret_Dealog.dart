@@ -146,7 +146,7 @@ GoregisterAlertDialog(BuildContext context) {
   // set up the button
   Widget okButton = FlatButton(
     child: Text(
-      "לך להירשם",
+      "לכו להירשם",
       style: new TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
@@ -172,23 +172,38 @@ GoregisterAlertDialog(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     //title: FittedBox(child: Text("בשביל לבצע פעולה זאת עלייך להירשם")),
-    title: Row(
-      children: [
-        ImageIcon(
-          AssetImage("image/alert.png"),
-          color: Colors.black,
-          size: 20,
-          // color: Colors.black,
+    title: Container(
+
+      height: MediaQuery.of(context).size.height / 10,
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ImageIcon(
+                AssetImage("image/alert.png"),
+                color: Colors.black,
+
+                // color: Colors.black,
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Center(
+                child: Text(
+                  "בשביל לבצע פעולה זאת עליכם להירשם",
+                  style: new TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Assistant',
+                      fontSize: 15),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
         ),
-        SizedBox(width: 10),
-        FittedBox(
-          child: Text(
-            "בשביל לבצע פעולה זאת עלייך להירשם",
-            style: new TextStyle(
-                color: Colors.black, fontFamily: 'Assistant', fontSize: 15),
-          ),
-        ),
-      ],
+      ),
     ),
     actions: [
       okButton,

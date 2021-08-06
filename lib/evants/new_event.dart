@@ -1,5 +1,6 @@
 import 'package:commons/commons.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:greenpeace/GetID_DB/getid.dart';
 import 'package:intl/intl.dart';
 import 'event_model.dart';
@@ -9,7 +10,7 @@ import 'event_firestore_service.dart';
 import 'package:greenpeace/global.dart' as globals;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
-import 'package:greenpeace/Footer/footer.dart';
+import 'package:greenpeace/GoogleMap.dart';
 
 class newEventPage extends StatefulWidget {
   final EventModel note;
@@ -27,11 +28,17 @@ class _newEventPage extends State<newEventPage> {
   TextEditingController _description;
   TextEditingController _location;
   TextEditingController _whatapp;
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   final format = DateFormat("dd-MM-yyyy HH:mm");
   final initialValue = DateTime.now();
   final createDateEvent = DateTime.now();
   DateTime value = DateTime.now();
   DateTime now = DateTime.now();
+  double _latitude=0;
+  double _longitude=0;
+  Position _currentPosition;
+  Position po;
+  String _currentAddress = "";
   int savedCount = 0;
   int changedCount = 0;
   String type_event;
@@ -87,8 +94,22 @@ class _newEventPage extends State<newEventPage> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
-          automaticallyImplyLeading: false),
+          centerTitle: true,
+          title: Container(
+
+              child: Image.asset('image/logo_greem.png', scale: 2)),
+          leading:
+          IconButton(
+            icon: Icon(
+              Icons.clear,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          )
+
+      ),
       key: _key,
       body: Form(
         key: _formKey,
@@ -96,35 +117,25 @@ class _newEventPage extends State<newEventPage> {
           alignment: Alignment.center,
           child: ListView(
             children: <Widget>[
-              Row(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      icon: Icon(
-                        Icons.clear,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 50),
-                  Text(
-                    'יצירת אירוע חדש',
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Center(
+                  child: Text(
+                    'אירוע חדש',
                     style: TextStyle(
                         fontFamily: 'Assistant',
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 30),
+                    textAlign: TextAlign.center,
                   ),
-                ],
+                ),
               ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
+                  maxLength: 25,
                   cursorColor: Colors.black,
                   controller: _title,
                   validator: (value) =>
@@ -173,24 +184,73 @@ class _newEventPage extends State<newEventPage> {
                 ),
               ),
               Padding(
+
+                padding: EdgeInsets.fromLTRB(
+                    5, MediaQuery.of(context).size.height / 15, 5, 0),
+                child: Align(
+                  child: FlatButton(
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'image/google-maps.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                        SizedBox(width: 7),
+                        Text(
+                          "צירוף המיקום הנוכחי שלך",
+                          style: new TextStyle(
+                              fontFamily: 'Assistant',
+                              fontSize: 25,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                    onPressed: () async{
+                      _location.text=await fetchLocation();
+                      setState(() {
+                      });
+                    },
+                  ),
+                  alignment: FractionalOffset.topRight,
+                ),
+              ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 0.0),
+                  child: Text(
+                    _currentAddress,
+                    style:
+                    TextStyle(color: Colors.white, fontFamily: 'Assistant'),
+                  ),
+                ),
+              Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                child: new Align(
+                  child: new Text(
+                    "או הוספת כתובת",
+                    style: new TextStyle(
+                        fontFamily: 'Assistant',
+                        fontSize: 25,
+                        color: Colors.black),
+                  ), //so big text
+                  alignment: FractionalOffset.topRight,
+                ),
+              ),
+              Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: TextFormField(
-                  controller: _location,
+                    controller: _location,
                   validator: (value) =>
-                      (value.isEmpty) ? "שדה המיקום חובה" : null,
-                  style: style,
+                  (_location.text == "") ? "שדה המיקום חובה" : null,
                   decoration: InputDecoration(
-                    labelText: "מיקום - כתובת מדויקת",
-                    labelStyle:
-                        TextStyle(fontFamily: 'Assistant', color: Colors.black),
+                    labelText: "הוספת כתובת",
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
-                        //  borderRadius: BorderRadius.circular(10),
-                        ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.lightGreen),
                       //borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -328,7 +388,7 @@ class _newEventPage extends State<newEventPage> {
                             if (_location.text != "" &&
                                 _description.text != "" &&
                                 _title.text != "" &&
-                                _whatapp.text != "" &&
+                                _title.text.length <26 &&
                                 !checkExistNameEvent && value!=null) {
                               setState(() {
                                 processing = true;
@@ -345,6 +405,7 @@ class _newEventPage extends State<newEventPage> {
                                   "location": _location.text,
                                   "type_event": type_event,
                                   "whatapp": _whatapp.text,
+
                                 });
                               } else {
 
@@ -360,6 +421,7 @@ class _newEventPage extends State<newEventPage> {
                                   type_event: type_event,
                                   location: _location.text,
                                   whatapp: _whatapp.text,
+
                                 ));
                               }
 
@@ -409,6 +471,7 @@ class _newEventPage extends State<newEventPage> {
         ),
       ),
     );
+
   }
 
   @override
@@ -417,6 +480,8 @@ class _newEventPage extends State<newEventPage> {
     _description.dispose();
     super.dispose();
   }
+
+
 }
 
 class Data {

@@ -38,6 +38,8 @@ class event_stream extends StatelessWidget {
           final location = event.data['location'];
           final type_event = event.data['type_event'];
           final whatapp = event.data['whatapp'];
+          final lat=event.data['lat'];
+          final long=event.data['long'];
 
           final _eventmodel = event_container(
             Event: EventModel(
@@ -46,21 +48,25 @@ class event_stream extends StatelessWidget {
               createDateEvent: createDateEvent,
               eventDate: eventDate,
               approve: approve,
-
               sender: sender,
               senderId: senderId,
               location: location,
               type_event: type_event,
               whatapp: whatapp,
+              lat: lat,
+              long:long,
+              time: createDateEvent,
 
             ),
 
 
           );
           eventsModel.add(_eventmodel);
-          // eventsModel.sort((a, b) => b.eventDate.compareTo(a.eventDate.));
+
         }
+
         }
+        eventsModel.sort((a, b) => b.Event.time.compareTo(a.Event.time));
         return
 
              Column(

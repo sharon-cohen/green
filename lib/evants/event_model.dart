@@ -12,9 +12,11 @@ class EventModel extends DatabaseItem{
   final String location;
   final String type_event;
   final String whatapp;
+  final double lat;
+  final double long;
   bool approve;
   EventModel({this.id,this.title, this.description, this.eventDate,this.approve,this.time,
-    this.senderId,this.sender,this.location,this.type_event,this.whatapp,this.createDateEvent
+    this.senderId,this.sender,this.location,this.type_event,this.whatapp,this.createDateEvent,this.lat,this.long
   }):super(id);
 
   factory EventModel.fromMap(Map data) {
@@ -30,6 +32,8 @@ class EventModel extends DatabaseItem{
       location: data['location'],
       type_event: data['type_event'],
       whatapp: data['whatapp'],
+      lat: data['lat'],
+      long :data['long']
     );
   }
 
@@ -46,6 +50,8 @@ class EventModel extends DatabaseItem{
       location: data['location'],
       type_event: data['type_event'],
       whatapp: data['whatapp'],
+        lat: data['lat'],
+        long :data['long']
     );
   }
 
@@ -64,6 +70,8 @@ class EventModel extends DatabaseItem{
       "type_event":type_event,
       "location":location,
       "whatapp": whatapp,
+      "lat" :lat,
+      "long":long
     };
   }
 }

@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'global.dart' as globals;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:greenpeace/GetID_DB/getid.dart';
 
 FirebaseUser loggedInUser;
 
@@ -31,82 +32,44 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Animation animation;
 
   bool isLoading = false;
-//  Future<Null> _sendAnalytics() async {
-//    await widget.analytics
-//        .logEvent(name: 'Welcom', parameters: <String, dynamic>{});
-//  }
-//  Future<Null> _currentScreen() async {
-//    await widget.analytics.setCurrentScreen(
-//        screenName: 'Welcom', screenClassOverride: 'WelcomeScreen');
-//  }
+
   @override
   void initState() {
 
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-     // _currentScreen();
-      _loadCurrentUser();
-      setState(() {
-        isLoading = true;
-      });
-    });
+        () async {
+       bool is_exsist=await _loadCurrentUser();
+
+       if(is_exsist){
+
+        await exists_user();
+      }
+      else{
+        no_user();
+      }
+       setState(() {
+         isLoading = true;
+
+       });
+    } ();
+
+
+
+
   }
+  Future<void> exists_user()async{
+    await FirebaseAuth.instance.currentUser().then((firebaseUser) async {
 
-  _loadCurrentUser() async {
-    FirebaseAuth.instance.currentUser().then((firebaseUser) async {
       if (firebaseUser == null) {
-        globals.name = "User";
-        globals.no_reg = true;
-        globals.emailUser = "";
-        globals.isMeneger = false;
-        globals.UserId = "";
 
-        button_in.add(
-          RoundedButton(
-            title: 'התחבר',
-            colour: Colors.white,
-            onPressed: () {
-              globals.no_reg = false;
-              //Navigator.pushNamed(context,profile.id);
-              Navigator.pushNamed(context, LoginScreen.id);
-            },
-          ),
-        );
-        button_in.add(
-          RoundedButton(
-              title: 'הרשם',
-              colour: Colors.white,
-              onPressed: () {
-
-                Navigator.pushNamed(context, RegistrationScreen.id);
-              }),
-        );
-        button_in.add(
-          RoundedButton(
-              title: 'היכנס מבלי להירשם',
-              colour: Colors.white,
-              onPressed: () {
-
-                globals.no_reg = true;
-                Navigator.pushNamed(context, BottomNavigationBarController.id,
-                    arguments:
-                    ScreenArguments_m('d', 'no_register', 'no_register'));
-              }),
-        );
-        button_in.add(
-          Container(
-            height: 80,
-          ),
-        );
-        // button_in.add(
-        //   SizedBox(height: 150),
-        // );
       } else {
-        print("sharon");
+
         var document = await Firestore.instance
             .collection('users')
             .document(firebaseUser.uid)
             .get();
+
+
         globals.UserId = firebaseUser.uid;
         globals.emailUser = firebaseUser.email;
         String role = document.data['role'];
@@ -135,6 +98,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               title: 'התחברות מהירה- ' + globals.name,
               colour: Colors.white,
               onPressed: () {
+                globals.no_reg = false;
                 Navigator.pushNamed(context, BottomNavigationBarController.id,
                     arguments: ScreenArguments_m('s', 'sharon', 'menager'));
               },
@@ -146,7 +110,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 colour: Colors.white,
                 onPressed: () {
                   globals.no_reg = true;
-                  Navigator.pushNamed(context, BottomNavigationBarController.id,
+                  Navigator.pushNamed(
+                      context, BottomNavigationBarController.id,
                       arguments:
                       ScreenArguments_m('d', 'no_register', 'no_register'));
                 }),
@@ -160,7 +125,83 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       }
     });
   }
+  void no_user() {
+    print("GFGFgfgfg");
 
+    globals.name = "User";
+    globals.no_reg = true;
+    globals.emailUser = "";
+    globals.isMeneger = false;
+    globals.UserId = "";
+
+    button_in.add(
+      RoundedButton(
+        title: 'התחבר',
+        colour: Colors.white,
+        onPressed: () {
+          globals.no_reg = false;
+          //Navigator.pushNamed(context,profile.id);
+          Navigator.pushNamed(context, LoginScreen.id);
+        },
+      ),
+    );
+    button_in.add(
+      RoundedButton(
+          title: 'הרשם',
+          colour: Colors.white,
+          onPressed: () {
+            Navigator.pushNamed(context, RegistrationScreen.id);
+          }),
+    );
+    button_in.add(
+      RoundedButton(
+          title: 'היכנס מבלי להירשם',
+          colour: Colors.white,
+          onPressed: () {
+            globals.no_reg = true;
+            Navigator.pushNamed(context, BottomNavigationBarController.id,
+                arguments:
+                ScreenArguments_m('d', 'no_register', 'no_register'));
+          }),
+    );
+    button_in.add(
+      Container(
+        height: 80,
+      ),
+    );
+  }
+  Future<bool>_loadCurrentUser() async {
+
+
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    if(user==null){
+     return false;
+    }
+  else{
+      print(user.uid);
+      final snapShot = await Firestore.instance
+          .collection('users')
+          .document(user.uid) // varuId in your case
+          .get();
+
+      if (snapShot == null || !snapShot.exists) {
+        return false;
+      }
+    else{
+
+      bool is_band=await GetuserBan(user.email);
+      if(is_band){
+        return false;
+      }
+      else{
+        return true;
+      }
+
+      }
+
+  }
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

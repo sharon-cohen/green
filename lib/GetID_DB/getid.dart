@@ -148,7 +148,7 @@ Future<String> GetStrugle(String name) async {
 
   final QuerySnapshot result = await Firestore.instance
       .collection('struggle')
-      .where('name', isEqualTo: name)
+      .where('title', isEqualTo: name)
       .limit(1)
       .getDocuments();
   final List<DocumentSnapshot> documents = result.documents;
@@ -175,7 +175,7 @@ Future<bool> CheckNameUserExist(String name) async {
 Future<bool> CheckNameStruggleExist(String name) async {
   final QuerySnapshot result = await Firestore.instance
       .collection('struggle')
-      .where('name', isEqualTo: name)
+      .where('title', isEqualTo: name)
       .limit(1)
       .getDocuments();
   final List<DocumentSnapshot> documents = result.documents;
@@ -209,12 +209,75 @@ Future<String>Getuser(String name)async{
     return "not exist";
 }
 Future<String>GetuserByEmail(String email)async{
-  final QuerySnapshot result = await Firestore.instance
-      .collection('users')
-      .where('email', isEqualTo: email)
-      .limit(1)
-      .getDocuments();
+
+  email=email.toLowerCase();
+   QuerySnapshot result=null;
+
+  try{
+     result = await Firestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .limit(1)
+        .getDocuments();
+  }
+  catch(err) {
+
+    return "not exist";
+  }
+
   final List<DocumentSnapshot> documents = result.documents;
+
+
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+}
+Future<String>GetMailuserByName(String name)async{
+
+  name=name.toLowerCase();
+  QuerySnapshot result=null;
+
+  try{
+    result = await Firestore.instance
+        .collection('users')
+        .where('name', isEqualTo: name)
+        .limit(1)
+        .getDocuments();
+  }
+  catch(err) {
+
+    return "not exist";
+  }
+
+  final List<DocumentSnapshot> documents = result.documents;
+
+
+  if(documents.length == 1)
+    return documents[0]["email"];
+  else
+    return "not exist";
+}
+Future<String>GetuserByName(String name)async{
+
+  name=name.toLowerCase();
+  QuerySnapshot result=null;
+
+  try{
+    result = await Firestore.instance
+        .collection('users')
+        .where('name', isEqualTo: name)
+        .limit(1)
+        .getDocuments();
+  }
+  catch(err) {
+
+    return "not exist";
+  }
+
+  final List<DocumentSnapshot> documents = result.documents;
+
+
   if(documents.length == 1)
     return documents[0].documentID;
   else
@@ -228,4 +291,49 @@ Future<bool>TypeManegeRoleuser(String userId)async{
   else{
     return false;
   }
+}
+
+Future<bool> GetuserBan(String mail)async{
+
+  mail=mail.toLowerCase();
+  final QuerySnapshot result = await Firestore.instance
+      .collection('banUsers')
+      .where('email', isEqualTo: mail)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return true;
+  else
+    return false;
+}
+Future<String> mailMenager(String email)async{
+  final QuerySnapshot result = await Firestore.instance
+      .collection('manegar')
+      .where('email', isEqualTo: email)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+}
+Future<String> GetuserBanID(String email)async{
+  email=email.toLowerCase();
+  final QuerySnapshot result = await Firestore.instance
+      .collection('banUsers')
+      .where('email', isEqualTo: email)
+      .limit(1)
+      .getDocuments();
+  final List<DocumentSnapshot> documents = result.documents;
+  if(documents.length == 1)
+    return documents[0].documentID;
+  else
+    return "not exist";
+}
+
+Future<String> GetAbout()async{
+  DocumentSnapshot variable = await Firestore.instance.collection('about').document('sYFhYhmjY5zyzL3Rowcg').get();
+  return variable['text'].toString();
 }

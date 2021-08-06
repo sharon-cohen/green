@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:path/path.dart';
-
+import 'package:greenpeace/GoogleMap.dart';
 final _firestore = Firestore.instance;
 
 class HotReport extends StatefulWidget {
@@ -24,9 +24,12 @@ class _HotReport extends State<HotReport> {
   var imageFile;
   String fileUrl = "";
   Position _currentPosition;
+  Position po;
   String _currentAddress = "";
   TextEditingController _description;
   TextEditingController _location;
+  double _latitude=0;
+  double _longitude=0;
   TextStyle style = TextStyle(fontFamily: 'Assistant', fontSize: 20.0);
   File _imageFile;
   String fileName = '';
@@ -71,7 +74,16 @@ class _HotReport extends State<HotReport> {
       appBar: AppBar(
           backgroundColor: Colors.white,
           title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
-          automaticallyImplyLeading: false),
+          leading:
+          IconButton(
+            icon: Icon(
+              Icons.clear,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          )),
       key: _key,
       body: Form(
         key: _formKey,
@@ -96,18 +108,18 @@ class _HotReport extends State<HotReport> {
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
                 child: Row(
                   children: [
-                    Align(
-                      child: IconButton(
-                        icon: Icon(Icons.clear),
-                        iconSize: 30,
-                        color: Colors.grey,
-                        splashColor: Colors.purple,
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
-                      ),
-                      alignment: FractionalOffset.topRight,
-                    ),
+//                    Align(
+//                      child: IconButton(
+//                        icon: Icon(Icons.clear),
+//                        iconSize: 30,
+//                        color: Colors.grey,
+//                        splashColor: Colors.purple,
+//                        onPressed: () {
+//                          Navigator.pop(context, true);
+//                        },
+//                      ),
+//                      alignment: FractionalOffset.topRight,
+//                    ),
                     SizedBox(width: 60),
                     new Text(
                       "דיווח סביבתי",
@@ -170,19 +182,23 @@ class _HotReport extends State<HotReport> {
                         ),
                       ],
                     ),
-                    onPressed: () {
-                      _getCurrentLocation();
+                    onPressed: () async{
+                      _location.text=await fetchLocation();
+                      setState(() {
+                      });
+
+
                     },
                   ),
                   alignment: FractionalOffset.topRight,
                 ),
               ),
-              if (_currentPosition != "")
+
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 0.0),
                   child: Text(
-                    _currentAddress,
+                    _location.text,
                     style:
                         TextStyle(color: Colors.white, fontFamily: 'Assistant'),
                   ),
@@ -239,6 +255,7 @@ class _HotReport extends State<HotReport> {
                                 style: new TextStyle(
                                     fontSize: 25, fontFamily: 'Assistant'),
                               ),
+
                             ],
                           ),
                           onPressed: pickImage,
@@ -274,7 +291,8 @@ class _HotReport extends State<HotReport> {
                                 "time": DateTime.now(),
                                 "location": _location.text,
                                 "url_image": fileUrl,
-                                "senderId": globals.UserId,
+                                 "senderId": globals.UserId,
+
                               });
 
                               setState(() {
@@ -317,37 +335,34 @@ class _HotReport extends State<HotReport> {
       ),
     );
   }
-
-  _getCurrentLocation() async {
-    geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
-
-      _getAddressFromLatLng();
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
   _getAddressFromLatLng() async {
     try {
       List<Placemark> p = await geolocator.placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
+          _currentPosition.latitude,  _currentPosition.longitude);
 
-      Placemark place = p[0];
+      Placemark placeMark = p[0];
+      String name = placeMark.name;
+      String subLocality = placeMark.subLocality;
+      String locality = placeMark.locality;
+      String administrativeArea = placeMark.administrativeArea;
+      String postalCode = placeMark.postalCode;
+      String country = placeMark.country;
+      String address = "${name}, ${subLocality}, ${locality}, ${administrativeArea} ${postalCode}, ${country}";
 
       setState(() {
         _currentAddress =
-            "${place.locality}, ${place.postalCode}, ${place.country}";
+            address;
         _location.text = _currentAddress;
+        _latitude=_currentPosition.latitude;
+        _longitude=_currentPosition.longitude;
       });
     } catch (e) {
       print(e);
     }
   }
+
+
+
 }
 
 class Data {

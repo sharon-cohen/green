@@ -224,15 +224,7 @@ String yearConvert(String year){
 
 
 }
-void launchMap(String address) async {
-  String query = Uri.encodeComponent(address);
 
-  String googleUrl = "https://waze.com/ul?q=$query";
-
-  if (await canLaunch(googleUrl)) {
-    await launch(googleUrl);
-  }
-}
 showAlertDialogImage(BuildContext context, String image) {
   // set up the butto
   AlertDialog alert = AlertDialog(
@@ -254,4 +246,14 @@ showAlertDialogImage(BuildContext context, String image) {
       return alert;
     },
   );
+}
+
+Future updatePlaceStruggleDB(String Id, int place) async{
+  await Firestore.instance
+      .collection("struggle")
+      .document(Id)
+      .updateData({
+
+    'place': place
+  });
 }

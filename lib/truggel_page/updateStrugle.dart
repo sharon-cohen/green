@@ -47,7 +47,7 @@ class updatestrugleState extends State<updatestrugle> {
     super.initState();
 
     _title = TextEditingController(text: widget.strugle.title);
-    _description = TextEditingController(text: widget.strugle.description);
+    _description = TextEditingController(text: widget.strugle.description1);
     _share = TextEditingController(text: widget.strugle.share);
     _petition = TextEditingController(text: widget.strugle.petition);
     _donation = TextEditingController(text: widget.strugle.donation);
@@ -108,8 +108,22 @@ class updatestrugleState extends State<updatestrugle> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Center(child: Image.asset('image/logo_greem.png', scale: 2)),
-          automaticallyImplyLeading: false),
+          centerTitle: true,
+          title: Container(
+
+              child: Image.asset('image/logo_greem.png', scale: 2)),
+          leading:
+          IconButton(
+            icon: Icon(
+              Icons.clear,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+          )
+
+      ),
       backgroundColor: Colors.grey[200],
       key: _key,
       body: Form(
@@ -120,39 +134,26 @@ class updatestrugleState extends State<updatestrugle> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
-                        icon: Icon(
-                          Icons.clear,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 65),
-                    Text(
-                      'עריכת מאבק',
-                      style: TextStyle(
-                          fontFamily: 'Assistant',
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30),
-                    ),
-                  ],
+                child: Center(
+                  child: Text(
+                    'עריכת מאבק',
+                    style: TextStyle(
+                        fontFamily: 'Assistant',
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: TextFormField(
+                  maxLength: 16,
                   controller: _title,
                   validator: (value) =>
-                      (value.isEmpty) ? "שדה נושא הבעיה חובה" : null,
+                      (value.isEmpty) ? "שם המאבק הוא שדה חובה" : null,
                   style: style,
                   decoration: InputDecoration(
                       labelText: "שם המאבק",

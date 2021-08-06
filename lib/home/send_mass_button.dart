@@ -9,12 +9,13 @@ import '../globalfunc.dart';
 import 'package:flutter_image/network.dart';
 import '../register.dart';
 import 'package:greenpeace/global.dart' as globals;
-import 'package:greenpeace/global.dart' as globals;
+import 'package:greenpeace/uploadImage/imageChoose.dart';
 final _firestore = Firestore.instance;
 
 class button_send extends StatefulWidget {
-  button_send({this.no_reg});
+  button_send({this.no_reg,this.callback});
   final bool no_reg;
+  Function callback;
 
   @override
   _button_sendState createState() => _button_sendState();
@@ -98,8 +99,10 @@ class _button_sendState extends State<button_send> {
     mass.clear();
 
     if (try_send == false) {
+
       mass.add(
         Expanded(
+          flex:3,
           child: TextField(
             controller: messageTextContoller,
             onTap: () {
@@ -114,76 +117,151 @@ class _button_sendState extends State<button_send> {
           ),
         ),
       );
-      mass.add(
-        FlatButton(
-          onPressed: () async {
-            messageTextContoller.clear();
-            if (messageText != "") {
-              await _firestore.collection("messages").add({
-                "text": messageText,
-                "sender": globals.name,
-                "time": DateTime.now(),
-                "url": fileUrl,
-              });
 
-              setState(() {
-                fileUrl = "";
-                messageText = "";
-              });
-            }
-          },
-          child: Container(
-            child: Text(
-              'שלח',
-              //style: kSendButtonTextStyle,
-              style: TextStyle(
-                color: Color(int.parse("0xff6ed000")),
-                fontFamily: 'Assistant',
-                fontSize: 15,
+      mass.add(
+        Expanded(
+          flex: 1,
+          child: FlatButton(
+            onPressed: () async {
+              messageTextContoller.clear();
+              if (messageText != "") {
+                await _firestore.collection("messages").add({
+                  "text": messageText,
+                  "sender": globals.name,
+                  "time": DateTime.now(),
+                  "url": fileUrl,
+                });
+
+                setState(() {
+                  fileUrl = "";
+                  messageText = "";
+                });
+              }
+            },
+            child: Container(
+              child: Text(
+                'שלח',
+                //style: kSendButtonTextStyle,
+                style: TextStyle(
+                  color: Color(int.parse("0xff6ed000")),
+                  fontFamily: 'Assistant',
+                  fontSize: 15,
+                ),
               ),
             ),
           ),
         ),
       );
+
       mass.add(
-        new Container(
-          margin: new EdgeInsets.symmetric(horizontal: 4.0),
-          child: new IconButton(
-              icon: new Icon(
-                Icons.photo_camera,
-                color: Color(int.parse("0xff6ed000")),
-              ),
-              onPressed: () async {
-                if(globals.no_reg=true){
-                  GoregisterAlertDialog(context);
-                }
-                else{
-                  var image =
-                  await ImagePicker.pickImage(source: ImageSource.gallery);
-                  int timestamp = new DateTime.now().millisecondsSinceEpoch;
-                  StorageReference storageReference = FirebaseStorage.instance
-                      .ref()
-                      .child('chats/img_' + timestamp.toString() + '.jpg');
-                  StorageUploadTask uploadTask = storageReference.putFile(image);
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await uploadTask.onComplete;
+        new Expanded(
+          flex:1,
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                new IconButton(
+                    padding:  EdgeInsets.only(top:10,bottom: 10,left: 10),
+                    constraints: BoxConstraints(),
+                    icon: new Icon(
+                      Icons.photo_camera,
+                      color: Color(int.parse("0xff6ed000")),
+                    ),
+                    onPressed: () async {
+                      if(globals.no_reg==true){
+                        GoregisterAlertDialog(context);
+                      }
+                      else{
+                        var image =
+                        await ImagePicker.pickImage(source: ImageSource.camera,
+                            imageQuality: 25,
+                            maxHeight: 1024,
+                            maxWidth: 1024
+                        );
+                        int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                        StorageReference storageReference = FirebaseStorage.instance
+                            .ref()
+                            .child('chats/img_' + timestamp.toString() + '.jpg');
+                        StorageUploadTask uploadTask = storageReference.putFile(image);
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await uploadTask.onComplete;
 
-                  try {
-                    fileUrl = await storageReference.getDownloadURL();
+                        try {
+                          fileUrl = await storageReference.getDownloadURL();
 
-                    setState(() {
-                      isLoading = false;
-                      image_sent_pro(context, fileUrl);
-                    });
-                  } catch (e) {
-                    print('errordfd');
-                  }
+                          setState(() {
+                            isLoading = false;
+                            messageTextContoller.clear();
+                            _firestore.collection("messages").add({
+                              "text": "",
+                              "sender": globals.name,
+                              "time": DateTime.now(),
+                              "url": fileUrl,
+                            });
+                            setState(() {
+                              fileUrl = "";
+                              messageText = "";
+                            });
+                          });
+                        } catch (e) {
+                          print('errordfd');
+                        }
 
-                }
+                      }
 
-              })
+                    }),
+
+                new IconButton(
+                    padding:  EdgeInsets.only(top:10,bottom: 10,left: 2),
+                    constraints: BoxConstraints(),
+                    icon: new Icon(
+
+                      Icons.upload_file,
+                      color: Color(int.parse("0xff6ed000")),
+                    ),
+                    onPressed: () async {
+                      if(globals.no_reg==true){
+                        GoregisterAlertDialog(context);
+                      }
+                      else{
+
+                        var image =
+                        await ImagePicker.pickImage(source: ImageSource.gallery,
+                            imageQuality: 25,
+                            maxHeight: 1024,
+                            maxWidth: 1024
+
+                        );
+                        int timestamp = new DateTime.now().millisecondsSinceEpoch;
+                        StorageReference storageReference = FirebaseStorage.instance
+                            .ref()
+                            .child('chats/img_' + timestamp.toString() + '.jpg');
+                        StorageUploadTask uploadTask = storageReference.putFile(image);
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await uploadTask.onComplete;
+
+                        try {
+                          fileUrl = await storageReference.getDownloadURL();
+
+                          setState(() {
+                            isLoading = false;
+                            image_sent_pro(context, fileUrl);
+                          });
+                        } catch (e) {
+                          print('errordfd');
+                        }
+
+                      }
+
+                    }),
+
+              ],
+            ),
+          )
 
           ,
         ),

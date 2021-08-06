@@ -96,11 +96,26 @@ class personalMessContainer extends StatelessWidget {
               //mess.sender,
               //20
               //30
-              title: TextStyleMess(
-                text: mess.sender,
-                size: 20,
-                sizeHeight: MediaQuery.of(context).size.height / 30,
-                sizeWidth: MediaQuery.of(context).size.width,
+              title: FlatButton(
+                padding: EdgeInsets.all(0),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => mass(
+                            topic: "הודעה פרטית",
+                            text: mess.text,
+                            sender: mess.sender,
+                            senderId: mess.senderId,
+                            MessForAll: MessForAll,
+                          )));
+                },
+                child: TextStyleMess(
+                  text: mess.sender,
+                  size: 20,
+                  sizeHeight: MediaQuery.of(context).size.height / 30,
+                  sizeWidth: MediaQuery.of(context).size.width,
+                ),
               ),
               // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
               subtitle: TextStyleMess(
